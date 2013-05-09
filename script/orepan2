@@ -1,0 +1,6 @@
+#!/usr/bin/env perl
+use strict;
+use wanings;
+use OrePAN2;
+
+OrePAN2::CLI->new->run(@ARGV);
