@@ -62,7 +62,7 @@ sub add_index {
 sub write_index {
     my ($self, $index) = @_;
 
-    my $pkgfname = File::Spec->catfile($self->directory, 'modules', '02.packages.txt');
+    my $pkgfname = File::Spec->catfile($self->directory, 'modules', '02packages.details.txt');
     mkdir(File::Basename::dirname($pkgfname));
     open my $fh, '>', $pkgfname,
         or die "Cannot open $pkgfname for writing: $!\n";

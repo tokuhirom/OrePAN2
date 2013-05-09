@@ -1,0 +1,41 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use OrePAN2::CLI::Indexer;
+
+OrePAN2::CLI::Indexer->new->run(@ARGV);
+
+__END__
+
+=head1 NAME
+
+orepan2-indexer - Indexer
+
+=head1 SYNOPSIS
+
+    % orepan2-indexer /path/to/darkpan/
+
+=head1 DESCRIPTION
+
+OrePAN2 indexer.
+
+This module makes 02.package.txt from directory contains tar balls.
+
+=head1 TUTORIAL
+
+Create darkpan directory.
+
+    % mkdir -p darkpan/authors/id/M/MA/MAHITO/
+
+Download tar ball from CPAN.
+
+    % curl -o darkpan/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz
+
+Create 02packages.details.txt!
+
+    % orepan2-indexer darkpan/
+
+Then you can install Acme::Hoge from darkpan!
+
+    % cpanm --mirror-only --mirror=file://`pwd`/darkpan/ Acme::Hoge
+
