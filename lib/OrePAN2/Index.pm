@@ -10,8 +10,33 @@ sub new {
     }, $class;
 }
 
+sub add_index {
+    my ($self, $package, $version, $archive_file) = @_;
+
+    push @{$self->{index}}, [$package, $version, $archive_file];
+}
+
 sub as_string {
-    '';
+    my $self = shift;
+
+    my @buf;
+
+    push @buf, (
+        'File:         02packages.details.txt',
+        'URL:          http://www.perl.com/CPAN/modules/02packages.details.txt',
+        'Description:  DarkPAN',
+        'Columns:      package name, version, path',
+        'Intended-For: Automated fetch routines, namespace documentation.',
+        "Written-By:   OrePAN2 $OrePAN2::VERSION",
+        "Line-Count:   @{[ scalar(@{$self->{index}}) ]}",
+        "Last-Updated: @{[ scalar localtime ]}",
+        '',
+    );
+
+    for my $row (sort { $a->[0] cmp $b->[0] } @{$self->{index}}) {
+        push @buf, sprintf "%-22s %-22s %s", $row->[0], $row->[1], $row->[2];
+    }
+    return join("\n", @buf);
 }
 
 1;

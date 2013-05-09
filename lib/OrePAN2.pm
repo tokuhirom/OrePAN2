@@ -8,6 +8,7 @@ use File::Spec ();
 use File::Basename ();
 use Archive::Extract ();
 use OrePAN2::Index;
+use File::Temp qw(tempdir);
 
 our $VERSION = "0.01";
 
@@ -37,13 +38,24 @@ sub make_index {
 
 sub add_index {
     my ($self, $index, $archive_file) = @_;
-    extract($archive_file);
-    my @pm_files = $self->list_pm_files();
-    for my $pm_file (@pm_files) {
-        my $meta = Module::Metadata->new($pm_file);
-        for my $pkg ($meta->provides()) {
-            $index->add($pkg, $archive_file);
-        }
+
+    my $archive = Archive::Extract->new(
+        archive => $archive_file
+    );
+    my $tmpdir = tempdir( CLEANUP => 1 );
+    $archive->extract( to => $tmpdir);
+
+    my $provides = Module::Metadata->provides(
+        dir => $tmpdir,
+        version => 2,
+    );
+    while (my ($package, $data) = each %$provides) {
+        my $version = $provides->{$package}->{version};
+        $index->add_index(
+            $package,
+            $version,
+            File::Spec->abs2rel($archive_file, File::Spec->catfile($self->directory, 'authors', 'id')),
+        );
     }
 }
 
@@ -56,25 +68,6 @@ sub write_index {
         or die "Cannot open $pkgfname for writing: $!\n";
     print $fh $index->as_string();
     close $fh;
-}
-
-sub list_pm_files {
-    my $self = shift;
-    my @files;
-    find(
-        {
-            wanted => sub {
-                return unless /
-                    (?:
-                          \.pm
-                    )
-                \z/x;
-                push @files, $_;
-            },
-            no_chdir => 1,
-        }, $self->{directory}
-    );
-    return @files;
 }
 
 sub list_tar_files {
@@ -93,7 +86,7 @@ sub list_tar_files {
                 push @files, $_;
             },
             no_chdir => 1,
-        }, $self->{directory}
+        }, File::Spec->catfile($self->{directory}, 'authors')
     );
     return @files;
 }
