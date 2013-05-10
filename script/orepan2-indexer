@@ -1,0 +1,26 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use OrePAN2::CLI::Indexer;
+
+OrePAN2::CLI::Indexer->new->run(@ARGV);
+
+__END__
+
+=head1 NAME
+
+orepan2-indexer - Indexer
+
+=head1 SYNOPSIS
+
+    % orepan2-indexer /path/to/darkpan/
+
+=head1 DESCRIPTION
+
+OrePAN2 indexer.
+
+This script makes 02packages.details.txt.gz from directory contains tar balls.
+
+=head1 SEE ALSO
+
+L<OrePAN2>

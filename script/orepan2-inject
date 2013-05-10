@@ -1,0 +1,45 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use OrePAN2::CLI::Inject;
+
+OrePAN2::CLI::Inject->new->run(@ARGV);
+
+__END__
+
+=head1 NAME
+
+orepan2-inject - Injector
+
+=head1 SYNOPSIS
+
+    % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git@master /path/to/darkpan/
+
+=head1 DESCRIPTION
+
+OrePAN2 injector.
+
+=head1 SOURCES
+
+=head2 ARCHIVE FILE
+
+    orepan2-inject Text-TestBase-0.10.tar.gz /tmp/darkpan
+
+You can inject to darkpan from a file.
+
+=head2 HTTP URL
+
+    orepan2-inject http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz /tmp/darkpan
+
+You can inject to darkpan from archive URL.
+
+=head2 Git repository
+
+    % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git@master /path/to/darkpan/
+    % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git        /path/to/darkpan/
+
+You need to setup git repository as a installable git repo.
+You need to put a META.json in your repository.
+
+If you are using Minilla or Milla, your repository is already ready to install.
+

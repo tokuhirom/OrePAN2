@@ -1,14 +1,30 @@
 # NAME
 
-OrePAN2 - It's new $module
-
-# SYNOPSIS
-
-    use OrePAN2;
+OrePAN2 - Yet another DarkPAN manager.
 
 # DESCRIPTION
 
-OrePAN2 is ...
+You can create your own perl module archive with OrePAN2!
+It's very simple and useful.
+
+1. Inject tar balls from git repo or archive file by orepan2-inject.
+2. Make 02packages.details.txt.gz by orepan2-indexer.
+
+# TUTORIAL
+
+Download tar ball from CPAN.
+
+    % orepan2-inject http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz /tmp/darkpan
+
+Create 02packages.details.txt!
+
+    % orepan2-indexer /tmp/darkpan/
+
+Then you can install Acme::Hoge from darkpan!
+
+    % cpanm --mirror-only --mirror=file:///tmp/darkpan/ Acme::Hoge
+
+It's pretty easy!
 
 # LICENSE
 
