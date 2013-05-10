@@ -19,6 +19,16 @@ orepan2-inject - Injector
 
 OrePAN2 injector.
 
+=head1 OPTIONS
+
+=over 4
+
+=item C< --no-generate-index >
+
+No generate I<02packages.details.txt.gz>.
+
+=back
+
 =head1 SOURCES
 
 =head2 ARCHIVE FILE

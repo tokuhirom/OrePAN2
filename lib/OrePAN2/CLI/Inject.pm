@@ -7,6 +7,7 @@ use Getopt::Long ();
 use Pod::Usage;
 use OrePAN2;
 use OrePAN2::Injector;
+use OrePAN2::Indexer;
 
 sub new {
     my $class = shift;
@@ -17,11 +18,13 @@ sub run {
     my ($self, @args) = @_;
 
     my $version;
+    my $generate_index = 1;
     my $p = Getopt::Long::Parser->new(
         config => [qw(posix_default no_ignore_case auto_help)]
     );
     $p->getoptions(
         'version!'       => \$version,
+        'generate-index!' => \$generate_index,
     );
     if ($version) {
         print "orepan2: $OrePAN2::VERSION\n";
@@ -44,6 +47,10 @@ sub run {
             next unless /\S/;
             $injector->inject($_);
         }
+    }
+
+    if ($generate_index) {
+        OrePAN2::Indexer->new(directory => $directory)->make_index();
     }
 }
 

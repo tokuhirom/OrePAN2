@@ -81,7 +81,9 @@ sub inject_from_git {
     my $guard = pushd($tmpdir);
 
     _run("git clone $repository");
+
     if ($branch) {
+        my $guard2 = pushd([<*>]->[0]);
         _run("git checkout $branch");
     }
 
