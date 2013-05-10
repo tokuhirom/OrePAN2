@@ -29,7 +29,7 @@ sub directory { shift->{directory} }
 sub make_index {
     my $self = shift;
 
-    my @files = $self->list_tar_files();
+    my @files = $self->list_archive_files();
     my $index = OrePAN2::Index->new();
     for my $archive_file (@files) {
         $self->add_index($index, $archive_file);
@@ -88,7 +88,7 @@ sub write_index {
     close $fh;
 }
 
-sub list_tar_files {
+sub list_archive_files {
     my $self = shift;
 
     my @files;
@@ -98,6 +98,7 @@ sub list_tar_files {
                 return unless /
                     (?:
                           \.tar\.gz
+                        | \.tgz
                         | \.zip
                     )
                 \z/x;
