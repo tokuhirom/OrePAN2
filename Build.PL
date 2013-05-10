@@ -23,9 +23,9 @@ my %args = (
         'Module::Build' => 0.38,
     },
 
-    name            => 'OrePAN2',
-    module_name     => 'OrePAN2',
-    allow_pure_perl => 0,
+    no_index    => { 'directory' => [ 'inc' ] },
+    name        => 'OrePAN2',
+    module_name => 'OrePAN2',
 
     script_files => [glob('script/*'), glob('bin/*')],
 
