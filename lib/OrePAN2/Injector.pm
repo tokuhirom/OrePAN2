@@ -7,9 +7,11 @@ use File::pushd;
 use CPAN::Meta;
 use File::Spec;
 use File::Path qw(mkpath);
-use File::Basename qw(dirname);
+use File::Basename qw(dirname basename);
 use File::Find qw(find);
 use Archive::Tar;
+use HTTP::Tiny;
+use File::Copy qw(copy);
 
 sub new {
     my $class = shift;
@@ -27,9 +29,49 @@ sub inject {
     
     if ($source =~ m{\A((?:git://|git\@github.com:).*?)(?:\@(.*))?\z}) {
         $self->inject_from_git($1, $2);
+    } elsif ($source =~ m{\Ahttp://}) {
+        $self->inject_from_http($source);
+    } elsif (-f $source) {
+        $self->inject_from_file($source);
     } else {
-        die "Unknown source: $source";
+        die "Unknown source: $source\n";
     }
+}
+
+sub tarpath {
+    my ($self, $basename) = @_;
+
+    my $tarpath = File::Spec->catfile($self->directory, 'authors', 'id', 'D', 'DU', 'DUMMY', $basename);
+    mkpath(dirname($tarpath));
+
+    return $tarpath;
+}
+
+sub inject_from_file {
+    my ($self, $file) = @_;
+
+    my $basename = basename($file);
+    my $tarpath = $self->tarpath($basename);
+
+    copy($file, $tarpath)
+        or die "Copy failed $file $tarpath: $!\n";
+
+    print "Wrote $tarpath from $file\n";
+}
+
+sub inject_from_http {
+    my ($self, $url) = @_;
+
+    my $basename = basename($url);
+
+    my $tarpath = $self->tarpath($basename);
+
+    my $response = HTTP::Tiny->new->mirror($url, $tarpath);
+    unless ($response->{success}) {
+        die "Cannot fetch $url($response->{status} $response->{reason})\n";
+    }
+
+    print "Wrote $tarpath from $url\n";
 }
 
 sub inject_from_git {
@@ -56,8 +98,7 @@ sub inject_from_git {
 
     rename [<*>]->[0], "$name-$version";
 
-    my $tarpath = File::Spec->catfile($self->directory, 'authors', 'id', 'D', 'DU', 'DUMMY', "$name-$version.tar.gz");
-    mkpath(dirname($tarpath));
+    my $tarpath = $self->tarpath("$name-$version.tar.gz");
 
     unlink $tarpath if -f $tarpath;
 
