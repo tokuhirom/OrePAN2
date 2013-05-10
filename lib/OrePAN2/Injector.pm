@@ -1,4 +1,4 @@
-package OrePAN2::Fetcher;
+package OrePAN2::Injector;
 use strict;
 use warnings;
 use utf8;
@@ -22,17 +22,17 @@ sub new {
 
 sub directory { shift->{directory} }
 
-sub fetch {
+sub inject {
     my ($self, $source) = @_;
     
     if ($source =~ m{\A((?:git://|git\@github.com:).*?)(?:\@(.*))?\z}) {
-        $self->fetch_git($1, $2);
+        $self->inject_from_git($1, $2);
     } else {
         die "Unknown source: $source";
     }
 }
 
-sub fetch_git {
+sub inject_from_git {
     my ($self, $repository, $branch) = @_;
 
     my $tmpdir = tempdir(CLENAUP => 1);

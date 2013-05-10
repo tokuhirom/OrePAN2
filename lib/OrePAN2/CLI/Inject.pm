@@ -1,4 +1,4 @@
-package OrePAN2::CLI::Fetcher;
+package OrePAN2::CLI::Inject;
 use strict;
 use warnings;
 use utf8;
@@ -6,7 +6,7 @@ use utf8;
 use Getopt::Long ();
 use Pod::Usage;
 use OrePAN2;
-use OrePAN2::Fetcher;
+use OrePAN2::Injector;
 
 sub new {
     my $class = shift;
@@ -30,19 +30,19 @@ sub run {
         -input => $0,
     );
 
-    my $fetcher = OrePAN2::Fetcher->new(
+    my $injector = OrePAN2::Injector->new(
         directory => $directory,
     );
     if (@ARGV) {
         for (@ARGV) {
             next unless /\S/;
-            $fetcher->fetch($_);
+            $injector->inject($_);
         }
     } else {
         while (<>) {
             chomp;
             next unless /\S/;
-            $fetcher->fetch($_);
+            $injector->inject($_);
         }
     }
 }
