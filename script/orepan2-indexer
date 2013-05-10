@@ -19,23 +19,8 @@ orepan2-indexer - Indexer
 
 OrePAN2 indexer.
 
-This module makes 02.package.txt from directory contains tar balls.
+This script makes 02packages.details.txt.gz from directory contains tar balls.
 
-=head1 TUTORIAL
+=head1 SEE ALSO
 
-Create darkpan directory.
-
-    % mkdir -p darkpan/authors/id/M/MA/MAHITO/
-
-Download tar ball from CPAN.
-
-    % curl -o darkpan/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz
-
-Create 02packages.details.txt!
-
-    % orepan2-indexer darkpan/
-
-Then you can install Acme::Hoge from darkpan!
-
-    % cpanm --mirror-only --mirror=file://`pwd`/darkpan/ Acme::Hoge
-
+L<OrePAN2>
