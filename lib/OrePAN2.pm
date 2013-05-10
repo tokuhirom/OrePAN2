@@ -10,6 +10,8 @@ __END__
 
 =encoding utf-8
 
+=for stopwords DarkPAN orepan2-inject orepan2-indexer darkpan
+
 =head1 NAME
 
 OrePAN2 - Yet another DarkPAN manager.
