@@ -67,6 +67,7 @@ sub scan_provides {
             print "Got provided packages information from META\n";
             return $meta->{provides};
         }
+        # fallthrough.
     }
 
     print "Getting provided packages information by Module::Metadata\n";
