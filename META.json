@@ -17,11 +17,8 @@
       "directory" : [
          "t",
          "xt",
-         "inc",
-         "share",
-         "eg",
-         "examples",
-         "author"
+         "tools",
+         "test-dist"
       ]
    },
    "prereqs" : {
