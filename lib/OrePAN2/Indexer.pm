@@ -79,7 +79,7 @@ sub scan_provides {
     }
 
     my @files = $self->list_pm_files('.', $meta);
-    local $Parse::PMFile::VERBOSE=100;
+    # local $Parse::PMFile::VERBOSE=100;
     my $pmfile = Parse::PMFile->new($meta ? $meta : +{});
     my $result;
     LOOP: for my $file (@files) {
