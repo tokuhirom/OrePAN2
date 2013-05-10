@@ -48,9 +48,9 @@ sub add_index {
     my $tmpdir = tempdir( CLEANUP => 1 );
     $archive->extract( to => $tmpdir);
 
-    my @provides = $self->scan_provides($tmpdir);
-    for my $row (@provides) {
-        my ($package, $version) = @$row;
+    my $provides = $self->scan_provides($tmpdir);
+    while (my ($package, $dat) = each %$provides) {
+        my $version = $dat->{version};
         $index->add_index(
             $package,
             $version,
@@ -81,14 +81,14 @@ sub scan_provides {
     my @files = $self->list_pm_files('.', $meta);
     local $Parse::PMFile::VERBOSE=100;
     my $pmfile = Parse::PMFile->new($meta ? $meta : +{});
-    my @result;
+    my $result;
     LOOP: for my $file (@files) {
         my $dat = $pmfile->parse($file);
         while (my ($pkg, $dat) = each %$dat) {
-            push @result, [$pkg, $dat->{version}];
+            $result->{$pkg} = $dat;
         }
     }
-    return @result;
+    return $result;
 }
 
 sub write_index {
