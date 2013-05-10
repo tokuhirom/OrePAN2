@@ -9,8 +9,11 @@ use File::Basename ();
 use Archive::Extract ();
 use OrePAN2::Index;
 use File::Temp qw(tempdir);
+use PerlIO::gzip;
 
 our $VERSION = "0.01";
+
+# Rename to OrePAN2::Indexer
 
 sub new {
     my $class = shift;
@@ -45,6 +48,7 @@ sub add_index {
     my $tmpdir = tempdir( CLEANUP => 1 );
     $archive->extract( to => $tmpdir);
 
+    # TODO: use 'provides' section if the tar ball's META.json contains 'provides'.
     my $provides = Module::Metadata->provides(
         dir => $tmpdir,
         version => 2,
@@ -62,9 +66,9 @@ sub add_index {
 sub write_index {
     my ($self, $index) = @_;
 
-    my $pkgfname = File::Spec->catfile($self->directory, 'modules', '02packages.details.txt');
+    my $pkgfname = File::Spec->catfile($self->directory, 'modules', '02packages.details.txt.gz');
     mkdir(File::Basename::dirname($pkgfname));
-    open my $fh, '>', $pkgfname,
+    open my $fh, '>:gzip', $pkgfname,
         or die "Cannot open $pkgfname for writing: $!\n";
     print $fh $index->as_string();
     close $fh;

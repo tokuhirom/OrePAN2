@@ -1,0 +1,29 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+use OrePAN2::CLI::Fetcher;
+
+OrePAN2::CLI::Fetcher->new->run(@ARGV);
+
+__END__
+
+=head1 NAME
+
+orepan2-fetcher - Fetcher
+
+=head1 SYNOPSIS
+
+    % orepan2-fetcher git://github.com/miyagawa/Acme-YakiniQ.git@master /path/to/darkpan/
+
+=head1 DESCRIPTION
+
+OrePAN2 fetcher.
+
+=head1 SOURCES
+
+=head2 Git repository
+
+You need to setup git repository as a installable git repo.
+
+You need to use Minilla or Milla to manage the repo.
+

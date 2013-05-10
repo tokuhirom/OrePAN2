@@ -34,7 +34,8 @@ sub as_string {
     );
 
     for my $row (sort { $a->[0] cmp $b->[0] } @{$self->{index}}) {
-        push @buf, sprintf "%-22s %-22s %s", $row->[0], $row->[1], $row->[2];
+        # package name, version, path
+        push @buf, sprintf "%-22s %-22s %s", $row->[0], $row->[1] || 'undef', $row->[2];
     }
     return join("\n", @buf) . "\n";
 }

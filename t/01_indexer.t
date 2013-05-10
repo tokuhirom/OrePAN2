@@ -20,7 +20,7 @@ my $orepan = OrePAN2->new(
 );
 $orepan->make_index();
 
-my $content = slurp "$tmpdir/modules/02packages.details.txt";
+my $content = slurp_gz "$tmpdir/modules/02packages.details.txt.gz";
 note $content;
 like $content, qr{Acme::YakiniQ\s+0.01\s+M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz};
 
