@@ -6,6 +6,7 @@ use utf8;
 use Getopt::Long ();
 use Pod::Usage;
 use OrePAN2;
+use OrePAN2::Indexer;
 
 sub new {
     my $class = shift;
@@ -29,7 +30,7 @@ sub run {
         -input => $0,
     );
 
-    my $orepan = OrePAN2->new(
+    my $orepan = OrePAN2::Indexer->new(
         directory => $directory,
     );
     $orepan->make_index();

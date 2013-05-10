@@ -7,7 +7,7 @@ use File::Temp qw(tempdir);
 use File::Path qw(mkpath);
 use File::Copy qw(copy);
 
-use OrePAN2;
+use OrePAN2::Indexer;
 
 my $tmpdir = tempdir(CLEANUP => 1);
 
@@ -15,7 +15,7 @@ mkpath "$tmpdir/authors/id/M/MI/MIYAGAWA/";
 
 copy 't/dat/Acme-YakiniQ-0.01.tar.gz', "$tmpdir/authors/id/M/MI/MIYAGAWA";
 
-my $orepan = OrePAN2->new(
+my $orepan = OrePAN2::Indexer->new(
     directory => $tmpdir,
 );
 $orepan->make_index();
