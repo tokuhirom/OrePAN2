@@ -11,6 +11,7 @@ requires 'Module::Metadata';
 requires 'PerlIO::gzip';
 requires 'Pod::Usage';
 requires 'parent';
+requires 'Parse::PMFile';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';

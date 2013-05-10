@@ -47,6 +47,7 @@
             "Getopt::Long" : "0",
             "HTTP::Tiny" : "0",
             "Module::Metadata" : "0",
+            "Parse::PMFile" : "0",
             "PerlIO::gzip" : "0",
             "Pod::Usage" : "0",
             "parent" : "0",
@@ -71,5 +72,5 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.01"
+   "version" : "0.02"
 }
