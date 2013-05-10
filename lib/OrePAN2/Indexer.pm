@@ -11,6 +11,7 @@ use Archive::Extract ();
 use OrePAN2::Index;
 use File::Temp qw(tempdir);
 use PerlIO::gzip;
+use CPAN::Meta;
 
 sub new {
     my $class = shift;
@@ -45,11 +46,7 @@ sub add_index {
     my $tmpdir = tempdir( CLEANUP => 1 );
     $archive->extract( to => $tmpdir);
 
-    # TODO: use 'provides' section if the tar ball's META.json contains 'provides'.
-    my $provides = Module::Metadata->provides(
-        dir => $tmpdir,
-        version => 2,
-    );
+    my $provides = $self->scan_provides($tmpdir);
     while (my ($package, $data) = each %$provides) {
         my $version = $provides->{$package}->{version};
         $index->add_index(
@@ -58,6 +55,25 @@ sub add_index {
             File::Spec->abs2rel($archive_file, File::Spec->catfile($self->directory, 'authors', 'id')),
         );
     }
+}
+
+sub scan_provides {
+    my ($self, $dir) = @_;
+
+    my $metafname = glob("$dir/*/META.json");
+    if (-f $metafname) {
+        my $meta = CPAN::Meta->load_file($metafname);
+        if ($meta->{provides}) {
+            print "Got provided packages information from META\n";
+            return $meta->{provides};
+        }
+    }
+
+    print "Getting provided packages information by Module::Metadata\n";
+    return Module::Metadata->provides(
+        dir => $dir,
+        version => 2,
+    );
 }
 
 sub write_index {

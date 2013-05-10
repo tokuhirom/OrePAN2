@@ -2,6 +2,7 @@ package OrePAN2::Index;
 use strict;
 use warnings;
 use utf8;
+use OrePAN2;
 
 sub new {
     my $class = shift;
