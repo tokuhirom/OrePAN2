@@ -11,11 +11,11 @@ no warnings 'redefine';
 
 my @specs = (
     [
-        'git@github.com:tokuhirom/Acme-Foo.git',
+        'git://github.com/tokuhirom/Acme-Foo.git',
         "authors/id/D/DU/DUMMY/Acme-Foo-0.01.tar.gz"
     ],
     [
-        'git@github.com:tokuhirom/Acme-Foo.git@master',
+        'git://github.com/tokuhirom/Acme-Foo.git@master',
         "authors/id/D/DU/DUMMY/Acme-Foo-0.01.tar.gz"
     ],
 );
