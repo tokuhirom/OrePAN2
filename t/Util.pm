@@ -2,6 +2,7 @@ package t::Util;
 use strict;
 use warnings;
 use utf8;
+use Carp ();
 
 use parent qw(Exporter);
 
@@ -17,7 +18,7 @@ sub slurp {
 sub slurp_gz {
     my $name = shift;
     open my $fh, '<:gzip', $name
-        or die "Cannot open '$name' for reading: $!";
+        or Carp::croak "Cannot open '$name' for reading: $!";
     do { local $/; <$fh> };
 }
 

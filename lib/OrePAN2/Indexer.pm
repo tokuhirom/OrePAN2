@@ -29,14 +29,14 @@ sub new {
 sub directory { shift->{directory} }
 
 sub make_index {
-    my $self = shift;
+    my ($self, %args) = @_;
 
     my @files = $self->list_archive_files();
     my $index = OrePAN2::Index->new();
     for my $archive_file (@files) {
         $self->add_index($index, $archive_file);
     }
-    $self->write_index($index);
+    $self->write_index($index, $args{no_compress});
 }
 
 sub add_index {
@@ -92,11 +92,15 @@ sub scan_provides {
 }
 
 sub write_index {
-    my ($self, $index) = @_;
+    my ($self, $index, $no_compress) = @_;
 
-    my $pkgfname = File::Spec->catfile($self->directory, 'modules', '02packages.details.txt.gz');
+    my $pkgfname = File::Spec->catfile(
+        $self->directory,
+        'modules',
+        $no_compress ? '02packages.details.txt' : '02packages.details.txt.gz'
+    );
     mkdir(File::Basename::dirname($pkgfname));
-    open my $fh, '>:gzip', $pkgfname,
+    open my $fh, $no_compress ? '>:raw' : '>:gzip', $pkgfname,
         or die "Cannot open $pkgfname for writing: $!\n";
     print $fh $index->as_string();
     close $fh;
