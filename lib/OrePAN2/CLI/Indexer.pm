@@ -17,23 +17,29 @@ sub run {
     my ($self, @args) = @_;
 
     my $version;
+    my $text;
     my $p = Getopt::Long::Parser->new(
         config => [qw(posix_default no_ignore_case auto_help)]
     );
-    $p->getoptions(
-        'version!'       => \$version,
+    $p->getoptionsfromarray(
+        \@args => (
+            'version!'       => \$version,
+            'text!'          => \$text,
+        )
     );
     if ($version) {
         print "orepan2: $OrePAN2::VERSION\n";
     }
-    my $directory = shift @ARGV or pod2usage(
+    my $directory = shift @args or pod2usage(
         -input => $0,
     );
 
     my $orepan = OrePAN2::Indexer->new(
         directory => $directory,
     );
-    $orepan->make_index();
+    $orepan->make_index(
+        no_compress => $text,
+    );
 }
 
 1;
