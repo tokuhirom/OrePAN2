@@ -8,6 +8,7 @@ sub new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
     bless {
+        index => [],
     }, $class;
 }
 
