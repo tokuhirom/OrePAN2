@@ -139,6 +139,10 @@ sub list_pm_files {
 sub list_archive_files {
     my $self = shift;
 
+
+    my $authors_dir = File::Spec->catfile($self->{directory}, 'authors');
+    return () unless -d $authors_dir;
+
     my @files;
     find(
         {
@@ -153,7 +157,7 @@ sub list_archive_files {
                 push @files, $_;
             },
             no_chdir => 1,
-        }, File::Spec->catfile($self->{directory}, 'authors')
+        }, $authors_dir
     );
     return @files;
 }
