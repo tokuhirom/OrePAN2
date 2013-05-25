@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.05 2013-05-25T00:03:26Z
+
+    - fixed deps
+      (tokuhirom)
+
 0.04 2013-05-23T04:55:27Z
 
     - orepan2-indexer supports --text option for non-gzip-ed index file.

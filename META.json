@@ -44,7 +44,7 @@
             "CPAN::Meta" : "0",
             "File::Temp" : "0",
             "File::pushd" : "0",
-            "Getopt::Long" : "0",
+            "Getopt::Long" : "2.39",
             "HTTP::Tiny" : "0",
             "Module::Metadata" : "0",
             "Parse::PMFile" : "0",
@@ -72,5 +72,5 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.04"
+   "version" : "0.05"
 }
