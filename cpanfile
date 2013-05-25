@@ -5,7 +5,7 @@ requires 'Archive::Tar';
 requires 'CPAN::Meta';
 requires 'File::Temp';
 requires 'File::pushd';
-requires 'Getopt::Long';
+requires 'Getopt::Long', 2.39;
 requires 'HTTP::Tiny';
 requires 'Module::Metadata';
 requires 'PerlIO::gzip';
