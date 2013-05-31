@@ -24,3 +24,7 @@ cover_db/
 MYMETA.*
 
 /OrePAN2-*
+/.build
+/_build_params
+!Build/
+!META.json
