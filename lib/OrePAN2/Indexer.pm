@@ -12,7 +12,6 @@ use OrePAN2::Index;
 use File::Temp qw(tempdir);
 use PerlIO::gzip;
 use CPAN::Meta;
-use Parse::PMFile;
 use File::pushd;
 
 sub new {
@@ -78,17 +77,44 @@ sub scan_provides {
         $meta = CPAN::Meta->load_file('META.yml');
     }
 
-    my @files = $self->list_pm_files('.', $meta);
-    # local $Parse::PMFile::VERBOSE=100;
-    my $pmfile = Parse::PMFile->new($meta ? $meta : +{});
-    my $result;
-    LOOP: for my $file (@files) {
-        my $dat = $pmfile->parse($file);
-        while (my ($pkg, $dat) = each %$dat) {
-            $result->{$pkg} = $dat;
+    return $self->scan_provides('.', $meta);
+}
+
+sub scan_provides {
+    my ($self, $dir, $meta) = @_;
+
+    my $provides = Module::Metadata->provides(
+        dir => $dir,
+        version => 2,
+    );
+    return $self->filter_no_index($provides, $meta);
+}
+
+sub filter_no_index {
+    my ($self, $provides, $meta) = @_;
+    for my $key (keys %$provides) {
+        for my $file (@{$meta->{file} || []}) {
+            if ($provides->{$key}->{file} eq $file) {
+                delete $provides->{$key};
+            }
+        }
+        for my $dir (@{$meta->{directory} || $meta->{dir} || []}) {
+            if ($provides->{$key}->{file} =~ m{\A$dir/}) {
+                delete $provides->{$key};
+            }
+        }
+        for my $pkg (@{$meta->{package} || []}) {
+            if ($key eq $pkg) {
+                delete $provides->{$key};
+            }
+        }
+        for my $pkg (@{$meta->{namespace} || []}) {
+            if ($key =~ m{\A$pkg\::}) {
+                delete $provides->{$key};
+            }
         }
     }
-    return $result;
+    return $provides;
 }
 
 sub write_index {
@@ -104,36 +130,6 @@ sub write_index {
         or die "Cannot open $pkgfname for writing: $!\n";
     print $fh $index->as_string();
     close $fh;
-}
-
-sub list_pm_files {
-    my ($self, $directory, $meta) = @_;
-
-    my @files;
-    find(
-        {
-            wanted => sub {
-                return unless /
-                    (?:
-                        \.pm
-                    )
-                \z/x;
-                my $rel = File::Spec->abs2rel($_, $directory);
-                if ($meta && $meta->{no_index}->{directory}) {
-                    my @no_index_dirs = @{$meta->{no_index}->{directory}};
-                    for my $no_index (@no_index_dirs) {
-                        if ([File::Spec->splitdir($rel)]->[0] eq $no_index) {
-                            print "Ignore $rel by no_index: $no_index\n";
-                            return;
-                        }
-                    }
-                }
-                push @files, $rel;
-            },
-            no_chdir => 1,
-        }, $directory
-    );
-    return @files;
 }
 
 sub list_archive_files {

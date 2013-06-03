@@ -7,11 +7,10 @@ requires 'File::Temp';
 requires 'File::pushd';
 requires 'Getopt::Long', 2.39;
 requires 'HTTP::Tiny';
-requires 'Module::Metadata';
+requires 'Module::Metadata', '1.000014';
 requires 'PerlIO::gzip';
 requires 'Pod::Usage';
 requires 'parent';
-requires 'Parse::PMFile';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
