@@ -77,10 +77,10 @@ sub scan_provides {
         $meta = CPAN::Meta->load_file('META.yml');
     }
 
-    return $self->scan_provides('.', $meta);
+    return $self->_scan_provides('.', $meta);
 }
 
-sub scan_provides {
+sub _scan_provides {
     my ($self, $dir, $meta) = @_;
 
     my $provides = Module::Metadata->provides(
