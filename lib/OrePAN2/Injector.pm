@@ -77,7 +77,7 @@ sub inject_from_http {
 sub inject_from_git {
     my ($self, $repository, $branch) = @_;
 
-    my $tmpdir = tempdir(CLENAUP => 1);
+    my $tmpdir = tempdir(CLEANUP => 1);
     my $guard = pushd($tmpdir);
 
     _run("git clone $repository");
