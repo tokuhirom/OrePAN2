@@ -85,6 +85,7 @@ sub _scan_provides {
 
     my $provides = Module::Metadata->provides(
         dir => $dir,
+        prefix => '',
         version => 2,
     );
     return $self->filter_no_index($provides, $meta->no_index);
