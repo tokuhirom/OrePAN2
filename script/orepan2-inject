@@ -27,6 +27,12 @@ OrePAN2 injector.
 
 No generate I<02packages.details.txt.gz>.
 
+=item C< --author=DANKOGAI >
+
+Specify the cpan author directory name.
+
+orepan2 uses 'DUMMY' as default.
+
 =back
 
 =head1 SOURCES

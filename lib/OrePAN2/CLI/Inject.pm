@@ -19,12 +19,14 @@ sub run {
 
     my $version;
     my $generate_index = 1;
+    my $author = "DUMMY";
     my $p = Getopt::Long::Parser->new(
         config => [qw(posix_default no_ignore_case auto_help)]
     );
     $p->getoptions(
         'version!'       => \$version,
         'generate-index!' => \$generate_index,
+        'author=s'        => \$author,
     );
     if ($version) {
         print "orepan2: $OrePAN2::VERSION\n";
@@ -35,6 +37,7 @@ sub run {
 
     my $injector = OrePAN2::Injector->new(
         directory => $directory,
+        author    => $author,
     );
     if (@ARGV) {
         for (@ARGV) {

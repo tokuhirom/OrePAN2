@@ -19,7 +19,10 @@ sub new {
     unless (exists $args{directory}) {
         Carp::croak("Missing directory");
     }
-    bless {%args}, $class;
+    bless {
+        author => 'DUMMY',
+        %args
+    }, $class;
 }
 
 sub directory { shift->{directory} }
@@ -41,7 +44,11 @@ sub inject {
 sub tarpath {
     my ($self, $basename) = @_;
 
-    my $tarpath = File::Spec->catfile($self->directory, 'authors', 'id', 'D', 'DU', 'DUMMY', $basename);
+    my $tarpath = File::Spec->catfile($self->directory, 'authors', 'id',
+        substr($self->{author}, 0, 1),
+        substr($self->{author}, 0, 2),
+        $self->{author},
+        $basename);
     mkpath(dirname($tarpath));
 
     return $tarpath;
