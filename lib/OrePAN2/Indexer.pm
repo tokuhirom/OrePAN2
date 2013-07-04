@@ -85,30 +85,31 @@ sub _scan_provides {
 
     my $provides = Module::Metadata->provides(
         dir => $dir,
+        prefix => '',
         version => 2,
     );
-    return $self->filter_no_index($provides, $meta);
+    return $self->filter_no_index($provides, $meta->no_index);
 }
 
 sub filter_no_index {
-    my ($self, $provides, $meta) = @_;
+    my ($self, $provides, $no_index) = @_;
     for my $key (keys %$provides) {
-        for my $file (@{$meta->{file} || []}) {
+        for my $file (@{$no_index->{file} || []}) {
             if ($provides->{$key}->{file} eq $file) {
                 delete $provides->{$key};
             }
         }
-        for my $dir (@{$meta->{directory} || $meta->{dir} || []}) {
+        for my $dir (@{$no_index->{directory} || $no_index->{dir} || []}) {
             if ($provides->{$key}->{file} =~ m{\A$dir/}) {
                 delete $provides->{$key};
             }
         }
-        for my $pkg (@{$meta->{package} || []}) {
+        for my $pkg (@{$no_index->{package} || []}) {
             if ($key eq $pkg) {
                 delete $provides->{$key};
             }
         }
-        for my $pkg (@{$meta->{namespace} || []}) {
+        for my $pkg (@{$no_index->{namespace} || []}) {
             if ($key =~ m{\A$pkg\::}) {
                 delete $provides->{$key};
             }
