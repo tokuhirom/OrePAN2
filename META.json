@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.4.5, CPAN::Meta::Converter version 2.131490",
+   "generated_by" : "Minilla/v0.5.5, CPAN::Meta::Converter version 2.130880",
    "license" : [
       "perl_5"
    ],
@@ -71,5 +71,8 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.05"
+   "version" : "0.06",
+   "x_contributors" : [
+      "Shoichi Kaji <skaji@outlook.com>"
+   ]
 }
