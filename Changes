@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.07 2013-07-05T01:35:47Z
+
+    - Added `orepan2-inject --author` option
+      (Suggested by ranguard++)
+
 0.06 2013-07-04T05:00:05Z
 
     - Switch to Module::Metadata instead of Parse::PMFile.
