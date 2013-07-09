@@ -55,6 +55,7 @@
       },
       "test" : {
          "requires" : {
+            "File::Which" : "0",
             "Test::More" : "0.98"
          }
       }
@@ -71,8 +72,9 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.07",
+   "version" : "0.08",
    "x_contributors" : [
-      "Shoichi Kaji <skaji@outlook.com>"
+      "Shoichi Kaji <skaji@outlook.com>",
+      "Masahiro Honma <hiratara@cpan.org>"
    ]
 }

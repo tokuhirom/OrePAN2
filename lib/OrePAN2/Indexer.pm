@@ -50,10 +50,12 @@ sub add_index {
     my $provides = $self->scan_provides($tmpdir);
     while (my ($package, $dat) = each %$provides) {
         my $version = $dat->{version};
+        my $path = File::Spec->abs2rel($archive_file, File::Spec->catfile($self->directory, 'authors', 'id'));
+        $path =~ s!\\!/!g;
         $index->add_index(
             $package,
             $version,
-            File::Spec->abs2rel($archive_file, File::Spec->catfile($self->directory, 'authors', 'id')),
+            $path,
         );
     }
 }
