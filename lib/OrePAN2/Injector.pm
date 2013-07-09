@@ -85,36 +85,43 @@ sub inject_from_git {
     my ($self, $repository, $branch) = @_;
 
     my $tmpdir = tempdir(CLEANUP => 1);
-    my $guard = pushd($tmpdir);
 
-    _run("git clone $repository");
+    my $tmp_tarpath = do {
+        my $guard = pushd($tmpdir);
 
-    if ($branch) {
-        my $guard2 = pushd([<*>]->[0]);
-        _run("git checkout $branch");
-    }
+        _run("git clone $repository");
 
-    # The repository needs to contains META.json in repository.
-    my $metafname = File::Spec->catfile([<*>]->[0], 'META.json');
-    unless (-f $metafname) {
-        die "$repository does not have a META.json\n";
-    }
+        if ($branch) {
+            my $guard2 = pushd([<*>]->[0]);
+            _run("git checkout $branch");
+        }
 
-    my $meta = CPAN::Meta->load_file($metafname);
+        # The repository needs to contains META.json in repository.
+        my $metafname = File::Spec->catfile([<*>]->[0], 'META.json');
+        unless (-f $metafname) {
+            die "$repository does not have a META.json\n";
+        }
 
-    my $name    = $meta->{name};
-    my $version = $meta->{version};
+        my $meta = CPAN::Meta->load_file($metafname);
 
-    rename [<*>]->[0], "$name-$version";
+        my $name    = $meta->{name};
+        my $version = $meta->{version};
 
-    my $tarpath = $self->tarpath("$name-$version.tar.gz");
+        rename [<*>]->[0], "$name-$version";
 
+        my $tmp_path = File::Spec->catfile($tmpdir, "$name-$version.tar.gz");
+
+        my $tar = Archive::Tar->new();
+        my @files = $self->list_files($tmpdir);
+        $tar->add_files(@files);
+        $tar->write($tmp_path, COMPRESS_GZIP);
+
+        $tmp_path;
+    };
+
+    my $tarpath = $self->tarpath(basename $tmp_tarpath);
     unlink $tarpath if -f $tarpath;
-
-    my $tar = Archive::Tar->new();
-    my @files = $self->list_files($tmpdir);
-    $tar->add_files(@files);
-    $tar->write($tarpath, COMPRESS_GZIP);
+    rename $tmp_tarpath => $tarpath;
 
     printf "Wrote $tarpath\n";
 }
