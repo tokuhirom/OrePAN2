@@ -90,7 +90,10 @@ sub _scan_provides {
         prefix => '',
         version => 2,
     );
-    return $self->filter_no_index($provides, $meta->no_index);
+    return $self->filter_no_index(
+        $provides,
+        defined($meta) ? $meta->no_index : {}
+    );
 }
 
 sub filter_no_index {
