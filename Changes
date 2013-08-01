@@ -2,6 +2,15 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.09 2013-08-01T03:10:02Z
+
+    [BUG FIX]
+    - Older version fails to create index on the dist does not contains META file.
+      (reported by exodist++)
+
+    [MINOR FIX]
+    - Bump up CPAN::Meta deps on 2.131560.
+
 0.08 2013-07-09T04:37:34Z
 
     - Put tar file to the right path.
