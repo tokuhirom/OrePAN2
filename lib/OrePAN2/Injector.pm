@@ -12,7 +12,6 @@ use File::Find qw(find);
 use Archive::Tar;
 use HTTP::Tiny;
 use File::Copy qw(copy);
-use CPANPLUS::Backend;
 use Cwd;
 
 sub new {
