@@ -4,7 +4,6 @@ use warnings;
 use utf8;
 
 use File::Find qw(find);
-use Module::Metadata 1.000014 ();
 use File::Spec ();
 use File::Basename ();
 use Archive::Extract ();
@@ -13,6 +12,7 @@ use File::Temp qw(tempdir);
 use PerlIO::gzip;
 use CPAN::Meta 2.131560;
 use File::pushd;
+use Parse::LocalDistribution;
 
 sub new {
     my $class = shift;
@@ -77,6 +77,8 @@ sub scan_provides {
         # fallthrough.
     } elsif (-f 'META.yml') {
         $meta = CPAN::Meta->load_file('META.yml');
+    } else {
+        print "[WARN] META file does not exists in $dir\n";
     }
 
     return $self->_scan_provides('.', $meta);
@@ -85,41 +87,7 @@ sub scan_provides {
 sub _scan_provides {
     my ($self, $dir, $meta) = @_;
 
-    my $provides = Module::Metadata->provides(
-        dir => $dir,
-        prefix => '',
-        version => 2,
-    );
-    return $self->filter_no_index(
-        $provides,
-        defined($meta) ? $meta->no_index : {}
-    );
-}
-
-sub filter_no_index {
-    my ($self, $provides, $no_index) = @_;
-    for my $key (keys %$provides) {
-        for my $file (@{$no_index->{file} || []}) {
-            if ($provides->{$key}->{file} eq $file) {
-                delete $provides->{$key};
-            }
-        }
-        for my $dir (@{$no_index->{directory} || $no_index->{dir} || []}) {
-            if ($provides->{$key}->{file} =~ m{\A$dir/}) {
-                delete $provides->{$key};
-            }
-        }
-        for my $pkg (@{$no_index->{package} || []}) {
-            if ($key eq $pkg) {
-                delete $provides->{$key};
-            }
-        }
-        for my $pkg (@{$no_index->{namespace} || []}) {
-            if ($key =~ m{\A$pkg\::}) {
-                delete $provides->{$key};
-            }
-        }
-    }
+    my $provides = Parse::LocalDistribution->new->parse($dir);
     return $provides;
 }
 
