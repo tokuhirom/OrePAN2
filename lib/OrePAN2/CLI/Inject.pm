@@ -20,6 +20,7 @@ sub run {
     my $version;
     my $generate_index = 1;
     my $author = "DUMMY";
+    my $text;
     my $p = Getopt::Long::Parser->new(
         config => [qw(posix_default no_ignore_case auto_help)]
     );
@@ -27,6 +28,7 @@ sub run {
         'version!'       => \$version,
         'generate-index!' => \$generate_index,
         'author=s'        => \$author,
+        'text!'           => \$text,
     );
     if ($version) {
         print "orepan2: $OrePAN2::VERSION\n";
@@ -53,7 +55,10 @@ sub run {
     }
 
     if ($generate_index) {
-        OrePAN2::Indexer->new(directory => $directory)->make_index();
+        my $indexer = OrePAN2::Indexer->new(directory => $directory);
+        $indexer->make_index(
+            no_compress => $text,
+        );
     }
 }
 
