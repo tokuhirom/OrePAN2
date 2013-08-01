@@ -4,14 +4,14 @@ use warnings;
 use utf8;
 
 use File::Find qw(find);
-use Module::Metadata ();
+use Module::Metadata 1.000014 ();
 use File::Spec ();
 use File::Basename ();
 use Archive::Extract ();
 use OrePAN2::Index;
 use File::Temp qw(tempdir);
 use PerlIO::gzip;
-use CPAN::Meta;
+use CPAN::Meta 2.131560;
 use File::pushd;
 
 sub new {

@@ -2,7 +2,7 @@ requires 'perl', '5.008001';
 
 requires 'Archive::Extract', 0.68;
 requires 'Archive::Tar';
-requires 'CPAN::Meta';
+requires 'CPAN::Meta', 2.131560;
 requires 'File::Temp';
 requires 'File::pushd';
 requires 'Getopt::Long', 2.39;
