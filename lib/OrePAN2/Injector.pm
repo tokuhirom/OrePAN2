@@ -12,6 +12,8 @@ use File::Find qw(find);
 use Archive::Tar;
 use HTTP::Tiny;
 use File::Copy qw(copy);
+use CPANPLUS::Backend;
+use Cwd;
 
 sub new {
     my $class = shift;
@@ -29,7 +31,7 @@ sub directory { shift->{directory} }
 
 sub inject {
     my ($self, $source) = @_;
-    
+
     if ($source =~ m{\A((?:git://|git\@github.com:).*?)(?:\@(.*))?\z}) {
         $self->inject_from_git($1, $2);
     } elsif ($source =~ m{\Ahttp://}) {
@@ -37,7 +39,29 @@ sub inject {
     } elsif (-f $source) {
         $self->inject_from_file($source);
     } else {
-        die "Unknown source: $source\n";
+        my $dir  = tempdir( CLEANUP => 1 );
+        my $orig = cwd();
+
+        chdir($dir);
+        system("cpan -g '$source'");
+        chdir($orig);
+
+        my $dist;
+        opendir(my $dh, $dir) || die "Could not open temp dir: $!";
+        for my $file (readdir($dh)) {
+            next if $file =~ m/^\./;
+            next unless -f "$dir/$file";
+            $dist = "$dir/$file";
+            last;
+        }
+        closedir($dh);
+
+        if ($dist) {
+            $self->inject_from_file($dist);
+        }
+        else {
+            die "Unknown source: $source\n";
+        }
     }
 }
 
