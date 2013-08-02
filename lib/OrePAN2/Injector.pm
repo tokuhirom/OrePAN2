@@ -12,7 +12,7 @@ use File::Find qw(find);
 use Archive::Tar;
 use HTTP::Tiny;
 use File::Copy qw(copy);
-use Cwd;
+use MetaCPAN::API;
 
 sub new {
     my $class = shift;
@@ -37,30 +37,25 @@ sub inject {
         $self->inject_from_http($source);
     } elsif (-f $source) {
         $self->inject_from_file($source);
-    } else {
-        my $dir  = tempdir( CLEANUP => 1 );
-        my $orig = cwd();
+    }
+    elsif ( $source =~ m/^[\w_][\w0-9:_]+$/ ) {
 
-        chdir($dir);
-        system("cpan -g '$source'");
-        chdir($orig);
+        my $c = MetaCPAN::API->new
+            || die "Could not get MetaCPAN API";
 
-        my $dist;
-        opendir(my $dh, $dir) || die "Could not open temp dir: $!";
-        for my $file (readdir($dh)) {
-            next if $file =~ m/^\./;
-            next unless -f "$dir/$file";
-            $dist = "$dir/$file";
-            last;
-        }
-        closedir($dh);
+        my $mod = $c->module($source)
+            || die "Could not find $source";
 
-        if ($dist) {
-            $self->inject_from_file($dist);
-        }
-        else {
-            die "Unknown source: $source\n";
-        }
+        my $rel = $c->release( distribution => $mod->{distribution} )
+            || die "Could not find distribution for $source";
+
+        my $url = $rel->{download_url}
+            || die "Could not find url for $source";
+
+        $self->inject_from_http($url);
+    }
+    else {
+        die "Unknown source: $source\n";
     }
 }
 
