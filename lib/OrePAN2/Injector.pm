@@ -12,6 +12,7 @@ use File::Find qw(find);
 use Archive::Tar;
 use HTTP::Tiny;
 use File::Copy qw(copy);
+use MetaCPAN::API;
 
 sub new {
     my $class = shift;
@@ -29,14 +30,31 @@ sub directory { shift->{directory} }
 
 sub inject {
     my ($self, $source) = @_;
-    
+
     if ($source =~ m{\A((?:git://|git\@github.com:).*?)(?:\@(.*))?\z}) {
         $self->inject_from_git($1, $2);
     } elsif ($source =~ m{\Ahttp://}) {
         $self->inject_from_http($source);
     } elsif (-f $source) {
         $self->inject_from_file($source);
-    } else {
+    }
+    elsif ( $source =~ m/^[\w_][\w0-9:_]+$/ ) {
+
+        my $c = MetaCPAN::API->new
+            || die "Could not get MetaCPAN API";
+
+        my $mod = $c->module($source)
+            || die "Could not find $source";
+
+        my $rel = $c->release( distribution => $mod->{distribution} )
+            || die "Could not find distribution for $source";
+
+        my $url = $rel->{download_url}
+            || die "Could not find url for $source";
+
+        $self->inject_from_http($url);
+    }
+    else {
         die "Unknown source: $source\n";
     }
 }
