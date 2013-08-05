@@ -3,14 +3,14 @@ use 5.008005;
 use strict;
 use warnings;
 
-our $VERSION = "0.11";
+our $VERSION = "0.12";
 
 1;
 __END__
 
 =encoding utf-8
 
-=for stopwords DarkPAN orepan2-inject orepan2-indexer darkpan
+=for stopwords DarkPAN orepan2-inject orepan2-indexer darkpan OrePAN1
 
 =head1 NAME
 
