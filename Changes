@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.11 2013-08-05T00:34:24Z
+
+    - Inject from CPAN by module name
+      (exodist++)
+
 0.10 2013-08-01T04:23:57Z
 
     - Switched to Parse::LocalDistribution instead of Module::Metadata.
