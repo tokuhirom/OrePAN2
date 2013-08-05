@@ -14,6 +14,7 @@ orepan2-inject - Injector
 =head1 SYNOPSIS
 
     % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git@master /path/to/darkpan/
+    % orepan2-inject Carton /path/to/darkpan/
 
 =head1 DESCRIPTION
 
@@ -58,4 +59,10 @@ You need to setup git repository as a installable git repo.
 You need to put a META.json in your repository.
 
 If you are using Minilla or Milla, your repository is already ready to install.
+
+=head2 Module name
+
+    % orepan2-inject Data::Dumper /path/to/darkpan
+
+You can inject from CPAN by module name.
 
