@@ -45,6 +45,26 @@ Then you can install Acme::Hoge from darkpan!
 
 It's pretty easy!
 
+=head1 What's difference between OrePAN1?
+
+=over 4
+
+=item OrePAN2 has more clean and sane interface.
+
+=item OrePAN2 provides OO-ish interface
+
+You can use OrePAN2 as a library.
+
+=item OrePAN2 uses modern modules like L<Parse::LocalDistribution>.
+
+OrePAN1 coded a lot of things by itself. OrePAN2 delegates most of things to other CPAN modules.
+
+=item OrePAN2 is active project
+
+OrePAN1 is now in maintenance phase. But OrePAN2 is still in actively development.
+
+=back
+
 =head1 LICENSE
 
 Copyright (C) tokuhirom.
