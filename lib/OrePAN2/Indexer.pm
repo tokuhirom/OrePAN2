@@ -4,8 +4,8 @@ use warnings;
 use utf8;
 
 use File::Find qw(find);
-use File::Spec ();
-use File::Basename ();
+use File::Spec       ();
+use File::Basename   ();
 use Archive::Extract ();
 use OrePAN2::Index;
 use File::Temp qw(tempdir);
@@ -16,8 +16,8 @@ use Parse::LocalDistribution;
 
 sub new {
     my $class = shift;
-    my %args = @_==1 ? %{$_[0]} : @_;
-    unless (defined $args{directory}) {
+    my %args = @_ == 1 ? %{$_[0]} : @_;
+    unless ( defined $args{directory} ) {
         Carp::croak("Missing mandatory parameter: directory");
     }
     bless {
@@ -28,29 +28,27 @@ sub new {
 sub directory { shift->{directory} }
 
 sub make_index {
-    my ($self, %args) = @_;
+    my ( $self, %args ) = @_;
 
     my @files = $self->list_archive_files();
     my $index = OrePAN2::Index->new();
     for my $archive_file (@files) {
-        $self->add_index($index, $archive_file);
+        $self->add_index( $index, $archive_file );
     }
-    $self->write_index($index, $args{no_compress});
+    $self->write_index( $index, $args{no_compress} );
 }
 
 sub add_index {
-    my ($self, $index, $archive_file) = @_;
+    my ( $self, $index, $archive_file ) = @_;
 
-    my $archive = Archive::Extract->new(
-        archive => $archive_file
-    );
+    my $archive = Archive::Extract->new( archive => $archive_file );
     my $tmpdir = tempdir( CLEANUP => 1 );
-    $archive->extract( to => $tmpdir);
+    $archive->extract( to => $tmpdir );
 
-    my $provides = $self->scan_provides($tmpdir);
-    while (my ($package, $dat) = each %$provides) {
+    my $provides = $self->scan_provides( $tmpdir, $archive_file );
+    while ( my ( $package, $dat ) = each %$provides ) {
         my $version = $dat->{version};
-        my $path = File::Spec->abs2rel($archive_file, File::Spec->catfile($self->directory, 'authors', 'id'));
+        my $path = File::Spec->abs2rel( $archive_file, File::Spec->catfile( $self->directory, 'authors', 'id' ) );
         $path =~ s!\\!/!g;
         $index->add_index(
             $package,
@@ -61,45 +59,50 @@ sub add_index {
 }
 
 sub scan_provides {
-    my ($self, $dir) = @_;
+    my ( $self, $dir, $archive_file ) = @_;
 
-    my $guard = pushd(glob("$dir/*"));
+    my $guard = pushd( glob("$dir/*") );
 
     my $metajson = "META.json";
     my $metayaml = "META.yml";
-    my $meta;
-    if (-f 'META.json') {
-        $meta = CPAN::Meta->load_file('META.json');
-        if ($meta->{provides}) {
-            print "Got provided packages information from META\n";
-            return $meta->{provides};
-        }
-        # fallthrough.
-    } elsif (-f 'META.yml') {
-        $meta = CPAN::Meta->load_file('META.yml');
-    } else {
-        print "[WARN] META file does not exists in $dir\n";
+
+    for my $mfile ( 'META.json', 'META.yml', 'META.yaml' ) {
+        next unless -f $mfile;
+        my $meta = eval { CPAN::Meta->load_file($mfile) };
+        return $meta if $meta;
+
+        print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
+        print STDERR "[WARN] $@\n";
+        print STDERR "[WARN] Attempting to continue...\n";
     }
 
-    return $self->_scan_provides('.', $meta);
+    print STDERR "[WARN] Could not find useful meta from '$archive_file'\n";
+    print STDERR "[WARN] Scanning for provided modules...\n";
+
+    my $meta = eval { $self->_scan_provides('.') };
+    return $meta if $meta;
+
+    print STDERR "[WARN] Error scanning: $@\n";
+    # Return empty meta.
+    return {};
 }
 
 sub _scan_provides {
-    my ($self, $dir, $meta) = @_;
+    my ( $self, $dir, $meta ) = @_;
 
     my $provides = Parse::LocalDistribution->new->parse($dir);
     return $provides;
 }
 
 sub write_index {
-    my ($self, $index, $no_compress) = @_;
+    my ( $self, $index, $no_compress ) = @_;
 
     my $pkgfname = File::Spec->catfile(
         $self->directory,
         'modules',
         $no_compress ? '02packages.details.txt' : '02packages.details.txt.gz'
     );
-    mkdir(File::Basename::dirname($pkgfname));
+    mkdir( File::Basename::dirname($pkgfname) );
     open my $fh, $no_compress ? '>:raw' : '>:gzip', $pkgfname,
         or die "Cannot open $pkgfname for writing: $!\n";
     print $fh $index->as_string();
@@ -109,8 +112,7 @@ sub write_index {
 sub list_archive_files {
     my $self = shift;
 
-
-    my $authors_dir = File::Spec->catfile($self->{directory}, 'authors');
+    my $authors_dir = File::Spec->catfile( $self->{directory}, 'authors' );
     return () unless -d $authors_dir;
 
     my @files;
@@ -127,7 +129,8 @@ sub list_archive_files {
                 push @files, $_;
             },
             no_chdir => 1,
-        }, $authors_dir
+        },
+        $authors_dir
     );
     return @files;
 }
