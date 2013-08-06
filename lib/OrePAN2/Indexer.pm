@@ -47,8 +47,8 @@ sub add_index {
     my $tmpdir = tempdir( CLEANUP => 1 );
     $archive->extract( to => $tmpdir);
 
-    my $provides = $self->scan_provides($tmpdir);
-    while (my ($package, $dat) = each %$provides) {
+    my $provides = $self->scan_provides( $tmpdir, $archive_file );
+    while ( my ( $package, $dat ) = each %$provides ) {
         my $version = $dat->{version};
         my $path = File::Spec->abs2rel($archive_file, File::Spec->catfile($self->directory, 'authors', 'id'));
         $path =~ s!\\!/!g;
@@ -61,27 +61,29 @@ sub add_index {
 }
 
 sub scan_provides {
-    my ($self, $dir) = @_;
+    my ( $self, $dir, $archive_file ) = @_;
 
-    my $guard = pushd(glob("$dir/*"));
+    my $guard = pushd( glob("$dir/*") );
 
-    my $metajson = "META.json";
-    my $metayaml = "META.yml";
-    my $meta;
-    if (-f 'META.json') {
-        $meta = CPAN::Meta->load_file('META.json');
-        if ($meta->{provides}) {
-            print "Got provided packages information from META\n";
-            return $meta->{provides};
-        }
-        # fallthrough.
-    } elsif (-f 'META.yml') {
-        $meta = CPAN::Meta->load_file('META.yml');
-    } else {
-        print "[WARN] META file does not exists in $dir\n";
+    for my $mfile ( 'META.json', 'META.yml', 'META.yaml' ) {
+        next unless -f $mfile;
+        my $meta = eval { CPAN::Meta->load_file($mfile) };
+        return $meta->{provides} if $meta && $meta->{provides};
+
+        print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
+        print STDERR "[WARN] $@\n";
+        print STDERR "[WARN] Attempting to continue...\n";
     }
 
-    return $self->_scan_provides('.', $meta);
+    print STDERR "[WARN] Could not find useful meta from '$archive_file'\n";
+    print STDERR "[WARN] Scanning for provided modules...\n";
+
+    my $provides = eval { $self->_scan_provides('.') };
+    return $provides if $provides;
+
+    print STDERR "[WARN] Error scanning: $@\n";
+    # Return empty provides.
+    return {};
 }
 
 sub _scan_provides {
