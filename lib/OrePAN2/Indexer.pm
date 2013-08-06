@@ -63,10 +63,7 @@ sub add_index {
 sub scan_provides {
     my ( $self, $dir, $archive_file ) = @_;
 
-    my $guard = pushd(glob("$dir/*"));
-
-    my $metajson = "META.json";
-    my $metayaml = "META.yml";
+    my $guard = pushd( glob("$dir/*") );
 
     for my $mfile ( 'META.json', 'META.yml', 'META.yaml' ) {
         next unless -f $mfile;
