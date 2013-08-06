@@ -68,7 +68,7 @@ sub scan_provides {
     for my $mfile ( 'META.json', 'META.yml', 'META.yaml' ) {
         next unless -f $mfile;
         my $meta = eval { CPAN::Meta->load_file($mfile) };
-        return $meta if $meta;
+        return $meta->{provides} if $meta && $meta->{provides};
 
         print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
         print STDERR "[WARN] $@\n";
@@ -78,11 +78,11 @@ sub scan_provides {
     print STDERR "[WARN] Could not find useful meta from '$archive_file'\n";
     print STDERR "[WARN] Scanning for provided modules...\n";
 
-    my $meta = eval { $self->_scan_provides('.') };
-    return $meta if $meta;
+    my $provides = eval { $self->_scan_provides('.') };
+    return $provides if $provides;
 
     print STDERR "[WARN] Error scanning: $@\n";
-    # Return empty meta.
+    # Return empty provides.
     return {};
 }
 
