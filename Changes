@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.13 2013-08-27T04:40:32Z
+
+    - Better fall-through for missing or broken META
+      (Chad Granum)
+
 0.12 2013-08-05T03:40:31Z
 
     - Document about differentiation from OrePAN1
