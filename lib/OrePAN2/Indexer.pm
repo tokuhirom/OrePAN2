@@ -77,8 +77,8 @@ sub scan_provides {
         }
     }
 
-    print STDERR "[WARN] Could not find useful meta from '$archive_file'\n";
-    print STDERR "[WARN] Scanning for provided modules...\n";
+    print STDERR "[INFO] Could not find useful meta from '$archive_file'\n";
+    print STDERR "[INFO] Scanning for provided modules...\n";
 
     my $provides = eval { $self->_scan_provides('.') };
     return $provides if $provides;
