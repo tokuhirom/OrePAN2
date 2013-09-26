@@ -70,9 +70,11 @@ sub scan_provides {
         my $meta = eval { CPAN::Meta->load_file($mfile) };
         return $meta->{provides} if $meta && $meta->{provides};
 
-        print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
-        print STDERR "[WARN] $@\n";
-        print STDERR "[WARN] Attempting to continue...\n";
+        if ($@) {
+            print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
+            print STDERR "[WARN] $@\n";
+            print STDERR "[WARN] Attempting to continue...\n";
+        }
     }
 
     print STDERR "[WARN] Could not find useful meta from '$archive_file'\n";
