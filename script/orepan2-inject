@@ -60,6 +60,14 @@ You need to put a META.json in your repository.
 
 If you are using Minilla or Milla, your repository is already ready to install.
 
+OrePAN2::Inject supports following URL types:
+
+    git+file://path/to/repo.git
+    git://github.com/plack/Plack.git@1.0000        # tag
+    git://github.com/plack/Plack.git@devel         # branch
+
+It's compatible with cpanm.
+
 =head2 Module name
 
     % orepan2-inject Data::Dumper /path/to/darkpan
