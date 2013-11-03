@@ -31,9 +31,13 @@ sub directory { shift->{directory} }
 sub inject {
     my ($self, $source) = @_;
 
-    if ($source =~ m{\A((?:git://|git\@github.com:).*?)(?:\@(.*))?\z}) {
-        $self->inject_from_git($1, $2);
-    } elsif ($source =~ m{\Ahttp://}) {
+    if ($source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/) { # steal from App::cpanminus::script
+        # git URL has to end with .git when you need to use pin @ commit/tag/branch
+        my ($uri, $commitish) = split /(?<=\.git)@/i, $source, 2;
+        # git CLI doesn't support git+http:// etc.
+        $uri =~ s/^git\+//;
+        $self->inject_from_git($uri, $commitish);
+    } elsif ($source =~ m{\Ahttps?://}) {
         $self->inject_from_http($source);
     } elsif (-f $source) {
         $self->inject_from_file($source);

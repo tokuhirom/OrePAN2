@@ -32,7 +32,7 @@ chdir $tmpdir;
 my $injector = OrePAN2::Injector->new(
     directory => '.',
 );
-$injector->inject_from_git("file://$gitrepo");
+$injector->inject("git+file://$gitrepo");
 
 ok -f 'authors/id/D/DU/DUMMY/Acme-YakiniQ-0.01.tar.gz', "inject from git";
 
