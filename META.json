@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.6.7, CPAN::Meta::Converter version 2.132661",
+   "generated_by" : "Minilla/v0.8.1, CPAN::Meta::Converter version 2.132510",
    "license" : [
       "perl_5"
    ],
@@ -73,10 +73,11 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.15",
+   "version" : "0.16",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
       "Masahiro Honma <hiratara@cpan.org>",
-      "Chad Granum <exodist7@gmail.com>"
+      "Chad Granum <exodist7@gmail.com>",
+      "Masayuki Matsuki <y.songmu@gmail.com>"
    ]
 }

@@ -41,6 +41,10 @@ It's pretty easy!
 
     OrePAN1 is now in maintenance phase. But OrePAN2 is still in actively development.
 
+# SEE ALSO
+
+[OrePAN2::Server](http://search.cpan.org/perldoc?OrePAN2::Server)
+
 # LICENSE
 
 Copyright (C) tokuhirom.

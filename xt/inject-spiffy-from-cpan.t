@@ -11,7 +11,7 @@ no warnings 'redefine';
 
 # test case for https://github.com/tokuhirom/OrePAN2/issues/6#issuecomment-21912528
 {
-    my $url = 'http://cpan.metacpan.org/authors/id/M/MI/MIYAGAWA/Devel-StackTrace-AsHTML-0.14.tar.gz';
+    my $url = 'http://search.cpan.org/CPAN/authors/id/M/MI/MIYAGAWA/Devel-StackTrace-AsHTML-0.14.tar.gz';
     my $tmpdir = tempdir( CLEANUP => 1 );
     local @ARGV = ('--text', $url, $tmpdir);
     OrePAN2::CLI::Inject->new->run();

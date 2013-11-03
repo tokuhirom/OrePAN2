@@ -2,6 +2,12 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.16 2013-11-03T10:17:24Z
+
+    - Support cpanm compatible git schemas.
+      git+file://path/to/git/repository.git
+      (songmu)
+
 0.15 2013-09-26T02:51:42Z
 
     - Change logging level
