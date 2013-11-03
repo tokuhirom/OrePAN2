@@ -65,6 +65,10 @@ OrePAN1 is now in maintenance phase. But OrePAN2 is still in actively developmen
 
 =back
 
+=head1 SEE ALSO
+
+L<OrePAN2::Server>
+
 =head1 LICENSE
 
 Copyright (C) tokuhirom.
