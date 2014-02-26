@@ -13,7 +13,7 @@ sub new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
     bless {
-        index => [],
+        index => {},
         no_mtime => 0,
     }, $class;
 }
@@ -48,27 +48,27 @@ sub load {
 
 sub lookup {
     my ($self, $package) = @_;
-    for (@{$self->{index}}) {
-        return ($_->[1], $_->[2]) if $_->[0] eq $package;
+    if (my $entry = $self->{index}->{$package}) {
+        return @$entry;
     }
     return;
 }
 
 sub packages {
     my ($self) = @_;
-    map { $_->[1] } sort { $a->[0] cmp $b->[0] } @{$self->{index}};
+    sort { $a cmp $b } keys %{$self->{index}};
 }
 
 sub delete_index {
     my ($self, $package) = @_;
-    @{$self->{index}} = grep { $_->[0] ne $package } @{$self->{index}};
+    delete $self->{index}->{$package};
     return;
 }
 
 sub add_index {
     my ($self, $package, $version, $archive_file) = @_;
 
-    push @{$self->{index}}, [$package, $version, $archive_file];
+    $self->{index}->{$package} = [$version, $archive_file];
 }
 
 sub as_string {
@@ -83,14 +83,15 @@ sub as_string {
         'Columns:      package name, version, path',
         'Intended-For: Automated fetch routines, namespace documentation.',
         "Written-By:   OrePAN2 $OrePAN2::VERSION",
-        "Line-Count:   @{[ scalar(@{$self->{index}}) ]}",
+        "Line-Count:   @{[ scalar(keys %{$self->{index}}) ]}",
         (!$self->{no_mtime} ? "Last-Updated: @{[ scalar localtime ]}" : ()),
         '',
     );
 
-    for my $row (sort { $a->[0] cmp $b->[0] } @{$self->{index}}) {
+    for my $pkg ($self->packages) {
+        my $entry = $self->{index}{$pkg};
         # package name, version, path
-        push @buf, sprintf "%-22s %-22s %s", $row->[0], $row->[1] || 'undef', $row->[2];
+        push @buf, sprintf "%-22s %-22s %s", $pkg, $entry->[0] || 'undef', $entry->[1];
     }
     return join("\n", @buf) . "\n";
 }

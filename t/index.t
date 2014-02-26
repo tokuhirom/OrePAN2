@@ -31,5 +31,11 @@ subtest 'delete' => sub {
     is [$index->lookup('A_Third_Package')]->[1], undef;
 };
 
+subtest 'as_string' => sub {
+    my $index = OrePAN2::Index->new;
+    $index->load('t/dat/02.packages.details.txt');
+    like $index->as_string, qr{A_Third_Package};
+};
+
 done_testing;
 
