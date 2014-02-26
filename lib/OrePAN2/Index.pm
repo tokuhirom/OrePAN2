@@ -15,6 +15,7 @@ sub new {
     bless {
         index => {},
         no_mtime => 0,
+        %args,
     }, $class;
 }
 
