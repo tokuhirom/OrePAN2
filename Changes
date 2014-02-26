@@ -2,6 +2,12 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.21 2014-02-26T09:47:32Z
+
+    - OrePAN2::Indexer: Make temporary file in the same parition.
+        It's required by atomic operation.
+        (tokuhirom)
+
 0.20 2014-02-26T02:34:49Z
 
     - OrePAN2::Index: add_index does not index the package by default. Added 'replace' option.
