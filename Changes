@@ -2,6 +2,12 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.17 2014-02-26T00:19:04Z
+
+    - OrePAN2::Inject#inject_from_* returns the tar ball path.
+      Previous version prints the tar ball path in the module.
+      (tokuhirom)
+
 0.16 2013-11-03T10:17:24Z
 
     - Support cpanm compatible git schemas.
