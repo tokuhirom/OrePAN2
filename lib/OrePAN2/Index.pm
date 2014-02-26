@@ -19,7 +19,8 @@ sub new {
 }
 
 sub load {
-    my ($self, $fname) = @_;
+    my ($self, $fname, $opts) = @_;
+    $opts ||= {};
 
     my $fh = do {
         if ($fname =~ /\.gz\z/) {
@@ -37,9 +38,10 @@ sub load {
         last unless /\S/;
     }
 
+    my $method = $opts->{replace} ? 'replace_index' : 'add_index';
     while (<$fh>) {
         if (/^(\S+)\s+(\S+)\s+(.*)$/) {
-           $self->add_index($1,$2 eq 'undef' ? undef : $2,$3);
+           $self->$method($1,$2 eq 'undef' ? undef : $2,$3);
         }
     }
 
@@ -65,9 +67,17 @@ sub delete_index {
     return;
 }
 
+sub replace_index {
+    my ($self, $package, $version, $archive_file) = @_;
+    $self->{index}->{$package} = [$version, $archive_file];
+}
+
 sub add_index {
     my ($self, $package, $version, $archive_file) = @_;
 
+    if ($self->{index}{$package}) {
+        Carp::croak("${package} is already indexed.");
+    }
     $self->{index}->{$package} = [$version, $archive_file];
 }
 
