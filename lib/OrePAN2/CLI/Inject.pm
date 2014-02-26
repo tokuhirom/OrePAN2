@@ -44,13 +44,15 @@ sub run {
     if (@ARGV) {
         for (@ARGV) {
             next unless /\S/;
-            $injector->inject($_);
+            my $tarpath = $injector->inject($_);
+            print "Wrote $tarpath from $_\n";
         }
     } else {
         while (<>) {
             chomp;
             next unless /\S/;
-            $injector->inject($_);
+            my $tarpath = $injector->inject($_);
+            print "Wrote $tarpath from $_\n";
         }
     }
 

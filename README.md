@@ -33,7 +33,7 @@ It's pretty easy!
 
     You can use OrePAN2 as a library.
 
-- OrePAN2 uses modern modules like [Parse::LocalDistribution](http://search.cpan.org/perldoc?Parse::LocalDistribution).
+- OrePAN2 uses modern modules like [Parse::LocalDistribution](https://metacpan.org/pod/Parse::LocalDistribution).
 
     OrePAN1 coded a lot of things by itself. OrePAN2 delegates most of things to other CPAN modules.
 
@@ -43,7 +43,7 @@ It's pretty easy!
 
 # SEE ALSO
 
-[OrePAN2::Server](http://search.cpan.org/perldoc?OrePAN2::Server)
+[OrePAN2::Server](https://metacpan.org/pod/OrePAN2::Server)
 
 # LICENSE
 
