@@ -2,6 +2,14 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.20 2014-02-26T02:34:49Z
+
+    - OrePAN2::Index: add_index does not index the package by default. Added 'replace' option.
+    - OrePAN2::Index: Use hash as internal representation for OrePAN2::Index.
+    - OrePAN2::Index: Fixed gunzip.
+    - OrePAN2::Index: Added delete_index method.
+      (tokuhirom)
+
 0.19 2014-02-26T01:30:14Z
 
     - OrePAN2::Index: Added methods for parsing
