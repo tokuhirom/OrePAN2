@@ -31,16 +31,17 @@ sub directory { shift->{directory} }
 sub inject {
     my ($self, $source) = @_;
 
+    my $tarpath;
     if ($source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/) { # steal from App::cpanminus::script
         # git URL has to end with .git when you need to use pin @ commit/tag/branch
         my ($uri, $commitish) = split /(?<=\.git)@/i, $source, 2;
         # git CLI doesn't support git+http:// etc.
         $uri =~ s/^git\+//;
-        return $self->inject_from_git($uri, $commitish);
+        $tarpath = $self->inject_from_git($uri, $commitish);
     } elsif ($source =~ m{\Ahttps?://}) {
-        return $self->inject_from_http($source);
+        $tarpath = $self->inject_from_http($source);
     } elsif (-f $source) {
-        return $self->inject_from_file($source);
+        $tarpath = $self->inject_from_file($source);
     }
     elsif ( $source =~ m/^[\w_][\w0-9:_]+$/ ) {
 
@@ -56,11 +57,13 @@ sub inject {
         my $url = $rel->{download_url}
             || die "Could not find url for $source";
 
-        return $self->inject_from_http($url);
+        $tarpath = $self->inject_from_http($url);
     }
     else {
         die "Unknown source: $source\n";
     }
+
+    return File::Spec->abs2rel(File::Spec->rel2abs($tarpath), $self->directory);
 }
 
 sub tarpath {
