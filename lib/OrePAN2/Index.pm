@@ -3,13 +3,59 @@ use strict;
 use warnings;
 use utf8;
 use OrePAN2;
+use IO::Compress::Gzip ('$GzipError');
+
+use Class::Accessor::Lite 0.05 (
+    rw => [qw(no_mtime)],
+);
 
 sub new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
     bless {
         index => [],
+        no_mtime => 0,
     }, $class;
+}
+
+sub load {
+    my ($class, $fname) = @_;
+
+    my $self = $class->new();
+
+    my $fh = do {
+        if ($fname =~ /\.gz\z/) {
+            IO::Compress::Gzip->new($fname)
+                or die "gzip failed: $GzipError\n";
+        } else {
+            open my $fh, '<', $fname
+                or Carp::croak("Cannot open '$fname' for reading: $!");
+            $fh;
+        }
+    };
+
+    # skip headers
+    while (<$fh>) {
+        last unless /\S/;
+    }
+
+    while (<$fh>) {
+        if (/^(\S+)\s+(\S+)\s+(.*)$/) {
+            push @{$self->{index}}, [$1,$2 eq 'undef' ? undef : $2,$3];
+        }
+    }
+
+    close $fh;
+
+    return $self;
+}
+
+sub lookup {
+    my ($self, $package) = @_;
+    for (@{$self->{index}}) {
+        return ($_->[1], $_->[2]) if $_->[0] eq $package;
+    }
+    return;
 }
 
 sub add_index {
@@ -31,7 +77,7 @@ sub as_string {
         'Intended-For: Automated fetch routines, namespace documentation.',
         "Written-By:   OrePAN2 $OrePAN2::VERSION",
         "Line-Count:   @{[ scalar(@{$self->{index}}) ]}",
-        "Last-Updated: @{[ scalar localtime ]}",
+        (!$self->{no_mtime} ? "Last-Updated: @{[ scalar localtime ]}" : ()),
         '',
     );
 
@@ -43,4 +89,36 @@ sub as_string {
 }
 
 1;
+__END__
 
+=head1 NAME
+
+OrePAN2::Index - Index
+
+=head1 DESCRIPTION
+
+This is a module to manipulate 02packages.details.txt.
+
+=head1 METHODS
+
+=over 4
+
+=item C<< my $index = OrePAN2::Index->new(%attr) >>
+
+=item C<< my $index = OrePAN2::Index->load($filename) >>
+
+Load existing 02.packages.details.txt
+
+=item C<< my ($version, $path) = $index->lookup($package) >>
+
+Lookup package from index.
+
+=item C<< $index->add_index($package, $version, $path) >>
+
+Add new entry to the index.
+
+=item C<< $index->as_string() >>
+
+Make index as string.
+
+=back

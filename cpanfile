@@ -11,6 +11,8 @@ requires 'Parse::LocalDistribution', '0.01';
 requires 'PerlIO::gzip';
 requires 'Pod::Usage';
 requires 'MetaCPAN::API', 0.43;
+requires 'Class::Accessor::Lite';
+requires 'IO::Compress::Gzip';
 requires 'parent';
 
 on 'test' => sub {
