@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use utf8;
 use OrePAN2;
-use IO::Compress::Gzip ('$GzipError');
+use IO::Uncompress::Gunzip ('$GunzipError');
 
 use Class::Accessor::Lite 0.05 (
     rw => [qw(no_mtime)],
@@ -25,8 +25,8 @@ sub load {
 
     my $fh = do {
         if ($fname =~ /\.gz\z/) {
-            IO::Compress::Gzip->new($fname)
-                or die "gzip failed: $GzipError\n";
+            IO::Uncompress::Gunzip->new($fname)
+                or die "gzip failed: $GunzipError\n";
         } else {
             open my $fh, '<', $fname
                 or Carp::croak("Cannot open '$fname' for reading: $!");
@@ -55,6 +55,17 @@ sub lookup {
     for (@{$self->{index}}) {
         return ($_->[1], $_->[2]) if $_->[0] eq $package;
     }
+    return;
+}
+
+sub packages {
+    my ($self) = @_;
+    map { $_->[1] } sort { $a->[0] cmp $b->[0] } @{$self->{index}};
+}
+
+sub delete_index {
+    my ($self, $package) = @_;
+    @{$self->{index}} = grep { $_->[0] ne $package } @{$self->{index}};
     return;
 }
 
