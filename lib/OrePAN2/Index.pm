@@ -19,9 +19,7 @@ sub new {
 }
 
 sub load {
-    my ($class, $fname) = @_;
-
-    my $self = $class->new();
+    my ($self, $fname) = @_;
 
     my $fh = do {
         if ($fname =~ /\.gz\z/) {
@@ -41,13 +39,11 @@ sub load {
 
     while (<$fh>) {
         if (/^(\S+)\s+(\S+)\s+(.*)$/) {
-            push @{$self->{index}}, [$1,$2 eq 'undef' ? undef : $2,$3];
+           $self->add_index($1,$2 eq 'undef' ? undef : $2,$3);
         }
     }
 
     close $fh;
-
-    return $self;
 }
 
 sub lookup {
@@ -116,7 +112,7 @@ This is a module to manipulate 02packages.details.txt.
 
 =item C<< my $index = OrePAN2::Index->new(%attr) >>
 
-=item C<< my $index = OrePAN2::Index->load($filename) >>
+=item C<< $index->load($filename) >>
 
 Load existing 02.packages.details.txt
 
