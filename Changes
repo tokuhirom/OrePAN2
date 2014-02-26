@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.19 2014-02-26T01:30:14Z
+
+    - OrePAN2::Index: Added methods for parsing
+      (tokuhirom)
+
 0.18 2014-02-26T00:30:30Z
 
     [INCOMPATIBLE CHANGE]
