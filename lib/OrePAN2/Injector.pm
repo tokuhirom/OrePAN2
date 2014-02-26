@@ -112,7 +112,7 @@ sub inject_from_git {
 
     my $tmpdir = tempdir(CLEANUP => 1);
 
-    my $tmp_tarpath = do {
+    my ($basename, $tar) = do {
         my $guard = pushd($tmpdir);
 
         _run("git clone $repository");
@@ -133,21 +133,26 @@ sub inject_from_git {
         my $name    = $meta->{name};
         my $version = $meta->{version};
 
-        rename [<*>]->[0], "$name-$version";
+        rename([<*>]->[0], "$name-$version")
+            or die $!;
 
-        my $tmp_path = File::Spec->catfile($tmpdir, "$name-$version.tar.gz");
+        my $tmp_path = File::Spec->catfile($tmpdir,
+        );
 
         my $tar = Archive::Tar->new();
         my @files = $self->list_files($tmpdir);
         $tar->add_files(@files);
-        $tar->write($tmp_path, COMPRESS_GZIP);
 
-        $tmp_path;
+        ("$name-$version.tar.gz", $tar);
     };
 
-    my $tarpath = $self->tarpath(basename $tmp_tarpath);
+    my $tarpath = $self->tarpath($basename);
+    # Must be same partition.
+    my $tmp_tarpath = File::Temp::mktemp("${tarpath}.XXXXXX");
+    $tar->write($tmp_tarpath, COMPRESS_GZIP);
     unlink $tarpath if -f $tarpath;
-    rename $tmp_tarpath => $tarpath;
+    rename($tmp_tarpath => $tarpath)
+        or die $!;
 
     return $tarpath;
 }
