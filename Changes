@@ -2,6 +2,12 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.18 2014-02-26T00:30:30Z
+
+    [INCOMPATIBLE CHANGE]
+    - OrePAN2::Inject#inject_from_* returns the tar ball path from darkpan root.
+      (tokuhirom)
+
 0.17 2014-02-26T00:19:04Z
 
     - OrePAN2::Inject#inject_from_* returns the tar ball path.
