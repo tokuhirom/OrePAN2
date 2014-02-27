@@ -9,10 +9,10 @@ use File::Basename ();
 use Archive::Extract ();
 use OrePAN2::Index;
 use File::Temp qw(tempdir);
-use PerlIO::gzip;
 use CPAN::Meta 2.131560;
 use File::pushd;
 use Parse::LocalDistribution;
+use IO::Zlib;
 
 sub new {
     my $class = shift;
@@ -104,8 +104,16 @@ sub write_index {
         $no_compress ? '02packages.details.txt' : '02packages.details.txt.gz'
     );
     mkdir(File::Basename::dirname($pkgfname));
-    open my $fh, $no_compress ? '>:raw' : '>:gzip', $pkgfname,
-        or die "Cannot open $pkgfname for writing: $!\n";
+    my $fh = do {
+        if ($no_compress) {
+            open my $fh, '>:raw', $pkgfname
+                or die "Cannot open $pkgfname for writing: $!\n";
+            $fh;
+        } else {
+            IO::Zlib->new($pkgfname, "w")
+                or die "Cannot open $pkgfname for writing: $!\n";
+        }
+    };
     print $fh $index->as_string();
     close $fh;
 }

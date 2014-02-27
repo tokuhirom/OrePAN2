@@ -48,9 +48,9 @@
             "Getopt::Long" : "2.39",
             "HTTP::Tiny" : "0",
             "IO::Uncompress::Gunzip" : "0",
+            "IO::Zlib" : "0",
             "MetaCPAN::API" : "0.43",
             "Parse::LocalDistribution" : "0.01",
-            "PerlIO::gzip" : "0",
             "Pod::Usage" : "0",
             "parent" : "0",
             "perl" : "5.008005"
