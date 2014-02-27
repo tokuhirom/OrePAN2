@@ -17,9 +17,11 @@ sub slurp {
 
 sub slurp_gz {
     my $name = shift;
-    open my $fh, '<:gzip', $name
+    require IO::Zlib;
+    my $fh = IO::Zlib->new($name, 'rb')
         or Carp::croak "Cannot open '$name' for reading: $!";
-    do { local $/; <$fh> };
+    my $content = join('', <$fh>);
+    return $content;
 }
 
 1;
