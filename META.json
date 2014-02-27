@@ -75,7 +75,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.22",
+   "version" : "0.23",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
       "Masahiro Honma <hiratara@cpan.org>",
