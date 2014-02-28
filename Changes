@@ -2,6 +2,10 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.27 2014-02-28T07:58:02Z
+
+    - Fixed caching bug.
+
 0.26 2014-02-28T07:44:18Z
 
     - [EXPERIMENTAL] Added experimental cache mode.
