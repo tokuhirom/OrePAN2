@@ -1,0 +1,41 @@
+#!perl
+use strict;
+use warnings;
+use OrePAN2::Index;
+use Getopt::Long;
+
+my $version;
+my $p = Getopt::Long::Parser->new(
+    config => [qw(posix_default no_ignore_case auto_help)]
+);
+$p->getoptions(
+    'o=s' => \my $outfilename,
+    'simple!' => \my $simple,
+);
+
+my $outfh = *STDOUT;
+if (defined $outfilename) {
+    open $outfh, '>', $outfilename
+        or die "Cannot open $outfilename for writing: $!";
+}
+
+my $index = OrePAN2::Index->new();
+for my $filename (@ARGV) {
+    $index->load($filename, {replace => 1});
+}
+print {$outfh} $index->as_string({simple => $simple});
+
+__END__
+
+=head1 SYNOPSIS
+
+    > orepan2-merge-index -o merged.txt foo/02packages.details.txt bar/02packages.details.txt.gz
+
+=head1 DESCRIPTION
+
+Remove tar files, does not refered by 02packages.txt.gz
+
+=head1 DEVELOPMENT STATUS
+
+B<Unstable>
+

@@ -1,0 +1,35 @@
+#!perl
+use strict;
+use warnings;
+use OrePAN2::Repository;
+use Pod::Usage;
+use Getopt::Long;
+
+my $p = Getopt::Long::Parser->new(
+    config => [qw(posix_default no_ignore_case auto_help)]
+);
+$p->getoptions(
+    'text!' => \my $text,
+);
+
+my $directory = shift(@ARGV) or pod2usage;
+my $repository = OrePAN2::Repository->new(
+    directory => $directory,
+    compress_index => !$text,
+);
+$repository->gc;
+
+__END__
+
+=head1 SYNOPSIS
+
+    > orepan2-gc /path/to/darkpan/
+
+=head1 DESCRIPTION
+
+Remove tar files, does not refered by 02packages.txt.gz
+
+=head1 DEVELOPMENT STATUS
+
+B<Unstable>
+
