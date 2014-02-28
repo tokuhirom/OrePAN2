@@ -11,9 +11,13 @@ requires 'Parse::LocalDistribution', '0.01';
 requires 'IO::Zlib';
 requires 'Pod::Usage';
 requires 'MetaCPAN::API', 0.43;
-requires 'Class::Accessor::Lite';
 requires 'IO::Uncompress::Gunzip';
 requires 'parent';
+requires 'Class::Accessor::Lite', '0.05';
+requires 'Digest::MD5';
+requires 'File::Path';
+requires 'IO::File::AtomicChange';
+requires 'JSON::PP';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
