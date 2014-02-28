@@ -5,16 +5,11 @@ use utf8;
 use OrePAN2;
 use IO::Uncompress::Gunzip ('$GunzipError');
 
-use Class::Accessor::Lite 0.05 (
-    rw => [qw(no_mtime)],
-);
-
 sub new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
     bless {
         index => {},
-        no_mtime => 0,
         %args,
     }, $class;
 }
@@ -83,7 +78,9 @@ sub add_index {
 }
 
 sub as_string {
-    my $self = shift;
+    my ($self, $opts) = @_;
+    $opts ||= +{};
+    my $simple = $opts->{simple} || 0;
 
     my @buf;
 
@@ -93,9 +90,11 @@ sub as_string {
         'Description:  DarkPAN',
         'Columns:      package name, version, path',
         'Intended-For: Automated fetch routines, namespace documentation.',
-        "Written-By:   OrePAN2 $OrePAN2::VERSION",
-        "Line-Count:   @{[ scalar(keys %{$self->{index}}) ]}",
-        (!$self->{no_mtime} ? "Last-Updated: @{[ scalar localtime ]}" : ()),
+        $simple ? () : (
+            "Written-By:   OrePAN2 $OrePAN2::VERSION",
+            "Line-Count:   @{[ scalar(keys %{$self->{index}}) ]}",
+            "Last-Updated: @{[ scalar localtime ]}",
+        ),
         '',
     );
 
