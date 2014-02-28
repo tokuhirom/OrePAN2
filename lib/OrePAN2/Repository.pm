@@ -7,7 +7,7 @@ use 5.008_001;
 use Carp;
 
 use Class::Accessor::Lite 0.05 (
-    rw => [qw(directory cache)],
+    rw => [qw(directory cache compress_index)],
 );
 use OrePAN2::Indexer;
 use OrePAN2::Injector;
@@ -26,11 +26,13 @@ sub new {
         }
     }
     my $self = bless {
+        compress_index => 1,
         %args,
     }, $class;
     $self->{cache} = OrePAN2::Repository::Cache->new(
         directory => $self->{directory}
     );
+
     return $self;
 }
 
@@ -55,7 +57,9 @@ sub has_cache {
 
 sub make_index {
     my $self = shift;
-    $self->indexer->make_index;
+    $self->indexer->make_index(
+        no_compress => !$self->compress_index,
+    );
 }
 
 sub inject {
@@ -67,7 +71,12 @@ sub inject {
 
 sub index_file {
     my $self = shift;
-    return File::Spec->catfile($self->directory, 'modules', '02packages.details.txt.gz');
+    return File::Spec->catfile($self->directory, 'modules', '02packages.details.txt' . ($self->compress_index ? '.gz' : ''));
+}
+
+sub save_cache {
+    my $self = shift;
+    $self->cache->save;
 }
 
 sub load_index {

@@ -15,6 +15,7 @@ $repo->gc();
 
 ok -f "$tmpdir/authors/id/D/DU/DUMMY/Acme-Foo-0.01.tar.gz";
 ok -f "$tmpdir/modules/02packages.details.txt.gz";
+ok !-f "$tmpdir/modules/02packages.details.txt";
 
 done_testing;
 

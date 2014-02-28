@@ -8,6 +8,7 @@ use Pod::Usage;
 use OrePAN2;
 use OrePAN2::Injector;
 use OrePAN2::Indexer;
+use OrePAN2::Repository;
 
 sub new {
     my $class = shift;
@@ -21,6 +22,7 @@ sub run {
     my $generate_index = 1;
     my $author = "DUMMY";
     my $text;
+    my $enable_cache = 0;
     my $p = Getopt::Long::Parser->new(
         config => [qw(posix_default no_ignore_case auto_help)]
     );
@@ -29,6 +31,7 @@ sub run {
         'generate-index!' => \$generate_index,
         'author=s'        => \$author,
         'text!'           => \$text,
+        'cache!'          => \$enable_cache,
     );
     if ($version) {
         print "orepan2: $OrePAN2::VERSION\n";
@@ -37,30 +40,35 @@ sub run {
         -input => $0,
     );
 
-    my $injector = OrePAN2::Injector->new(
-        directory => $directory,
-        author    => $author,
+    my $repository = OrePAN2::Repository->new(
+        directory      => $directory,
+        compress_index => !$text,
     );
     if (@ARGV) {
         for (@ARGV) {
             next unless /\S/;
-            my $tarpath = $injector->inject($_);
+            next if $enable_cache && $repository->has_cache($_);
+
+            my $tarpath = $repository->inject($_, {author => $author});
             print "Wrote $tarpath from $_\n";
         }
     } else {
         while (<>) {
             chomp;
             next unless /\S/;
-            my $tarpath = $injector->inject($_);
+            next if $enable_cache && $repository->has_cache($_);
+
+            my $tarpath = $repository->inject($_, {author => $author});
             print "Wrote $tarpath from $_\n";
         }
     }
 
+    return unless $repository->cache->is_dirty;
+
+    $repository->save_cache;
+
     if ($generate_index) {
-        my $indexer = OrePAN2::Indexer->new(directory => $directory);
-        $indexer->make_index(
-            no_compress => $text,
-        );
+        $repository->make_index();
     }
 }
 

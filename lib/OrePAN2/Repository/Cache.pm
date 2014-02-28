@@ -10,6 +10,7 @@ use JSON::PP;
 use Digest::MD5;
 use IO::File::AtomicChange;
 use File::Path;
+use File::stat;
 
 use Class::Accessor::Lite 0.05 (
     rw => [qw(is_dirty directory)],
@@ -31,27 +32,31 @@ sub new {
     return $self;
 }
 
-sub load {
+sub data {
     my $self = shift;
-
-    if (open my $fh, '<', $self->{filename}) {
-        $self->{data} = JSON::PP::decode_json(do { local $/; <$fh> });
-    } else {
-        $self->{data} = +{};
-    }
+    $self->{data} ||= do {
+        if (open my $fh, '<', $self->{filename}) {
+            JSON::PP::decode_json(do { local $/; <$fh> });
+        } else {
+            +{};
+        }
+    };
 }
 
 sub is_hit {
     my ($self, $stuff) = @_;
 
-    my $entry = $self->{data}->{$stuff};
+    my $entry = $self->data->{$stuff};
 
     return 0 unless $entry;
-    return 0 unless $entry->{file};
+    return 0 unless $entry->{filename};
     return 0 unless $entry->{md5};
-    return 0 unless -r $entry->{file};
+    return 0 unless -r $entry->{filename};
+    if (my $stat = stat($stuff) && defined($entry->{mtime})) {
+        return 0 if $stat->mtime ne $entry->{mtime}
+    }
 
-    my $md5 = $self->calc_md5(File::Spec->catfile($self->directory, $entry->{file}));
+    my $md5 = $self->calc_md5(File::Spec->catfile($self->directory, $entry->{filename}));
     return 0 unless $md5;
     return 0 if $md5 ne $entry->{md5};
     return 1;
@@ -78,6 +83,7 @@ sub set {
     $self->{data}->{$stuff} = +{
         filename => $filename,
         md5      => $md5,
+        (-f $filename ? (mtime => stat($filename)->mtime) : ()),
     };
     $self->is_dirty(1);
 }

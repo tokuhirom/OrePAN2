@@ -15,9 +15,8 @@ subtest 'gz' => sub {
 
     my $injector = OrePAN2::Injector->new(
         directory => $tmpdir,
-        author => 'MIYAGAWA',
     );
-    $injector->inject('t/dat/Acme-YakiniQ-0.01.tar.gz');
+    $injector->inject('t/dat/Acme-YakiniQ-0.01.tar.gz', {author => 'MIYAGAWA'});
     ok -f "$tmpdir/authors/id/M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz";
 };
 
@@ -26,9 +25,8 @@ subtest 'author name must be upper case' => sub {
 
     my $injector = OrePAN2::Injector->new(
         directory => $tmpdir,
-        author => 'upper',
     );
-    $injector->inject('t/dat/Acme-Foo-0.01.tar.gz');
+    $injector->inject('t/dat/Acme-Foo-0.01.tar.gz', {author => 'upper'});
     ok -f "$tmpdir/authors/id/U/UP/UPPER/Acme-Foo-0.01.tar.gz";
 };
 
