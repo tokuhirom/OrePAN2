@@ -48,15 +48,17 @@ sub is_hit {
 
     my $entry = $self->data->{$stuff};
 
+    my $fullpath = File::Spec->catfile($self->directory, $entry->{filename});
+
     return 0 unless $entry;
     return 0 unless $entry->{filename};
     return 0 unless $entry->{md5};
-    return 0 unless -r $entry->{filename};
+    return 0 unless -f $fullpath;
     if (my $stat = stat($stuff) && defined($entry->{mtime})) {
         return 0 if $stat->mtime ne $entry->{mtime}
     }
 
-    my $md5 = $self->calc_md5(File::Spec->catfile($self->directory, $entry->{filename}));
+    my $md5 = $self->calc_md5($fullpath);
     return 0 unless $md5;
     return 0 if $md5 ne $entry->{md5};
     return 1;
@@ -65,7 +67,7 @@ sub is_hit {
 sub calc_md5 {
     my ($self, $filename) = @_;
 
-    open my $fh, '<', File::Spec->catfile($self->directory, $filename)
+    open my $fh, '<', $filename
         or do {
         return;
     };
@@ -78,7 +80,7 @@ sub calc_md5 {
 sub set {
     my ($self, $stuff, $filename) = @_;
 
-    my $md5 = $self->calc_md5($filename)
+    my $md5 = $self->calc_md5(File::Spec->catfile($self->directory, $filename))
         or Carp::croak("Cannot calcurate MD5 for '$filename'");
     $self->{data}->{$stuff} = +{
         filename => $filename,
