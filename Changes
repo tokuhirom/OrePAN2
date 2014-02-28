@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.26 2014-02-28T07:44:18Z
+
+    - [EXPERIMENTAL] Added experimental cache mode.
+      (tokuhirom)
+
 0.25 2014-02-28T01:00:53Z
 
     - Fixed deps
