@@ -2,6 +2,10 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.29 2014-03-05T06:06:48Z
+
+    - Index new version instead of die.
+
 0.28 2014-02-28T09:00:20Z
 
     - Added orepan2-gc, orepan2-merge-index
