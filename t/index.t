@@ -23,6 +23,19 @@ subtest 'load, lookup' => sub {
     }
 };
 
+subtest 'add_index', sub {
+    # Given create new index
+    my $index = OrePAN2::Index->new;
+    # And index X-0.01
+    $index->add_index('X', 0.01, 'X/X/X/X-0.01.tar.gz');
+
+    # When index X-0.02
+    $index->add_index('X', 0.02, 'X/X/X/X-0.02.tar.gz');
+
+    # Then, X-0.02 was indexed
+    is [$index->lookup('X')]->[1], 'X/X/X/X-0.02.tar.gz';
+};
+
 subtest 'delete' => sub {
     my $index = OrePAN2::Index->new;
     $index->load('t/dat/02.packages.details.txt');

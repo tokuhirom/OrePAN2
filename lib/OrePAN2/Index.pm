@@ -34,10 +34,9 @@ sub load {
         last unless /\S/;
     }
 
-    my $method = $opts->{replace} ? 'replace_index' : 'add_index';
     while (<$fh>) {
         if (/^(\S+)\s+(\S+)\s+(.*)$/) {
-           $self->$method($1,$2 eq 'undef' ? undef : $2,$3);
+           $self->add_index($1,$2 eq 'undef' ? undef : $2,$3);
         }
     }
 
@@ -63,16 +62,14 @@ sub delete_index {
     return;
 }
 
-sub replace_index {
-    my ($self, $package, $version, $archive_file) = @_;
-    $self->{index}->{$package} = [$version, $archive_file];
-}
-
 sub add_index {
     my ($self, $package, $version, $archive_file) = @_;
 
     if ($self->{index}{$package}) {
-        Carp::croak("${package} is already indexed.");
+        my ($orig_ver) = @{$self->{index}{$package}};
+        if (version->parse($orig_ver) >= version->parse($version)) {
+            return;
+        }
     }
     $self->{index}->{$package} = [$version, $archive_file];
 }
