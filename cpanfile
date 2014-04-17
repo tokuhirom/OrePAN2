@@ -7,7 +7,7 @@ requires 'File::Temp';
 requires 'File::pushd';
 requires 'Getopt::Long', 2.39;
 requires 'HTTP::Tiny';
-requires 'Parse::LocalDistribution', '0.01';
+requires 'Parse::LocalDistribution', '0.11';
 requires 'IO::Zlib';
 requires 'Pod::Usage';
 requires 'MetaCPAN::API', 0.43;
