@@ -30,7 +30,7 @@ sub directory { shift->{directory} }
 
 sub inject {
     my ($self, $source, $opts) = @_;
-    local $self->{author} = uc($opts->{author} || 'DUMMY');
+    local $self->{author} = uc($opts->{author} || $self->{author} || 'DUMMY');
 
     my $tarpath;
     if ($source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/) { # steal from App::cpanminus::script
