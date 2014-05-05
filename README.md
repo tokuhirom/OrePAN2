@@ -4,15 +4,15 @@ OrePAN2 - Yet another DarkPAN manager.
 
 # DESCRIPTION
 
-You can create your own perl module archive with OrePAN2!
+You can create your own Perl module archive with OrePAN2!
 It's very simple and useful.
 
-1. Inject tar balls from git repo or archive file by orepan2-inject.
-2. Make 02packages.details.txt.gz by orepan2-indexer.
+- 1. Inject tarballs from git repo or archive file via orepan2-inject.
+- 2. Make 02packages.details.txt.gz via orepan2-indexer.
 
 # TUTORIAL
 
-Download tar ball from CPAN.
+Download a tar ball from CPAN.
 
     % orepan2-inject http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz /tmp/darkpan
 
@@ -20,26 +20,26 @@ Create 02packages.details.txt!
 
     % orepan2-indexer /tmp/darkpan/
 
-Then you can install Acme::Hoge from darkpan!
+Then you can install Acme::Hoge from DarkPAN!
 
     % cpanm --mirror-only --mirror=file:///tmp/darkpan/ Acme::Hoge
 
 It's pretty easy!
 
-# What's difference between OrePAN1?
+# What's the difference between OrePAN 2 and OrePAN1?
 
-- OrePAN2 has more clean and sane interface.
-- OrePAN2 provides OO-ish interface
+- OrePAN2 has a cleaner interface.
+- OrePAN2 provides an OO-ish interface
 
     You can use OrePAN2 as a library.
 
 - OrePAN2 uses modern modules like [Parse::LocalDistribution](https://metacpan.org/pod/Parse::LocalDistribution).
 
-    OrePAN1 coded a lot of things by itself. OrePAN2 delegates most of things to other CPAN modules.
+    OrePAN1 did a lot of heavy lifting on its own. OrePAN2 delegates most tasks to other CPAN modules.
 
 - OrePAN2 is active project
 
-    OrePAN1 is now in maintenance phase. But OrePAN2 is still in actively development.
+    OrePAN1 is now in maintenance mode, but OrePAN2 is still under active development.
 
 # SEE ALSO
 

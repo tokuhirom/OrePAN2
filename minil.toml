@@ -1,2 +1,3 @@
+module_maker="ModuleBuildTiny"
 [no_index]
 directory = ["t", "xt", "tools", "test-dist"]

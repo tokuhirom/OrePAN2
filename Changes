@@ -2,6 +2,14 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.30 2014-05-04T23:54:02Z
+
+    commit 3b36adad91d930de6f9e31b83eb4be5fd183ad05
+    Author: Ichito Nagata <i.nagata110@gmail.com>
+    Date:   Sat May 3 11:32:22 2014 +0900
+
+        use $self->{author} when the option is not provided
+
 0.29 2014-03-05T06:06:48Z
 
     - Index new version instead of die.

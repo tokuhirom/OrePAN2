@@ -3,14 +3,14 @@ use 5.008005;
 use strict;
 use warnings;
 
-our $VERSION = "0.29";
+our $VERSION = "0.30";
 
 1;
 __END__
 
 =encoding utf-8
 
-=for stopwords DarkPAN orepan2-inject orepan2-indexer darkpan OrePAN1
+=for stopwords DarkPAN orepan2-inject orepan2-indexer darkpan OrePAN1 OrePAN
 
 =head1 NAME
 
@@ -31,7 +31,7 @@ It's very simple and useful.
 
 =head1 TUTORIAL
 
-Download a tarball from CPAN.
+Download a tar ball from CPAN.
 
     % orepan2-inject http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz /tmp/darkpan
 
