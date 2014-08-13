@@ -10,7 +10,7 @@ requires 'HTTP::Tiny';
 requires 'Parse::LocalDistribution', '0.11';
 requires 'IO::Zlib';
 requires 'Pod::Usage';
-requires 'MetaCPAN::API', 0.43;
+requires 'MetaCPAN::Client', 1.006000;
 requires 'IO::Uncompress::Gunzip';
 requires 'parent';
 requires 'Class::Accessor::Lite', '0.05';
@@ -21,6 +21,7 @@ requires 'JSON::PP';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
+    requires 'Test::RequiresInternet', '0.02';
     requires 'File::Which';
 };
 
