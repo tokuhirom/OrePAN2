@@ -18,6 +18,8 @@ requires 'Digest::MD5';
 requires 'File::Path';
 requires 'IO::File::AtomicChange';
 requires 'JSON::PP';
+requires 'Path::Tiny';
+requires 'Try::Tiny';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
