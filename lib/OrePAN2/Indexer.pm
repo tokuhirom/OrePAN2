@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use utf8;
 
+use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
 use File::Find qw(find);
 use File::Spec ();
 use File::Basename ();
@@ -110,13 +111,6 @@ sub scan_provides {
     return {};
 }
 
-{
-    my $lookup = {};
-    sub _metacpan_lookup {
-        return $lookup;
-    }
-}
-
 sub _maybe_index_from_metacpan {
     my ( $self, $index, $file ) = @_;
 
@@ -183,6 +177,7 @@ sub do_metacpan_lookup {
                 = $inner->{version};
         }
     }
+    $self->_metacpan_lookup( $provides );
 }
 
 sub _scan_provides {
