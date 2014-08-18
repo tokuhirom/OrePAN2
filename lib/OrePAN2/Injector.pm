@@ -12,7 +12,7 @@ use File::Find qw(find);
 use Archive::Tar;
 use HTTP::Tiny;
 use File::Copy qw(copy);
-use MetaCPAN::API;
+use MetaCPAN::Client;
 
 sub new {
     my $class = shift;
@@ -46,16 +46,16 @@ sub inject {
     }
     elsif ( $source =~ m/^[\w_][\w0-9:_]+$/ ) {
 
-        my $c = MetaCPAN::API->new
-            || die "Could not get MetaCPAN API";
+        my $c = MetaCPAN::Client->new
+            || die "Could not get MetaCPAN::Client";
 
         my $mod = $c->module($source)
             || die "Could not find $source";
 
-        my $rel = $c->release( distribution => $mod->{distribution} )
+        my $rel = $c->release( $mod->distribution )
             || die "Could not find distribution for $source";
 
-        my $url = $rel->{download_url}
+        my $url = $rel->download_url
             || die "Could not find url for $source";
 
         $tarpath = $self->inject_from_http($url);
