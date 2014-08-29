@@ -1,6 +1,6 @@
 requires 'perl', '5.008001';
 
-requires 'Archive::Extract', 0.68;
+requires 'Archive::Extract', 0.72;
 requires 'Archive::Tar';
 requires 'CPAN::Meta', 2.131560;
 requires 'File::Temp';
