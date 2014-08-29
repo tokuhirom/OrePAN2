@@ -48,12 +48,11 @@ sub is_hit {
 
     my $entry = $self->data->{$stuff};
 
-    my $fullpath = File::Spec->catfile($self->directory, $entry->{filename});
+    return 0 unless $entry && $entry->{filename} && $entry->{md5};
 
-    return 0 unless $entry;
-    return 0 unless $entry->{filename};
-    return 0 unless $entry->{md5};
+    my $fullpath = File::Spec->catfile($self->directory, $entry->{filename});
     return 0 unless -f $fullpath;
+
     if (my $stat = stat($stuff) && defined($entry->{mtime})) {
         return 0 if $stat->mtime ne $entry->{mtime}
     }
