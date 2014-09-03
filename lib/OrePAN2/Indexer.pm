@@ -170,11 +170,11 @@ sub do_metacpan_lookup {
 
     while ( my $file = $modules->next ) {
         next unless $file->module;
-
         foreach my $inner ( @{ $file->module } ) {
             next unless $inner->{indexed};
+
             $provides->{release}->{ $file->release }->{ $inner->{name} }
-                = $inner->{version};
+                //= $inner->{version};
         }
     }
     $self->_metacpan_lookup( $provides );
