@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use utf8;
 
+use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
 use File::Find qw(find);
 use File::Spec ();
 use File::Basename ();
@@ -11,7 +12,10 @@ use OrePAN2::Index;
 use File::Temp qw(tempdir);
 use CPAN::Meta 2.131560;
 use File::pushd;
+use MetaCPAN::Client;
 use Parse::LocalDistribution;
+use Path::Tiny;
+use Try::Tiny;
 use IO::Zlib;
 
 sub new {
@@ -31,6 +35,15 @@ sub make_index {
     my ($self, %args) = @_;
 
     my @files = $self->list_archive_files();
+
+    try {
+        $self->do_metacpan_lookup( \@files );
+    }
+    catch {
+        print STDERR "[WARN] Unable to fetch provides via MetaCPAN";
+        print STDERR "[WARN] $_";
+    };
+
     my $index = OrePAN2::Index->new();
     for my $archive_file (@files) {
         $self->add_index($index, $archive_file);
@@ -41,6 +54,8 @@ sub make_index {
 sub add_index {
     my ($self, $index, $archive_file) = @_;
 
+    return if $self->_maybe_index_from_metacpan( $index, $archive_file );
+
     my $archive = Archive::Extract->new(
         archive => $archive_file
     );
@@ -48,10 +63,10 @@ sub add_index {
     $archive->extract( to => $tmpdir);
 
     my $provides = $self->scan_provides( $tmpdir, $archive_file );
+    my $path = $self->_orepan_archive_path( $archive_file );
+
     while ( my ( $package, $dat ) = each %$provides ) {
         my $version = $dat->{version};
-        my $path = File::Spec->abs2rel($archive_file, File::Spec->catfile($self->directory, 'authors', 'id'));
-        $path =~ s!\\!/!g;
         $index->add_index(
             $package,
             $version,
@@ -60,11 +75,19 @@ sub add_index {
     }
 }
 
+sub _orepan_archive_path {
+    my $self         = shift;
+    my $archive_file = shift;
+    my $path         = File::Spec->abs2rel( $archive_file,
+        File::Spec->catfile( $self->directory, 'authors', 'id' ) );
+    $path =~ s!\\!/!g;
+    return $path;
+}
+
 sub scan_provides {
     my ( $self, $dir, $archive_file ) = @_;
 
     my $guard = pushd( glob("$dir/*") );
-
     for my $mfile ( 'META.json', 'META.yml', 'META.yaml' ) {
         next unless -f $mfile;
         my $meta = eval { CPAN::Meta->load_file($mfile) };
@@ -86,6 +109,75 @@ sub scan_provides {
     print STDERR "[WARN] Error scanning: $@\n";
     # Return empty provides.
     return {};
+}
+
+sub _maybe_index_from_metacpan {
+    my ( $self, $index, $file ) = @_;
+
+    my $archive = Path::Tiny->new( $file )->basename;
+    my $lookup  = $self->_metacpan_lookup;
+
+    unless ( exists $lookup->{archive}->{$archive} ) {
+        print STDERR "[INFO] $archive not found on MetaCPAN\n";
+        return;
+    }
+    my $release_name = $lookup->{archive}->{$archive};
+
+    my $provides = $lookup->{release}->{$release_name};
+     unless ( $provides && keys %{$provides} ) {
+         print STDERR "[INFO] provides for $archive not found on MetaCPAN\n";
+         return;
+     }
+
+    my $path = $self->_orepan_archive_path( $file );
+
+    foreach my $package ( keys %{$provides} ) {
+        $index->add_index( $package, $provides->{$package}, $path, );
+    }
+    return 1;
+}
+
+sub do_metacpan_lookup {
+    my ( $self, $files ) = @_;
+
+    return unless @{$files};
+
+    my $provides = $self->_metacpan_lookup;
+
+    my $mc = MetaCPAN::Client->new;
+    my @archives = map { Path::Tiny->new( $_ )->basename } @{$files};
+    my @search_by_archives = map { +{ archive => $_ } } @archives;
+    my $releases = $mc->release( { either => \@search_by_archives } );
+
+    my @file_search;
+
+    while ( my $release = $releases->next ) {
+
+        $provides->{archive}->{ $release->archive } = $release->name;
+
+        push @file_search,
+            {
+            all => [
+                { release               => $release->name },
+                { indexed               => 'true' },
+                { authorized            => 'true' },
+                { 'file.module.indexed' => 'true' },
+            ]
+            };
+    }
+
+    my $modules = $mc->module( { either => \@file_search } );
+
+    while ( my $file = $modules->next ) {
+        next unless $file->module;
+        foreach my $inner ( @{ $file->module } ) {
+            next unless $inner->{indexed};
+
+            $provides->{release}->{ $file->release }->{ $inner->{name} }
+                //= $inner->{version};
+        }
+    }
+    $self->_metacpan_lookup( $provides );
 }
 
 sub _scan_provides {
@@ -120,7 +212,6 @@ sub write_index {
 
 sub list_archive_files {
     my $self = shift;
-
 
     my $authors_dir = File::Spec->catfile($self->{directory}, 'authors');
     return () unless -d $authors_dir;

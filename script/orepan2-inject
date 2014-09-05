@@ -18,9 +18,10 @@ orepan2-inject - Injector
 
 =head1 DESCRIPTION
 
-OrePAN2 injector. This module injects your modules to the OrePAN2 darkpan repository.
+OrePAN2 injector. This module injects your modules into the OrePAN2 DarkPAN repository.
 
-You need to run orepan2-indexer script after inject. Index files are required for module installation.
+You need to run the orepan2-indexer script after injecting. Index files are
+required for module installation.
 
 =head1 OPTIONS
 
@@ -28,13 +29,13 @@ You need to run orepan2-indexer script after inject. Index files are required fo
 
 =item C< --no-generate-index >
 
-No generate I<02packages.details.txt.gz>.
+Do not generate I<02packages.details.txt.gz>.
 
 =item C< --author=DANKOGAI >
 
 Specify the cpan author directory name.
 
-orepan2 uses 'DUMMY' as default.
+OrePAN2 uses 'DUMMY' as a default author name.
 
 =back
 
@@ -46,25 +47,25 @@ orepan2-inject script supports following source types.
 
     orepan2-inject Text-TestBase-0.10.tar.gz /tmp/darkpan
 
-You can inject to darkpan from a file.
+You can inject into DarkPAN from a file.
 
 =head2 HTTP URL
 
     orepan2-inject http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz /tmp/darkpan
 
-You can inject to darkpan from archive URL.
+You can inject into DarkPAN from an archive URL.
 
 =head2 Git repository
 
     % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git@master /path/to/darkpan/
     % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git        /path/to/darkpan/
 
-You need to setup git repository as a installable git repo.
+You need to set up git repository as a installable git repo.
 You need to put a META.json in your repository.
 
 If you are using Minilla or Milla, your repository is already ready to install.
 
-OrePAN2::Inject supports following URL types:
+OrePAN2::Inject supports the following URL types:
 
     git+file://path/to/repo.git
     git://github.com/plack/Plack.git@1.0000        # tag

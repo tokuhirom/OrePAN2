@@ -19,7 +19,8 @@ orepan2-indexer - Indexer
 
 OrePAN2 indexer.
 
-This script makes 02packages.details.txt.gz from directory contains tar balls.
+This script creates 02packages.details.txt.gz from a directory which contains
+tarballs.
 
 =head1 SEE ALSO
 
