@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.15.1, CPAN::Meta::Converter version 2.140640",
+   "generated_by" : "Minilla/v2.1.1, CPAN::Meta::Converter version 2.141520",
    "license" : [
       "perl_5"
    ],
@@ -38,7 +38,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Archive::Extract" : "0.68",
+            "Archive::Extract" : "0.72",
             "Archive::Tar" : "0",
             "CPAN::Meta" : "2.13156",
             "Class::Accessor::Lite" : "0.05",
@@ -52,9 +52,11 @@
             "IO::Uncompress::Gunzip" : "0",
             "IO::Zlib" : "0",
             "JSON::PP" : "0",
-            "MetaCPAN::API" : "0.43",
+            "MetaCPAN::Client" : "1.006",
             "Parse::LocalDistribution" : "0.11",
+            "Path::Tiny" : "0",
             "Pod::Usage" : "0",
+            "Try::Tiny" : "0",
             "parent" : "0",
             "perl" : "5.008005"
          }
@@ -62,7 +64,8 @@
       "test" : {
          "requires" : {
             "File::Which" : "0",
-            "Test::More" : "0.98"
+            "Test::More" : "0.98",
+            "Test::RequiresInternet" : "0.02"
          }
       }
    },
@@ -78,14 +81,15 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.30",
+   "version" : "0.31",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
       "Masahiro Honma <hiratara@cpan.org>",
       "Chad Granum <exodist7@gmail.com>",
       "Songmu <y.songmu@gmail.com>",
       "moznion <moznion@gmail.com>",
-      "Olaf Alders <olaf@wundersolutions.com>",
-      "Ichito Nagata <i.nagata110@gmail.com>"
+      "Ichito Nagata <i.nagata110@gmail.com>",
+      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
+      "Olaf Alders <olaf@wundersolutions.com>"
    ]
 }

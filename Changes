@@ -2,6 +2,14 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    commit c8d9dd0f3514113d682cb5fc82165a8cb01adfa2
+    Author: Olaf Alders <olaf@wundersolutions.com>
+    Date:   Wed Aug 13 10:26:49 2014 -0400
+
+        s/MetaCPAN::API/MetaCPAN::Client/
+
+        MetaCPAN::API has been deprecated.
+
 0.30 2014-05-04T23:54:02Z
 
     commit 3b36adad91d930de6f9e31b83eb4be5fd183ad05
