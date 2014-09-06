@@ -1,3 +1,4 @@
 module_maker="ModuleBuildTiny"
+authority = "cpan:TOKUHIROM"
 [no_index]
 directory = ["t", "xt", "tools", "test-dist"]
