@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    - Fix some undef warnings (miyagawa)
+    - Add an option to use MetaCPAN for provides lookups (oalders)
+    - Update minimum version of Archive::Extract to suppress warnings
+      (tokuhirom)
+
 0.30 2014-05-04T23:54:02Z
 
     commit 3b36adad91d930de6f9e31b83eb4be5fd183ad05
