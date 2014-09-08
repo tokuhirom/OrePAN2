@@ -38,7 +38,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Archive::Extract" : "0.68",
+            "Archive::Extract" : "0.72",
             "Archive::Tar" : "0",
             "CPAN::Meta" : "2.13156",
             "Class::Accessor::Lite" : "0.05",
@@ -72,16 +72,16 @@
    "release_status" : "unstable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/oalders/OrePAN2/issues"
+         "web" : "https://github.com/tokuhirom/OrePAN2/issues"
       },
-      "homepage" : "https://github.com/oalders/OrePAN2",
+      "homepage" : "https://github.com/tokuhirom/OrePAN2",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/oalders/OrePAN2.git",
-         "web" : "https://github.com/oalders/OrePAN2"
+         "url" : "git://github.com/tokuhirom/OrePAN2.git",
+         "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.30",
+   "version" : "0.31",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
       "Masahiro Honma <hiratara@cpan.org>",
@@ -89,6 +89,7 @@
       "Songmu <y.songmu@gmail.com>",
       "moznion <moznion@gmail.com>",
       "Ichito Nagata <i.nagata110@gmail.com>",
+      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "Olaf Alders <olaf@wundersolutions.com>"
    ]
 }
