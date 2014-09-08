@@ -18,11 +18,14 @@ sub run {
 
     my $version;
     my $text;
+    my $metacpan;
+
     my $p = Getopt::Long::Parser->new(
         config => [qw(posix_default no_ignore_case auto_help)]
     );
     $p->getoptionsfromarray(
         \@args => (
+            'metacpan!'      => \$metacpan,
             'version!'       => \$version,
             'text!'          => \$text,
         )
@@ -36,6 +39,7 @@ sub run {
 
     my $orepan = OrePAN2::Indexer->new(
         directory => $directory,
+        metacpan  => $metacpan,
     );
     $orepan->make_index(
         no_compress => $text,

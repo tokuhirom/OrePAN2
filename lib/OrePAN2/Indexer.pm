@@ -36,13 +36,15 @@ sub make_index {
 
     my @files = $self->list_archive_files();
 
-    try {
-        $self->do_metacpan_lookup( \@files );
+    if ( $self->{metacpan} ) {
+        try {
+            $self->do_metacpan_lookup( \@files );
+        }
+        catch {
+            print STDERR '[WARN] Unable to fetch provides via MetaCPAN';
+            print STDERR "[WARN] $_";
+        };
     }
-    catch {
-        print STDERR "[WARN] Unable to fetch provides via MetaCPAN";
-        print STDERR "[WARN] $_";
-    };
 
     my $index = OrePAN2::Index->new();
     for my $archive_file (@files) {
@@ -114,6 +116,8 @@ sub scan_provides {
 sub _maybe_index_from_metacpan {
     my ( $self, $index, $file ) = @_;
 
+    return unless $self->{metacpan};
+
     my $archive = Path::Tiny->new( $file )->basename;
     my $lookup  = $self->_metacpan_lookup;
 
@@ -177,6 +181,7 @@ sub do_metacpan_lookup {
                 //= $inner->{version};
         }
     }
+
     $self->_metacpan_lookup( $provides );
 }
 
