@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.15.1, CPAN::Meta::Converter version 2.140640",
+   "generated_by" : "Minilla/v2.1.1, CPAN::Meta::Converter version 2.142060",
    "license" : [
       "perl_5"
    ],
@@ -52,9 +52,11 @@
             "IO::Uncompress::Gunzip" : "0",
             "IO::Zlib" : "0",
             "JSON::PP" : "0",
-            "MetaCPAN::API" : "0.43",
+            "MetaCPAN::Client" : "1.006",
             "Parse::LocalDistribution" : "0.11",
+            "Path::Tiny" : "0",
             "Pod::Usage" : "0",
+            "Try::Tiny" : "0",
             "parent" : "0",
             "perl" : "5.008005"
          }
@@ -62,20 +64,21 @@
       "test" : {
          "requires" : {
             "File::Which" : "0",
-            "Test::More" : "0.98"
+            "Test::More" : "0.98",
+            "Test::RequiresInternet" : "0.02"
          }
       }
    },
    "release_status" : "unstable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/tokuhirom/OrePAN2/issues"
+         "web" : "https://github.com/oalders/OrePAN2/issues"
       },
-      "homepage" : "https://github.com/tokuhirom/OrePAN2",
+      "homepage" : "https://github.com/oalders/OrePAN2",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/tokuhirom/OrePAN2.git",
-         "web" : "https://github.com/tokuhirom/OrePAN2"
+         "url" : "git://github.com/oalders/OrePAN2.git",
+         "web" : "https://github.com/oalders/OrePAN2"
       }
    },
    "version" : "0.30",
@@ -85,7 +88,7 @@
       "Chad Granum <exodist7@gmail.com>",
       "Songmu <y.songmu@gmail.com>",
       "moznion <moznion@gmail.com>",
-      "Olaf Alders <olaf@wundersolutions.com>",
-      "Ichito Nagata <i.nagata110@gmail.com>"
+      "Ichito Nagata <i.nagata110@gmail.com>",
+      "Olaf Alders <olaf@wundersolutions.com>"
    ]
 }
