@@ -136,6 +136,13 @@ Add new entry to the index.
 
 =item C<< $index->as_string() >>
 
+Returns the content of the index as a string.  Some of the index metadata can
+cause merge conflicts when multiple developers are working on the same project.
+You can avoid this problem by using a paring down the metadata.  "simple"
+defaults to 0.
+
+    $index->as_string( simple => 1 );
+
 Make index as string.
 
 =back
