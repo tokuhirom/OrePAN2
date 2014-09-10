@@ -23,7 +23,7 @@ sub new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
     unless (defined $args{directory}) {
-        Carp::croak("Missing mandatory parameter: directory");
+        Carp::croak('Missing mandatory parameter: directory');
     }
     bless {
         %args,
@@ -42,8 +42,8 @@ sub make_index {
             $self->do_metacpan_lookup( \@files );
         }
         catch {
-            print STDERR '[WARN] Unable to fetch provides via MetaCPAN';
-            print STDERR "[WARN] $_";
+            print STDERR "[WARN] Unable to fetch provides via MetaCPAN\n";
+            print STDERR "[WARN] $_\n";
         };
     }
 

@@ -21,7 +21,7 @@ sub run {
 
     my $version;
     my $generate_index = 1;
-    my $author = "DUMMY";
+    my $author = 'DUMMY';
     my $text;
     my $enable_cache = 0;
     my $p = Getopt::Long::Parser->new(

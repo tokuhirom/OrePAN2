@@ -100,7 +100,7 @@ sub as_string {
     for my $pkg ($self->packages) {
         my $entry = $self->{index}{$pkg};
         # package name, version, path
-        push @buf, sprintf "%-22s %-22s %s", $pkg, $entry->[0] || 'undef', $entry->[1];
+        push @buf, sprintf '%-22s %-22s %s', $pkg, $entry->[0] || 'undef', $entry->[1];
     }
     return join("\n", @buf) . "\n";
 }
