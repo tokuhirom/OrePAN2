@@ -2,6 +2,7 @@ package OrePAN2::Index;
 
 use strict;
 use warnings;
+use autodie;
 use utf8;
 
 use IO::Uncompress::Gunzip ('$GunzipError');
@@ -25,8 +26,7 @@ sub load {
             IO::Uncompress::Gunzip->new($fname)
                 or die "gzip failed: $GunzipError\n";
         } else {
-            open my $fh, '<', $fname
-                or Carp::croak("Cannot open '$fname' for reading: $!");
+            open my $fh, '<', $fname;
             $fh;
         }
     };

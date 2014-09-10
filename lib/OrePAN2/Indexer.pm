@@ -204,11 +204,10 @@ sub write_index {
     mkdir(File::Basename::dirname($pkgfname));
     my $fh = do {
         if ($no_compress) {
-            open my $fh, '>:raw', $pkgfname
-                or die "Cannot open $pkgfname for writing: $!\n";
+            open my $fh, '>:raw', $pkgfname;
             $fh;
         } else {
-            IO::Zlib->new($pkgfname, "w")
+            IO::Zlib->new($pkgfname, 'w')
                 or die "Cannot open $pkgfname for writing: $!\n";
         }
     };
