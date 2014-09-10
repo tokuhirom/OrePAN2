@@ -1,12 +1,13 @@
 package OrePAN2::CLI::Indexer;
+
 use strict;
 use warnings;
 use utf8;
 
 use Getopt::Long ();
-use Pod::Usage;
 use OrePAN2;
 use OrePAN2::Indexer;
+use Pod::Usage;
 
 sub new {
     my $class = shift;

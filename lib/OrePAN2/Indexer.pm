@@ -1,22 +1,23 @@
 package OrePAN2::Indexer;
+
 use strict;
 use warnings;
 use utf8;
 
+use Archive::Extract ();
+use CPAN::Meta 2.131560;
 use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
+use File::Basename ();
 use File::Find qw(find);
 use File::Spec ();
-use File::Basename ();
-use Archive::Extract ();
-use OrePAN2::Index;
 use File::Temp qw(tempdir);
-use CPAN::Meta 2.131560;
 use File::pushd;
+use IO::Zlib;
 use MetaCPAN::Client;
+use OrePAN2::Index;
 use Parse::LocalDistribution;
 use Path::Tiny;
 use Try::Tiny;
-use IO::Zlib;
 
 sub new {
     my $class = shift;
