@@ -18,8 +18,7 @@ sub new {
 }
 
 sub load {
-    my ($self, $fname, $opts) = @_;
-    $opts ||= {};
+    my ($self, $fname) = @_;
 
     my $fh = do {
         if ($fname =~ /\.gz\z/) {
