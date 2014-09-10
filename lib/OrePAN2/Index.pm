@@ -123,15 +123,19 @@ This is a module to manipulate 02packages.details.txt.
 
 =item C<< $index->load($filename) >>
 
-Load existing 02.packages.details.txt
+Load an existing 02.packages.details.txt
 
 =item C<< my ($version, $path) = $index->lookup($package) >>
 
-Lookup package from index.
+Perform a package lookup on the index.
+
+=item C<< $index->delete_index($package) >>
+
+Delete a package from the index.
 
 =item C<< $index->add_index($package, $version, $path) >>
 
-Add new entry to the index.
+Add a new entry to the index.
 
 =item C<< $index->as_string() >>
 

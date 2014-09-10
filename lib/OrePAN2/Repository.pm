@@ -87,7 +87,7 @@ sub load_index {
     $index;
 }
 
-# Remove files that does not referenced from index file.
+# Remove files that are not referenced by the index file.
 sub gc {
     my ($self) = @_;
 
