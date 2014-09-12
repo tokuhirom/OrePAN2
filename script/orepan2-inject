@@ -37,6 +37,10 @@ Specify the cpan author directory name.
 
 OrePAN2 uses 'DUMMY' as a default author name.
 
+=item C< --simple >
+
+Use a simple format for 02packages metadata.  This helps avoid merge conflicts.
+
 =back
 
 =head1 SOURCES

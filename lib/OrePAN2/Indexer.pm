@@ -211,7 +211,7 @@ sub write_index {
                 or die "Cannot open $pkgfname for writing: $!\n";
         }
     };
-    print $fh $index->as_string();
+    print $fh $index->as_string( { simple => $self->{simple} } );
     close $fh;
 }
 

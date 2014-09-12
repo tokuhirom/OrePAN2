@@ -47,6 +47,7 @@ sub indexer {
     my $self = shift;
     $self->{indexer} ||= OrePAN2::Indexer->new(
         directory => $self->directory,
+        simple    => $self->{simple},
     );
 }
 
@@ -57,9 +58,7 @@ sub has_cache {
 
 sub make_index {
     my $self = shift;
-    $self->indexer->make_index(
-        no_compress => !$self->compress_index,
-    );
+    $self->indexer->make_index( no_compress => !$self->compress_index );
 }
 
 sub inject {

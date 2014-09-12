@@ -22,6 +22,7 @@ sub run {
     my $version;
     my $generate_index = 1;
     my $author = 'DUMMY';
+    my $simple;
     my $text;
     my $enable_cache = 0;
     my $p = Getopt::Long::Parser->new(
@@ -31,6 +32,7 @@ sub run {
         'version!'       => \$version,
         'generate-index!' => \$generate_index,
         'author=s'        => \$author,
+        'simple!'         => \$simple,
         'text!'           => \$text,
         'cache!'          => \$enable_cache,
     );
@@ -44,6 +46,7 @@ sub run {
     my $repository = OrePAN2::Repository->new(
         directory      => $directory,
         compress_index => !$text,
+        simple         => $simple,
     );
     if (@ARGV) {
         for (@ARGV) {
