@@ -1,9 +1,12 @@
 package OrePAN2::Index;
+
 use strict;
 use warnings;
+use autodie;
 use utf8;
-use OrePAN2;
+
 use IO::Uncompress::Gunzip ('$GunzipError');
+use OrePAN2;
 
 sub new {
     my $class = shift;
@@ -15,16 +18,14 @@ sub new {
 }
 
 sub load {
-    my ($self, $fname, $opts) = @_;
-    $opts ||= {};
+    my ($self, $fname) = @_;
 
     my $fh = do {
         if ($fname =~ /\.gz\z/) {
             IO::Uncompress::Gunzip->new($fname)
                 or die "gzip failed: $GunzipError\n";
         } else {
-            open my $fh, '<', $fname
-                or Carp::croak("Cannot open '$fname' for reading: $!");
+            open my $fh, '<', $fname;
             $fh;
         }
     };
@@ -98,7 +99,7 @@ sub as_string {
     for my $pkg ($self->packages) {
         my $entry = $self->{index}{$pkg};
         # package name, version, path
-        push @buf, sprintf "%-22s %-22s %s", $pkg, $entry->[0] || 'undef', $entry->[1];
+        push @buf, sprintf '%-22s %-22s %s', $pkg, $entry->[0] || 'undef', $entry->[1];
     }
     return join("\n", @buf) . "\n";
 }
@@ -122,17 +123,28 @@ This is a module to manipulate 02packages.details.txt.
 
 =item C<< $index->load($filename) >>
 
-Load existing 02.packages.details.txt
+Load an existing 02.packages.details.txt
 
 =item C<< my ($version, $path) = $index->lookup($package) >>
 
-Lookup package from index.
+Perform a package lookup on the index.
+
+=item C<< $index->delete_index($package) >>
+
+Delete a package from the index.
 
 =item C<< $index->add_index($package, $version, $path) >>
 
-Add new entry to the index.
+Add a new entry to the index.
 
 =item C<< $index->as_string() >>
+
+Returns the content of the index as a string.  Some of the index metadata can
+cause merge conflicts when multiple developers are working on the same project.
+You can avoid this problem by using a paring down the metadata.  "simple"
+defaults to 0.
+
+    $index->as_string( simple => 1 );
 
 Make index as string.
 

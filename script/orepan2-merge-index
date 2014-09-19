@@ -29,7 +29,7 @@ __END__
 
 =head1 SYNOPSIS
 
-    > orepan2-merge-index -o merged.txt foo/02packages.details.txt bar/02packages.details.txt.gz
+    % orepan2-merge-index -o merged.txt foo/02packages.details.txt bar/02packages.details.txt.gz
 
 =head1 DESCRIPTION
 
@@ -39,3 +39,18 @@ Combines 2 or more 02packages.details.txt.gz files.
 
 B<Unstable>
 
+=head1 OPTIONS
+
+=head2 o
+
+    % orepan2-merge-index -o merged.txt foo/02packages.details.txt bar/02packages.details.txt.gz
+
+Name of output file
+
+=head2 simple
+
+Use a simple format for 02packages metadata.  This helps avoid merge conflicts.
+
+     > orepan2-merge-index --simple -o merged.txt foo/02packages.details.txt bar/02packages.details.txt.gz
+
+=cut

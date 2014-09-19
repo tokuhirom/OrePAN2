@@ -1,14 +1,15 @@
 package OrePAN2::CLI::Inject;
+
 use strict;
 use warnings;
 use utf8;
 
 use Getopt::Long ();
-use Pod::Usage;
 use OrePAN2;
-use OrePAN2::Injector;
 use OrePAN2::Indexer;
+use OrePAN2::Injector;
 use OrePAN2::Repository;
+use Pod::Usage;
 
 sub new {
     my $class = shift;
@@ -20,7 +21,8 @@ sub run {
 
     my $version;
     my $generate_index = 1;
-    my $author = "DUMMY";
+    my $author = 'DUMMY';
+    my $simple;
     my $text;
     my $enable_cache = 0;
     my $p = Getopt::Long::Parser->new(
@@ -30,6 +32,7 @@ sub run {
         'version!'       => \$version,
         'generate-index!' => \$generate_index,
         'author=s'        => \$author,
+        'simple!'         => \$simple,
         'text!'           => \$text,
         'cache!'          => \$enable_cache,
     );
@@ -43,6 +46,7 @@ sub run {
     my $repository = OrePAN2::Repository->new(
         directory      => $directory,
         compress_index => !$text,
+        simple         => $simple,
     );
     if (@ARGV) {
         for (@ARGV) {

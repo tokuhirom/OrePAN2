@@ -46,6 +46,12 @@ Forces the resulting 02packages index file to be uncompressed.
 
     % orepan2-indexer --text /path/to/darkpan/
 
+=head2 simple
+
+Use a simple format for 02packages metadata.  This helps avoid merge conflicts.
+
+    % orepan2-indexer --simple /path/to/darkpan
+
 =head2 version
 
 Prints the current OrePAN2 version.
