@@ -179,7 +179,7 @@ sub do_metacpan_lookup {
             next unless $inner->{indexed};
 
             $provides->{release}->{ $file->release }->{ $inner->{name} }
-                //= $inner->{version};
+                //= $inner->{version_numified};
         }
     }
 
