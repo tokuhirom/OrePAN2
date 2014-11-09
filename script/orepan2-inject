@@ -20,9 +20,6 @@ orepan2-inject - Injector
 
 OrePAN2 injector. This module injects your modules into the OrePAN2 DarkPAN repository.
 
-You need to run the orepan2-indexer script after injecting. Index files are
-required for module installation.
-
 =head1 OPTIONS
 
 =over 4
