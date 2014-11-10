@@ -1,17 +1,19 @@
 package OrePAN2::Injector;
+
 use strict;
 use warnings;
 use utf8;
+
+use Archive::Tar;
+use CPAN::Meta;
+use File::Basename qw(dirname basename);
+use File::Copy qw(copy);
+use File::Find qw(find);
+use File::Path qw(mkpath);
+use File::Spec;
 use File::Temp qw(tempdir);
 use File::pushd;
-use CPAN::Meta;
-use File::Spec;
-use File::Path qw(mkpath);
-use File::Basename qw(dirname basename);
-use File::Find qw(find);
-use Archive::Tar;
 use HTTP::Tiny;
-use File::Copy qw(copy);
 use MetaCPAN::Client;
 
 sub new {

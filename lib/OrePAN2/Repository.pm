@@ -1,20 +1,20 @@
 package OrePAN2::Repository;
+
 use strict;
 use warnings;
 use utf8;
 use 5.008_001;
 
 use Carp;
-
 use Class::Accessor::Lite 0.05 (
     rw => [qw(directory cache compress_index)],
 );
+use File::Find;
+use File::Spec;
+use File::pushd;
 use OrePAN2::Indexer;
 use OrePAN2::Injector;
 use OrePAN2::Repository::Cache;
-use File::pushd;
-use File::Find;
-use File::Spec;
 
 sub new {
     my $class = shift;
@@ -47,6 +47,7 @@ sub indexer {
     my $self = shift;
     $self->{indexer} ||= OrePAN2::Indexer->new(
         directory => $self->directory,
+        simple    => $self->{simple},
     );
 }
 
@@ -57,15 +58,13 @@ sub has_cache {
 
 sub make_index {
     my $self = shift;
-    $self->indexer->make_index(
-        no_compress => !$self->compress_index,
-    );
+    $self->indexer->make_index( no_compress => !$self->compress_index );
 }
 
 sub inject {
-    my ($self, $stuff) = @_;
+    my ($self, $stuff, $opts) = @_;
 
-    my $tarpath = $self->injector->inject($stuff);
+    my $tarpath = $self->injector->inject($stuff, $opts);
     $self->cache->set($stuff, $tarpath);
 }
 
@@ -87,7 +86,7 @@ sub load_index {
     $index;
 }
 
-# Remove files that does not referenced from index file.
+# Remove files that are not referenced by the index file.
 sub gc {
     my ($self) = @_;
 

@@ -29,7 +29,7 @@ subtest 'use MetaCPAN' => sub {
 
     ok -f "$tmpdir/authors/$path", 'path exists';
 
-    my $orepan = OrePAN2::Indexer->new( directory => $tmpdir, );
+    my $orepan = OrePAN2::Indexer->new( directory => $tmpdir, metacpan => 1 );
     $orepan->make_index( no_compress => 1 );
 
     ok( exists $orepan->_metacpan_lookup->{archive}->{ $release->archive },

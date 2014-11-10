@@ -22,6 +22,42 @@ OrePAN2 indexer.
 This script creates 02packages.details.txt.gz from a directory which contains
 tarballs.
 
+=head1 OPTIONS
+
+=head2 metacpan
+
+Use the MetaCPAN API to look up "provides" information.  This can greatly speed
+up the indexing of a large repository.  MetaCPAN lookups are disabled by
+default.
+
+You should note that MetaCPAN will be stricter about version numbers
+than OrePAN2's internal parser is.  If you're switching an existing OrePAN2
+repository to use MetaCPAN, this may result in some undef version numbers in
+your 02packages file where you formerly had version numbers.  In almost all
+cases this will be the correct behaviour and should not cause any problems.  If
+you find behaviour which is not correct, please open a Github issue so that we
+can look into the root of the problem.
+
+    % orepan2-indexer --metacpan /path/to/darkpan/
+
+=head2 text
+
+Forces the resulting 02packages index file to be uncompressed.
+
+    % orepan2-indexer --text /path/to/darkpan/
+
+=head2 simple
+
+Use a simple format for 02packages metadata.  This helps avoid merge conflicts.
+
+    % orepan2-indexer --simple /path/to/darkpan
+
+=head2 version
+
+Prints the current OrePAN2 version.
+
+    % orepan2-indexer --version
+
 =head1 SEE ALSO
 
 L<OrePAN2>

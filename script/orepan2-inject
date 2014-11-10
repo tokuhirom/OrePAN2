@@ -20,9 +20,6 @@ orepan2-inject - Injector
 
 OrePAN2 injector. This module injects your modules into the OrePAN2 DarkPAN repository.
 
-You need to run the orepan2-indexer script after injecting. Index files are
-required for module installation.
-
 =head1 OPTIONS
 
 =over 4
@@ -37,6 +34,10 @@ Specify the cpan author directory name.
 
 OrePAN2 uses 'DUMMY' as a default author name.
 
+=item C< --simple >
+
+Use a simple format for 02packages metadata.  This helps avoid merge conflicts.
+
 =back
 
 =head1 SOURCES
@@ -45,13 +46,13 @@ orepan2-inject script supports following source types.
 
 =head2 ARCHIVE FILE
 
-    orepan2-inject Text-TestBase-0.10.tar.gz /tmp/darkpan
+    orepan2-inject Text-TestBase-0.10.tar.gz /path/to/darkpan/
 
 You can inject into DarkPAN from a file.
 
 =head2 HTTP URL
 
-    orepan2-inject http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz /tmp/darkpan
+    orepan2-inject http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz /path/to/darkpan/
 
 You can inject into DarkPAN from an archive URL.
 

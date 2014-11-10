@@ -1,28 +1,29 @@
 package OrePAN2::Indexer;
+
 use strict;
 use warnings;
 use utf8;
 
+use Archive::Extract ();
+use CPAN::Meta 2.131560;
 use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
+use File::Basename ();
 use File::Find qw(find);
 use File::Spec ();
-use File::Basename ();
-use Archive::Extract ();
-use OrePAN2::Index;
 use File::Temp qw(tempdir);
-use CPAN::Meta 2.131560;
 use File::pushd;
+use IO::Zlib;
 use MetaCPAN::Client;
+use OrePAN2::Index;
 use Parse::LocalDistribution;
 use Path::Tiny;
 use Try::Tiny;
-use IO::Zlib;
 
 sub new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
     unless (defined $args{directory}) {
-        Carp::croak("Missing mandatory parameter: directory");
+        Carp::croak('Missing mandatory parameter: directory');
     }
     bless {
         %args,
@@ -36,13 +37,15 @@ sub make_index {
 
     my @files = $self->list_archive_files();
 
-    try {
-        $self->do_metacpan_lookup( \@files );
+    if ( $self->{metacpan} ) {
+        try {
+            $self->do_metacpan_lookup( \@files );
+        }
+        catch {
+            print STDERR "[WARN] Unable to fetch provides via MetaCPAN\n";
+            print STDERR "[WARN] $_\n";
+        };
     }
-    catch {
-        print STDERR "[WARN] Unable to fetch provides via MetaCPAN";
-        print STDERR "[WARN] $_";
-    };
 
     my $index = OrePAN2::Index->new();
     for my $archive_file (@files) {
@@ -114,6 +117,8 @@ sub scan_provides {
 sub _maybe_index_from_metacpan {
     my ( $self, $index, $file ) = @_;
 
+    return unless $self->{metacpan};
+
     my $archive = Path::Tiny->new( $file )->basename;
     my $lookup  = $self->_metacpan_lookup;
 
@@ -174,9 +179,10 @@ sub do_metacpan_lookup {
             next unless $inner->{indexed};
 
             $provides->{release}->{ $file->release }->{ $inner->{name} }
-                //= $inner->{version};
+                //= $inner->{version_numified};
         }
     }
+
     $self->_metacpan_lookup( $provides );
 }
 
@@ -198,15 +204,14 @@ sub write_index {
     mkdir(File::Basename::dirname($pkgfname));
     my $fh = do {
         if ($no_compress) {
-            open my $fh, '>:raw', $pkgfname
-                or die "Cannot open $pkgfname for writing: $!\n";
+            open my $fh, '>:raw', $pkgfname;
             $fh;
         } else {
-            IO::Zlib->new($pkgfname, "w")
+            IO::Zlib->new($pkgfname, 'w')
                 or die "Cannot open $pkgfname for writing: $!\n";
         }
     };
-    print $fh $index->as_string();
+    print $fh $index->as_string( { simple => $self->{simple} } );
     close $fh;
 }
 

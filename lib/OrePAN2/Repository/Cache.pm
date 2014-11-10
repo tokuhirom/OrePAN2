@@ -1,20 +1,20 @@
 package OrePAN2::Repository::Cache;
+
 use strict;
 use warnings;
 use utf8;
 use 5.008_001;
 
 use Carp;
-use File::Spec;
-use JSON::PP;
-use Digest::MD5;
-use IO::File::AtomicChange;
-use File::Path;
-use File::stat;
-
 use Class::Accessor::Lite 0.05 (
     rw => [qw(is_dirty directory)],
 );
+use Digest::MD5;
+use File::Path;
+use File::Spec;
+use File::stat;
+use IO::File::AtomicChange;
+use JSON::PP;
 
 sub new {
     my $class = shift;
