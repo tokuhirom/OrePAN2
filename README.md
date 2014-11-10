@@ -14,15 +14,15 @@ It's very simple and useful.
 
 Download a tar ball from CPAN.
 
-    % orepan2-inject http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz /tmp/darkpan
+    % orepan2-inject http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz /path/to/darkpan/
 
 Create 02packages.details.txt!
 
-    % orepan2-indexer /tmp/darkpan/
+    % orepan2-indexer /path/to/darkpan/
 
 Then you can install Acme::Hoge from DarkPAN!
 
-    % cpanm --mirror-only --mirror=file:///tmp/darkpan/ Acme::Hoge
+    % cpanm --mirror-only --mirror=file:///path/to/darkpan/ Acme::Hoge
 
 It's pretty easy!
 
