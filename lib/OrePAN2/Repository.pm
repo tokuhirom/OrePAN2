@@ -62,9 +62,9 @@ sub make_index {
 }
 
 sub inject {
-    my ($self, $stuff) = @_;
+    my ($self, $stuff, $opts) = @_;
 
-    my $tarpath = $self->injector->inject($stuff);
+    my $tarpath = $self->injector->inject($stuff, $opts);
     $self->cache->set($stuff, $tarpath);
 }
 
