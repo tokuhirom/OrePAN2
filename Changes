@@ -2,13 +2,10 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
-    commit c8d9dd0f3514113d682cb5fc82165a8cb01adfa2
-    Author: Olaf Alders <olaf@wundersolutions.com>
-    Date:   Wed Aug 13 10:26:49 2014 -0400
-
-        s/MetaCPAN::API/MetaCPAN::Client/
-
-        MetaCPAN::API has been deprecated.
+    - Remove MetaCPAN::API, which is now deprecated (oalders)
+    - Use numified_version when getting provides from MetaCPAN (oalders)
+    - Doc updates (Ivan Bessarabov)
+    - Fixed `--author` in orepan2-inject
 
 0.31 2014-09-08T19:51:08Z
 
@@ -19,11 +16,7 @@ Revision history for Perl extension OrePAN2
 
 0.30 2014-05-04T23:54:02Z
 
-    commit 3b36adad91d930de6f9e31b83eb4be5fd183ad05
-    Author: Ichito Nagata <i.nagata110@gmail.com>
-    Date:   Sat May 3 11:32:22 2014 +0900
-
-        use $self->{author} when the option is not provided
+    - Use $self->{author} when the option is not provided (Ichito Nagata)
 
 0.29 2014-03-05T06:06:48Z
 
