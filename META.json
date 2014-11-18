@@ -81,7 +81,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.31",
+   "version" : "0.32",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
@@ -91,7 +91,7 @@
       "moznion <moznion@gmail.com>",
       "Ichito Nagata <i.nagata110@gmail.com>",
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
-      "Olaf Alders <olaf@wundersolutions.com>",
-      "Ivan Bessarabov <ivan@bessarabov.ru>"
+      "Ivan Bessarabov <ivan@bessarabov.ru>",
+      "Olaf Alders <olaf@wundersolutions.com>"
    ]
 }
