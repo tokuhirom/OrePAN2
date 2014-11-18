@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.1.1, CPAN::Meta::Converter version 2.141520",
+   "generated_by" : "Minilla/v2.1.1, CPAN::Meta::Converter version 2.142060",
    "license" : [
       "perl_5"
    ],
@@ -82,6 +82,7 @@
       }
    },
    "version" : "0.31",
+   "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
       "Masahiro Honma <hiratara@cpan.org>",
@@ -90,6 +91,7 @@
       "moznion <moznion@gmail.com>",
       "Ichito Nagata <i.nagata110@gmail.com>",
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
-      "Olaf Alders <olaf@wundersolutions.com>"
+      "Olaf Alders <olaf@wundersolutions.com>",
+      "Ivan Bessarabov <ivan@bessarabov.ru>"
    ]
 }
