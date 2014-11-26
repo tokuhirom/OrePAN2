@@ -13,7 +13,7 @@ orepan2-inject - Injector
 
 =head1 SYNOPSIS
 
-    % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git@master /path/to/darkpan/
+    % orepan2-inject git://github.com/tokuhirom/Text-TestBase.git@master /path/to/darkpan/
     % orepan2-inject Carton /path/to/darkpan/
 
 =head1 DESCRIPTION
@@ -58,8 +58,8 @@ You can inject into DarkPAN from an archive URL.
 
 =head2 Git repository
 
-    % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git@master /path/to/darkpan/
-    % orepan2-inject git://github.com/miyagawa/Acme-YakiniQ.git        /path/to/darkpan/
+    % orepan2-inject git://github.com/tokuhirom/Text-TestBase.git@master /path/to/darkpan/
+    % orepan2-inject git://github.com/tokuhirom/Text-TestBase.git        /path/to/darkpan/
 
 You need to set up git repository as a installable git repo.
 You need to put a META.json in your repository.
