@@ -1,0 +1,5 @@
+[PerlTidy]
+argv = --profile=$ROOT/.perltidyrc
+ignore = blib/**/*
+ignore = OrePAN2-*/**/*
+select = **/*.{pl,pm,t}

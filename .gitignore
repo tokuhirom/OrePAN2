@@ -12,12 +12,15 @@ nytprof/
 
 cover_db/
 
+tidyall.ERR
+
 *.bak
 *.old
 *~
 *.swp
 *.o
 *.obj
+.tidyall.d
 
 !LICENSE
 
