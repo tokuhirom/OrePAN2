@@ -42,4 +42,33 @@ subtest 'use MetaCPAN' => sub {
         'correct version reported by provides' );
 };
 
+subtest 'Upgrade undef versions' => sub {
+    my $tmpdir = tempdir( CLEANUP => 1 );
+
+    inject_and_index( $tmpdir,
+        'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.31.tar.gz'
+    );
+
+    my $index = inject_and_index( $tmpdir,
+        'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.32.tar.gz'
+    );
+
+    my $latest = 'OrePAN2-0.32.tar.gz';
+
+    foreach my $pkg ( 'OrePAN2', 'OrePAN2::Indexer' ) {
+        like( $index->{index}->{$pkg}->[1],
+            qr{$latest}, "$pkg is in $latest" );
+    }
+};
+
+sub inject_and_index {
+    my $dir     = shift;
+    my $archive = shift;
+
+    my $injector = OrePAN2::Injector->new( directory => $dir, );
+    $injector->inject( $archive );
+    my $orepan = OrePAN2::Indexer->new( directory => $dir, metacpan => 1 );
+    return $orepan->make_index;
+}
+
 done_testing;

@@ -52,6 +52,7 @@ sub make_index {
         $self->add_index($index, $archive_file);
     }
     $self->write_index($index, $args{no_compress});
+    return $index;
 }
 
 sub add_index {

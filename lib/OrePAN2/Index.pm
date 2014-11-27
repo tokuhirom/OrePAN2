@@ -68,7 +68,10 @@ sub add_index {
 
     if ($self->{index}{$package}) {
         my ($orig_ver) = @{$self->{index}{$package}};
-        if (version->parse($orig_ver) >= version->parse($version)) {
+
+        if (version->parse($orig_ver) > version->parse($version)) {
+            print STDERR "[INFO] Not adding $package in $archive_file\n";
+            print STDERR "[INFO] Existing version $orig_ver is greater than $version\n";
             return;
         }
     }
