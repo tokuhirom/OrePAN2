@@ -69,11 +69,10 @@ sub add_index {
     my $provides = $self->scan_provides( $tmpdir, $archive_file );
     my $path = $self->_orepan_archive_path( $archive_file );
 
-    while ( my ( $package, $dat ) = each %$provides ) {
-        my $version = $dat->{version};
+    foreach my $package ( sort keys %{$provides} ) {
         $index->add_index(
             $package,
-            $version,
+            $provides->{$package}->{version},
             $path,
         );
     }
