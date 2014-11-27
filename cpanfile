@@ -21,6 +21,7 @@ requires 'IO::File::AtomicChange';
 requires 'JSON::PP';
 requires 'Path::Tiny';
 requires 'Try::Tiny';
+requires 'version', '0.9909';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
