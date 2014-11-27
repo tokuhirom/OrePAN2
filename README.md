@@ -12,7 +12,7 @@ It's very simple and useful.
 
 # TUTORIAL
 
-Download a tar ball from CPAN.
+Download a tarball from CPAN.
 
     % orepan2-inject http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz /path/to/darkpan/
 
