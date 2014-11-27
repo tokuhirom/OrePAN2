@@ -237,7 +237,7 @@ sub list_archive_files {
             no_chdir => 1,
         }, $authors_dir
     );
-    return @files;
+    return sort @files;
 }
 
 1;
