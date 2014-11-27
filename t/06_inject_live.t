@@ -45,14 +45,19 @@ subtest 'use MetaCPAN' => sub {
 subtest 'Upgrade undef versions' => sub {
     my $tmpdir = tempdir( CLEANUP => 1 );
 
-    inject_and_index( $tmpdir,
-        'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.31.tar.gz'
-    );
+    # Since we are now sorting the files by modification time, order of
+    # injection does not matter.  If someone is downgrading a module, they
+    # should delete the later module from the darkpan and then inject the
+    # module they are downgrading to.  In this case we're injecting in the
+    # wrong order, but the newer archive will take precedence.
 
-    my $index = inject_and_index( $tmpdir,
+    inject_and_index( $tmpdir,
         'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.32.tar.gz'
     );
 
+    my $index = inject_and_index( $tmpdir,
+        'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.31.tar.gz'
+    );
     my $latest = 'OrePAN2-0.32.tar.gz';
 
     foreach my $pkg ( 'OrePAN2', 'OrePAN2::Indexer' ) {

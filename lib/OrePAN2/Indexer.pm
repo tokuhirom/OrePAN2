@@ -237,7 +237,11 @@ sub list_archive_files {
             no_chdir => 1,
         }, $authors_dir
     );
-    return sort @files;
+
+    # Sort files by modication time so that we can index distributions from
+    # earliest to latest version.
+
+    return sort {-M $b <=> -M $a } @files;
 }
 
 1;

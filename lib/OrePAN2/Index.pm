@@ -63,6 +63,10 @@ sub delete_index {
     return;
 }
 
+# Order of preference is last updated. So if some modules maintain the same
+# version number across multiple uploads, we'll point to the module in the
+# latest archive.
+
 sub add_index {
     my ($self, $package, $version, $archive_file) = @_;
 
