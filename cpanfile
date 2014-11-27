@@ -9,6 +9,8 @@ requires 'Getopt::Long', 2.39;
 requires 'HTTP::Tiny';
 requires 'IO::Socket::SSL', 1.42;
 requires 'Parse::LocalDistribution', '0.14';
+requires 'Parse::CPAN::Meta', '1.4414';
+requires 'Parse::PMFile', '0.29';
 requires 'IO::Zlib';
 requires 'Pod::Usage';
 requires 'MetaCPAN::Client', 1.006000;
