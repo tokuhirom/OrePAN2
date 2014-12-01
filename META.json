@@ -54,12 +54,15 @@
             "IO::Zlib" : "0",
             "JSON::PP" : "0",
             "MetaCPAN::Client" : "1.006",
-            "Parse::LocalDistribution" : "0.11",
+            "Parse::CPAN::Meta" : "1.4414",
+            "Parse::LocalDistribution" : "0.14",
+            "Parse::PMFile" : "0.29",
             "Path::Tiny" : "0",
             "Pod::Usage" : "0",
             "Try::Tiny" : "0",
             "parent" : "0",
-            "perl" : "5.008005"
+            "perl" : "5.008005",
+            "version" : "0.9909"
          }
       },
       "test" : {
@@ -82,7 +85,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.33",
+   "version" : "0.34",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",

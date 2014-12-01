@@ -2,6 +2,8 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.34 2014-12-01T14:21:15Z
+
     - If two packages have the same version, the one which is last in will be preferred (oalders)
     - OrePAN2::Indexer::make_index() now returns an OrePAN2::Index object (oalders)
 
