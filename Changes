@@ -2,7 +2,9 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
-    - Revert back to MetaCPAN version (from version_numified)
+0.35 2014-12-01T20:26:54Z
+
+    - Revert back to MetaCPAN version (from version_numified) (oalders)
 
 0.34 2014-12-01T14:21:15Z
 

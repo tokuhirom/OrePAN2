@@ -85,7 +85,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.34",
+   "version" : "0.35",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
