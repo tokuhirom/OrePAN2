@@ -10,7 +10,7 @@ use OrePAN2;
 
 sub new {
     my $class = shift;
-    my %args = @_==1 ? %{$_[0]} : @_;
+    my %args = @_ == 1 ? %{ $_[0] } : @_;
     bless {
         index => {},
         %args,
@@ -18,13 +18,14 @@ sub new {
 }
 
 sub load {
-    my ($self, $fname) = @_;
+    my ( $self, $fname ) = @_;
 
     my $fh = do {
-        if ($fname =~ /\.gz\z/) {
+        if ( $fname =~ /\.gz\z/ ) {
             IO::Uncompress::Gunzip->new($fname)
                 or die "gzip failed: $GunzipError\n";
-        } else {
+        }
+        else {
             open my $fh, '<', $fname;
             $fh;
         }
@@ -37,7 +38,7 @@ sub load {
 
     while (<$fh>) {
         if (/^(\S+)\s+(\S+)\s+(.*)$/) {
-           $self->add_index($1,$2 eq 'undef' ? undef : $2,$3);
+            $self->add_index( $1, $2 eq 'undef' ? undef : $2, $3 );
         }
     }
 
@@ -45,8 +46,8 @@ sub load {
 }
 
 sub lookup {
-    my ($self, $package) = @_;
-    if (my $entry = $self->{index}->{$package}) {
+    my ( $self, $package ) = @_;
+    if ( my $entry = $self->{index}->{$package} ) {
         return @$entry;
     }
     return;
@@ -54,11 +55,11 @@ sub lookup {
 
 sub packages {
     my ($self) = @_;
-    sort { $a cmp $b } keys %{$self->{index}};
+    sort { $a cmp $b } keys %{ $self->{index} };
 }
 
 sub delete_index {
-    my ($self, $package) = @_;
+    my ( $self, $package ) = @_;
     delete $self->{index}->{$package};
     return;
 }
@@ -68,47 +69,53 @@ sub delete_index {
 # latest archive.
 
 sub add_index {
-    my ($self, $package, $version, $archive_file) = @_;
+    my ( $self, $package, $version, $archive_file ) = @_;
 
-    if ($self->{index}{$package}) {
-        my ($orig_ver) = @{$self->{index}{$package}};
+    if ( $self->{index}{$package} ) {
+        my ($orig_ver) = @{ $self->{index}{$package} };
 
-        if (version->parse($orig_ver) > version->parse($version)) {
+        if ( version->parse($orig_ver) > version->parse($version) ) {
             print STDERR "[INFO] Not adding $package in $archive_file\n";
-            print STDERR "[INFO] Existing version $orig_ver is greater than $version\n";
+            print STDERR
+                "[INFO] Existing version $orig_ver is greater than $version\n";
             return;
         }
     }
-    $self->{index}->{$package} = [$version, $archive_file];
+    $self->{index}->{$package} = [ $version, $archive_file ];
 }
 
 sub as_string {
-    my ($self, $opts) = @_;
+    my ( $self, $opts ) = @_;
     $opts ||= +{};
     my $simple = $opts->{simple} || 0;
 
     my @buf;
 
-    push @buf, (
+    push @buf,
+        (
         'File:         02packages.details.txt',
         'URL:          http://www.perl.com/CPAN/modules/02packages.details.txt',
         'Description:  DarkPAN',
         'Columns:      package name, version, path',
         'Intended-For: Automated fetch routines, namespace documentation.',
-        $simple ? () : (
+        $simple
+        ? ()
+        : (
             "Written-By:   OrePAN2 $OrePAN2::VERSION",
             "Line-Count:   @{[ scalar(keys %{$self->{index}}) ]}",
             "Last-Updated: @{[ scalar localtime ]}",
         ),
         '',
-    );
+        );
 
-    for my $pkg ($self->packages) {
+    for my $pkg ( $self->packages ) {
         my $entry = $self->{index}{$pkg};
+
         # package name, version, path
-        push @buf, sprintf '%-22s %-22s %s', $pkg, $entry->[0] || 'undef', $entry->[1];
+        push @buf, sprintf '%-22s %-22s %s', $pkg, $entry->[0] || 'undef',
+            $entry->[1];
     }
-    return join("\n", @buf) . "\n";
+    return join( "\n", @buf ) . "\n";
 }
 
 1;

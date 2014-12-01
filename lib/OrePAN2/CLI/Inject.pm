@@ -17,25 +17,25 @@ sub new {
 }
 
 sub run {
-    my ($self, @args) = @_;
+    my ( $self, @args ) = @_;
 
     my $version;
     my $generate_index = 1;
-    my $author = 'DUMMY';
+    my $author         = 'DUMMY';
     my $simple;
     my $text;
     my $enable_cache = 0;
-    my $p = Getopt::Long::Parser->new(
-        config => [qw(posix_default no_ignore_case auto_help)]
-    );
+    my $p            = Getopt::Long::Parser->new(
+        config => [qw(posix_default no_ignore_case auto_help)] );
     $p->getoptions(
-        'version!'       => \$version,
+        'version!'        => \$version,
         'generate-index!' => \$generate_index,
         'author=s'        => \$author,
         'simple!'         => \$simple,
         'text!'           => \$text,
         'cache!'          => \$enable_cache,
     );
+
     if ($version) {
         print "orepan2: $OrePAN2::VERSION\n";
     }
@@ -53,16 +53,17 @@ sub run {
             next unless /\S/;
             next if $enable_cache && $repository->has_cache($_);
 
-            my $tarpath = $repository->inject($_, {author => $author});
+            my $tarpath = $repository->inject( $_, { author => $author } );
             print "Wrote $tarpath from $_\n";
         }
-    } else {
+    }
+    else {
         while (<>) {
             chomp;
             next unless /\S/;
             next if $enable_cache && $repository->has_cache($_);
 
-            my $tarpath = $repository->inject($_, {author => $author});
+            my $tarpath = $repository->inject( $_, { author => $author } );
             print "Wrote $tarpath from $_\n";
         }
     }

@@ -18,9 +18,9 @@ sub slurp {
 sub slurp_gz {
     my $name = shift;
     require IO::Zlib;
-    my $fh = IO::Zlib->new($name, 'rb')
+    my $fh = IO::Zlib->new( $name, 'rb' )
         or Carp::croak "Cannot open '$name' for reading: $!";
-    my $content = join('', <$fh>);
+    my $content = join( '', <$fh> );
     return $content;
 }
 

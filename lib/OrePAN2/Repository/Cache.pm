@@ -18,43 +18,48 @@ use JSON::PP;
 
 sub new {
     my $class = shift;
-    my %args = @_==1 ? %{$_[0]} : @_;
+    my %args = @_ == 1 ? %{ $_[0] } : @_;
 
     for my $key (qw(directory)) {
-        unless (exists $args{$key}) {
+        unless ( exists $args{$key} ) {
             Carp::croak("Missing mandatory parameter: $key");
         }
     }
     my $self = bless {
         %args,
     }, $class;
-    $self->{filename} = File::Spec->catfile($self->{directory}, 'orepan2-cache.json');
+    $self->{filename}
+        = File::Spec->catfile( $self->{directory}, 'orepan2-cache.json' );
     return $self;
 }
 
 sub data {
     my $self = shift;
     $self->{data} ||= do {
-        if (open my $fh, '<', $self->{filename}) {
-            JSON::PP::decode_json(do { local $/; <$fh> });
-        } else {
+        if ( open my $fh, '<', $self->{filename} ) {
+            JSON::PP::decode_json(
+                do { local $/; <$fh> }
+            );
+        }
+        else {
             +{};
         }
     };
 }
 
 sub is_hit {
-    my ($self, $stuff) = @_;
+    my ( $self, $stuff ) = @_;
 
     my $entry = $self->data->{$stuff};
 
     return 0 unless $entry && $entry->{filename} && $entry->{md5};
 
-    my $fullpath = File::Spec->catfile($self->directory, $entry->{filename});
+    my $fullpath
+        = File::Spec->catfile( $self->directory, $entry->{filename} );
     return 0 unless -f $fullpath;
 
-    if (my $stat = stat($stuff) && defined($entry->{mtime})) {
-        return 0 if $stat->mtime ne $entry->{mtime}
+    if ( my $stat = stat($stuff) && defined( $entry->{mtime} ) ) {
+        return 0 if $stat->mtime ne $entry->{mtime};
     }
 
     my $md5 = $self->calc_md5($fullpath);
@@ -64,12 +69,12 @@ sub is_hit {
 }
 
 sub calc_md5 {
-    my ($self, $filename) = @_;
+    my ( $self, $filename ) = @_;
 
     open my $fh, '<', $filename
         or do {
         return;
-    };
+        };
 
     my $md5 = Digest::MD5->new();
     $md5->addfile($fh);
@@ -77,14 +82,16 @@ sub calc_md5 {
 }
 
 sub set {
-    my ($self, $stuff, $filename) = @_;
+    my ( $self, $stuff, $filename ) = @_;
 
-    my $md5 = $self->calc_md5(File::Spec->catfile($self->directory, $filename))
+    my $md5
+        = $self->calc_md5(
+        File::Spec->catfile( $self->directory, $filename ) )
         or Carp::croak("Cannot calcurate MD5 for '$filename'");
     $self->{data}->{$stuff} = +{
         filename => $filename,
         md5      => $md5,
-        (-f $filename ? (mtime => stat($filename)->mtime) : ()),
+        ( -f $filename ? ( mtime => stat($filename)->mtime ) : () ),
     };
     $self->is_dirty(1);
 }
@@ -93,13 +100,14 @@ sub save {
     my ($self) = @_;
 
     my $filename = $self->{filename};
-    my $json = JSON::PP->new->pretty(1)->canonical(1)->encode($self->{data});
+    my $json
+        = JSON::PP->new->pretty(1)->canonical(1)->encode( $self->{data} );
 
-    File::Path::mkpath(File::Basename::dirname($filename));
+    File::Path::mkpath( File::Basename::dirname($filename) );
 
-    my $fh = IO::File::AtomicChange->new($filename, 'w');
+    my $fh = IO::File::AtomicChange->new( $filename, 'w' );
     $fh->print($json);
-    $fh->close(); # MUST CALL close EXPLICITLY
+    $fh->close();    # MUST CALL close EXPLICITLY
 }
 
 1;

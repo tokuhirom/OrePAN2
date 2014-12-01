@@ -22,16 +22,17 @@ my @specs = (
 
 for my $spec (@specs) {
     my $tmpdir = tempdir( CLEANUP => 1 );
-    local @ARGV = ($spec->[0], $tmpdir);
+    local @ARGV = ( $spec->[0], $tmpdir );
     OrePAN2::CLI::Inject->new->run();
-    ok(-f "$tmpdir/@{[ $spec->[1] ]}");
+    ok( -f "$tmpdir/@{[ $spec->[1] ]}" );
 }
 
 subtest 'no index' => sub {
     my $tmpdir = tempdir( CLEANUP => 1 );
-    local @ARGV = ('--no-generate-index', 't/dat/Acme-Foo-0.01.tar.gz', $tmpdir);
+    local @ARGV
+        = ( '--no-generate-index', 't/dat/Acme-Foo-0.01.tar.gz', $tmpdir );
     OrePAN2::CLI::Inject->new->run();
-    ok(!-f "$tmpdir/modules/02packages.details.txt.gz");
+    ok( !-f "$tmpdir/modules/02packages.details.txt.gz" );
 };
 
 done_testing;

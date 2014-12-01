@@ -16,20 +16,15 @@ use t::Util;
     };
 }
 
-
 subtest 'gz index' => sub {
-    my $tmp = pushd(tempdir());
-    OrePAN2::CLI::Indexer->new()->run(
-        $tmp
-    );
+    my $tmp = pushd( tempdir() );
+    OrePAN2::CLI::Indexer->new()->run($tmp);
     ok -f 'modules/02packages.details.txt.gz';
 };
 
 subtest 'txt index' => sub {
-    my $tmp = pushd(tempdir());
-    OrePAN2::CLI::Indexer->new()->run(
-        '--text', $tmp
-    );
+    my $tmp = pushd( tempdir() );
+    OrePAN2::CLI::Indexer->new()->run( '--text', $tmp );
     ok -f 'modules/02packages.details.txt';
     my $txt = slurp 'modules/02packages.details.txt';
     note $txt;

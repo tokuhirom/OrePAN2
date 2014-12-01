@@ -15,20 +15,19 @@ sub new {
 }
 
 sub run {
-    my ($self, @args) = @_;
+    my ( $self, @args ) = @_;
 
     my $version;
     my $text;
     my $metacpan;
 
     my $p = Getopt::Long::Parser->new(
-        config => [qw(posix_default no_ignore_case auto_help)]
-    );
+        config => [qw(posix_default no_ignore_case auto_help)] );
     $p->getoptionsfromarray(
         \@args => (
-            'metacpan!'      => \$metacpan,
-            'version!'       => \$version,
-            'text!'          => \$text,
+            'metacpan!' => \$metacpan,
+            'version!'  => \$version,
+            'text!'     => \$text,
         )
     );
     if ($version) {

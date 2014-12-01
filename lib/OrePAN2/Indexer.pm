@@ -21,8 +21,8 @@ use Try::Tiny;
 
 sub new {
     my $class = shift;
-    my %args = @_==1 ? %{$_[0]} : @_;
-    unless (defined $args{directory}) {
+    my %args = @_ == 1 ? %{ $_[0] } : @_;
+    unless ( defined $args{directory} ) {
         Carp::croak('Missing mandatory parameter: directory');
     }
     bless {
@@ -33,7 +33,7 @@ sub new {
 sub directory { shift->{directory} }
 
 sub make_index {
-    my ($self, %args) = @_;
+    my ( $self, %args ) = @_;
 
     my @files = $self->list_archive_files();
 
@@ -49,25 +49,23 @@ sub make_index {
 
     my $index = OrePAN2::Index->new();
     for my $archive_file (@files) {
-        $self->add_index($index, $archive_file);
+        $self->add_index( $index, $archive_file );
     }
-    $self->write_index($index, $args{no_compress});
+    $self->write_index( $index, $args{no_compress} );
     return $index;
 }
 
 sub add_index {
-    my ($self, $index, $archive_file) = @_;
+    my ( $self, $index, $archive_file ) = @_;
 
     return if $self->_maybe_index_from_metacpan( $index, $archive_file );
 
-    my $archive = Archive::Extract->new(
-        archive => $archive_file
-    );
+    my $archive = Archive::Extract->new( archive => $archive_file );
     my $tmpdir = tempdir( CLEANUP => 1 );
-    $archive->extract( to => $tmpdir);
+    $archive->extract( to => $tmpdir );
 
     my $provides = $self->scan_provides( $tmpdir, $archive_file );
-    my $path = $self->_orepan_archive_path( $archive_file );
+    my $path = $self->_orepan_archive_path($archive_file);
 
     foreach my $package ( sort keys %{$provides} ) {
         $index->add_index(
@@ -81,8 +79,10 @@ sub add_index {
 sub _orepan_archive_path {
     my $self         = shift;
     my $archive_file = shift;
-    my $path         = File::Spec->abs2rel( $archive_file,
-        File::Spec->catfile( $self->directory, 'authors', 'id' ) );
+    my $path         = File::Spec->abs2rel(
+        $archive_file,
+        File::Spec->catfile( $self->directory, 'authors', 'id' )
+    );
     $path =~ s!\\!/!g;
     return $path;
 }
@@ -110,6 +110,7 @@ sub scan_provides {
     return $provides if $provides;
 
     print STDERR "[WARN] Error scanning: $@\n";
+
     # Return empty provides.
     return {};
 }
@@ -119,7 +120,7 @@ sub _maybe_index_from_metacpan {
 
     return unless $self->{metacpan};
 
-    my $archive = Path::Tiny->new( $file )->basename;
+    my $archive = Path::Tiny->new($file)->basename;
     my $lookup  = $self->_metacpan_lookup;
 
     unless ( exists $lookup->{archive}->{$archive} ) {
@@ -129,12 +130,12 @@ sub _maybe_index_from_metacpan {
     my $release_name = $lookup->{archive}->{$archive};
 
     my $provides = $lookup->{release}->{$release_name};
-     unless ( $provides && keys %{$provides} ) {
-         print STDERR "[INFO] provides for $archive not found on MetaCPAN\n";
-         return;
-     }
+    unless ( $provides && keys %{$provides} ) {
+        print STDERR "[INFO] provides for $archive not found on MetaCPAN\n";
+        return;
+    }
 
-    my $path = $self->_orepan_archive_path( $file );
+    my $path = $self->_orepan_archive_path($file);
 
     foreach my $package ( keys %{$provides} ) {
         $index->add_index( $package, $provides->{$package}, $path, );
@@ -149,8 +150,8 @@ sub do_metacpan_lookup {
 
     my $provides = $self->_metacpan_lookup;
 
-    my $mc = MetaCPAN::Client->new;
-    my @archives = map { Path::Tiny->new( $_ )->basename } @{$files};
+    my $mc                 = MetaCPAN::Client->new;
+    my @archives           = map { Path::Tiny->new($_)->basename } @{$files};
     my @search_by_archives = map { +{ archive => $_ } } @archives;
     my $releases = $mc->release( { either => \@search_by_archives } );
 
@@ -178,36 +179,37 @@ sub do_metacpan_lookup {
         foreach my $inner ( @{ $file->module } ) {
             next unless $inner->{indexed};
 
-            $provides->{release}->{ $file->release }->{ $inner->{name} }
-                //= $inner->{version_numified};
+            $provides->{release}->{ $file->release }->{ $inner->{name} } //=
+                $inner->{version_numified};
         }
     }
 
-    $self->_metacpan_lookup( $provides );
+    $self->_metacpan_lookup($provides);
 }
 
 sub _scan_provides {
-    my ($self, $dir, $meta) = @_;
+    my ( $self, $dir, $meta ) = @_;
 
     my $provides = Parse::LocalDistribution->new->parse($dir);
     return $provides;
 }
 
 sub write_index {
-    my ($self, $index, $no_compress) = @_;
+    my ( $self, $index, $no_compress ) = @_;
 
     my $pkgfname = File::Spec->catfile(
         $self->directory,
         'modules',
         $no_compress ? '02packages.details.txt' : '02packages.details.txt.gz'
     );
-    mkdir(File::Basename::dirname($pkgfname));
+    mkdir( File::Basename::dirname($pkgfname) );
     my $fh = do {
         if ($no_compress) {
             open my $fh, '>:raw', $pkgfname;
             $fh;
-        } else {
-            IO::Zlib->new($pkgfname, 'w')
+        }
+        else {
+            IO::Zlib->new( $pkgfname, 'w' )
                 or die "Cannot open $pkgfname for writing: $!\n";
         }
     };
@@ -218,7 +220,7 @@ sub write_index {
 sub list_archive_files {
     my $self = shift;
 
-    my $authors_dir = File::Spec->catfile($self->{directory}, 'authors');
+    my $authors_dir = File::Spec->catfile( $self->{directory}, 'authors' );
     return () unless -d $authors_dir;
 
     my @files;
@@ -235,13 +237,14 @@ sub list_archive_files {
                 push @files, $_;
             },
             no_chdir => 1,
-        }, $authors_dir
+        },
+        $authors_dir
     );
 
     # Sort files by modication time so that we can index distributions from
     # earliest to latest version.
 
-    return sort {-M $b <=> -M $a } @files;
+    return sort { -M $b <=> -M $a } @files;
 }
 
 1;

@@ -18,10 +18,10 @@ use OrePAN2::Repository::Cache;
 
 sub new {
     my $class = shift;
-    my %args = @_==1 ? %{$_[0]} : @_;
+    my %args = @_ == 1 ? %{ $_[0] } : @_;
 
     for my $key (qw(directory)) {
-        unless (exists $args{$key}) {
+        unless ( exists $args{$key} ) {
             Carp::croak("Missing mandatory parameter: $key");
         }
     }
@@ -29,9 +29,8 @@ sub new {
         compress_index => 1,
         %args,
     }, $class;
-    $self->{cache} = OrePAN2::Repository::Cache->new(
-        directory => $self->{directory}
-    );
+    $self->{cache}
+        = OrePAN2::Repository::Cache->new( directory => $self->{directory} );
 
     return $self;
 }
@@ -52,7 +51,7 @@ sub indexer {
 }
 
 sub has_cache {
-    my ($self, $stuff) = @_;
+    my ( $self, $stuff ) = @_;
     $self->cache->is_hit($stuff);
 }
 
@@ -62,15 +61,18 @@ sub make_index {
 }
 
 sub inject {
-    my ($self, $stuff, $opts) = @_;
+    my ( $self, $stuff, $opts ) = @_;
 
-    my $tarpath = $self->injector->inject($stuff, $opts);
-    $self->cache->set($stuff, $tarpath);
+    my $tarpath = $self->injector->inject( $stuff, $opts );
+    $self->cache->set( $stuff, $tarpath );
 }
 
 sub index_file {
     my $self = shift;
-    return File::Spec->catfile($self->directory, 'modules', '02packages.details.txt' . ($self->compress_index ? '.gz' : ''));
+    return File::Spec->catfile(
+        $self->directory, 'modules',
+        '02packages.details.txt' . ( $self->compress_index ? '.gz' : '' )
+    );
 }
 
 sub save_cache {
@@ -82,7 +84,7 @@ sub load_index {
     my $self = shift;
 
     my $index = OrePAN2::Index->new();
-    $index->load($self->index_file);
+    $index->load( $self->index_file );
     $index;
 }
 
@@ -94,24 +96,26 @@ sub gc {
 
     my $index = $self->load_index;
     my %registered;
-    for my $package ($index->packages) {
-        my ($version, $path) = $index->lookup($package);
+    for my $package ( $index->packages ) {
+        my ( $version, $path ) = $index->lookup($package);
         $registered{$path}++;
     }
 
-    my $pushd = File::pushd::pushd(File::Spec->catdir($self->directory, 'authors', 'id'));
+    my $pushd = File::pushd::pushd(
+        File::Spec->catdir( $self->directory, 'authors', 'id' ) );
     File::Find::find(
         {
             no_chdir => 1,
-            wanted => sub {
+            wanted   => sub {
                 return unless -f $_;
                 $_ = File::Spec->canonpath($_);
-                unless ($registered{$_}) {
+                unless ( $registered{$_} ) {
                     unlink $_;
                 }
                 1;
             },
-        }, '.'
+        },
+        '.'
     );
 }
 

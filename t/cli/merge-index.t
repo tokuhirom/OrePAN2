@@ -30,8 +30,11 @@ AAA::eBay              undef                  J/JW/JWACH/Apache-FastForward-1.1.
 $f2->close;
 
 my $out = File::Temp->new();
-is system($^X, '-Ilib', 'script/orepan2-merge-index', '-o', $out->filename, $f1->filename, $f2->filename), 0;
-$out->seek(0, SEEK_SET);
+is system( $^X, '-Ilib', 'script/orepan2-merge-index', '-o', $out->filename,
+    $f1->filename, $f2->filename
+    ),
+    0;
+$out->seek( 0, SEEK_SET );
 my $result = do { local $/; <$out> };
 note $result;
 

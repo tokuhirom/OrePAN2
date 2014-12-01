@@ -14,7 +14,7 @@ subtest 'use MetaCPAN' => sub {
     my $tmpdir = tempdir( CLEANUP => 1 );
 
     my $mcpan  = MetaCPAN::Client->new;
-    my $module = $mcpan->module( 'OrePAN2' );
+    my $module = $mcpan->module('OrePAN2');
 
     my $release = $mcpan->release( $module->distribution );
 
@@ -22,7 +22,7 @@ subtest 'use MetaCPAN' => sub {
         directory => $tmpdir,
         author    => $release->author,
     );
-    $injector->inject( 'OrePAN2' );
+    $injector->inject('OrePAN2');
 
     my $path = $release->download_url;
     $path =~ s{\A.*/authors/}{};
@@ -32,14 +32,18 @@ subtest 'use MetaCPAN' => sub {
     my $orepan = OrePAN2::Indexer->new( directory => $tmpdir, metacpan => 1 );
     $orepan->make_index( no_compress => 1 );
 
-    ok( exists $orepan->_metacpan_lookup->{archive}->{ $release->archive },
-        'archive found by MetaCPAN' );
+    ok(
+        exists $orepan->_metacpan_lookup->{archive}->{ $release->archive },
+        'archive found by MetaCPAN'
+    );
 
     my $provides = $orepan->_metacpan_lookup->{release}->{ $release->name };
     ok( $provides, 'release found by MetaCPAN' );
 
-    is( $provides->{OrePAN2}, $release->version,
-        'correct version reported by provides' );
+    is(
+        $provides->{OrePAN2}, $release->version,
+        'correct version reported by provides'
+    );
 };
 
 subtest 'Upgrade undef versions' => sub {
@@ -51,18 +55,22 @@ subtest 'Upgrade undef versions' => sub {
     # module they are downgrading to.  In this case we're injecting in the
     # wrong order, but the newer archive will take precedence.
 
-    inject_and_index( $tmpdir,
+    inject_and_index(
+        $tmpdir,
         'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.32.tar.gz'
     );
 
-    my $index = inject_and_index( $tmpdir,
+    my $index = inject_and_index(
+        $tmpdir,
         'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.31.tar.gz'
     );
     my $latest = 'OrePAN2-0.32.tar.gz';
 
     foreach my $pkg ( 'OrePAN2', 'OrePAN2::Indexer' ) {
-        like( $index->{index}->{$pkg}->[1],
-            qr{$latest}, "$pkg is in $latest" );
+        like(
+            $index->{index}->{$pkg}->[1],
+            qr{$latest}, "$pkg is in $latest"
+        );
     }
 };
 
@@ -71,7 +79,7 @@ sub inject_and_index {
     my $archive = shift;
 
     my $injector = OrePAN2::Injector->new( directory => $dir, );
-    $injector->inject( $archive );
+    $injector->inject($archive);
     my $orepan = OrePAN2::Indexer->new( directory => $dir, metacpan => 1 );
     return $orepan->make_index;
 }
