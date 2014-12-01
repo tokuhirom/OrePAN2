@@ -52,6 +52,7 @@ sub make_index {
         $self->add_index($index, $archive_file);
     }
     $self->write_index($index, $args{no_compress});
+    return $index;
 }
 
 sub add_index {
@@ -68,11 +69,10 @@ sub add_index {
     my $provides = $self->scan_provides( $tmpdir, $archive_file );
     my $path = $self->_orepan_archive_path( $archive_file );
 
-    while ( my ( $package, $dat ) = each %$provides ) {
-        my $version = $dat->{version};
+    foreach my $package ( sort keys %{$provides} ) {
         $index->add_index(
             $package,
-            $version,
+            $provides->{$package}->{version},
             $path,
         );
     }
@@ -237,7 +237,11 @@ sub list_archive_files {
             no_chdir => 1,
         }, $authors_dir
     );
-    return @files;
+
+    # Sort files by modication time so that we can index distributions from
+    # earliest to latest version.
+
+    return sort {-M $b <=> -M $a } @files;
 }
 
 1;

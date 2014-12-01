@@ -2,6 +2,9 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    - If two packages have the same version, the one which is last in will be preferred (oalders)
+    - OrePAN2::Indexer::make_index() now returns an OrePAN2::Index object (oalders)
+
 0.33 2014-11-22T00:38:07Z
 
     - Add IO::Socket::SSL to dependencies (Ivan Bessarabov)

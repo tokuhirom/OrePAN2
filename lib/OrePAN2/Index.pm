@@ -63,12 +63,19 @@ sub delete_index {
     return;
 }
 
+# Order of preference is last updated. So if some modules maintain the same
+# version number across multiple uploads, we'll point to the module in the
+# latest archive.
+
 sub add_index {
     my ($self, $package, $version, $archive_file) = @_;
 
     if ($self->{index}{$package}) {
         my ($orig_ver) = @{$self->{index}{$package}};
-        if (version->parse($orig_ver) >= version->parse($version)) {
+
+        if (version->parse($orig_ver) > version->parse($version)) {
+            print STDERR "[INFO] Not adding $package in $archive_file\n";
+            print STDERR "[INFO] Existing version $orig_ver is greater than $version\n";
             return;
         }
     }
