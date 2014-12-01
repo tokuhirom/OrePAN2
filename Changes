@@ -2,6 +2,8 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    - Revert back to MetaCPAN version (from version_numified)
+
 0.34 2014-12-01T14:21:15Z
 
     - If two packages have the same version, the one which is last in will be preferred (oalders)
@@ -14,7 +16,7 @@ Revision history for Perl extension OrePAN2
 0.32 2014-11-18T03:37:27Z
 
     - Remove MetaCPAN::API, which is now deprecated (oalders)
-    - Use numified_version when getting provides from MetaCPAN (oalders)
+    - Use version_numified when getting provides from MetaCPAN (oalders)
     - Doc updates (Ivan Bessarabov)
     - Fixed `--author` in orepan2-inject
 
