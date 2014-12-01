@@ -46,6 +46,18 @@ subtest 'use MetaCPAN' => sub {
     );
 };
 
+subtest 'Fixed decimal notation in versions' => sub {
+    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $index = inject_and_index(
+        $tmpdir,
+        'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/LWP-ConsoleLogger-0.000012.tar.gz'
+    );
+    like(
+        $index->as_string, qr{0\.000012},
+        'version string in fixed decimal notation'
+    );
+};
+
 subtest 'Upgrade undef versions' => sub {
     my $tmpdir = tempdir( CLEANUP => 1 );
 

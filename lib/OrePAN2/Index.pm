@@ -111,9 +111,25 @@ sub as_string {
     for my $pkg ( $self->packages ) {
         my $entry = $self->{index}{$pkg};
 
+        # maybe reformat numified version. trying to avoid versions that MetaCPAN numifies to
+        # something like '9e-06'
+
+        my $numified = $entry->[0];
+        my $version;
+
+        if ($numified) {
+            my $decimal = sprintf( '%f', $numified );
+
+            # only use decimal if no precision is lost
+            $version = $decimal == $numified ? $decimal : $numified;
+        }
+
         # package name, version, path
-        push @buf, sprintf '%-22s %-22s %s', $pkg, $entry->[0] || 'undef',
-            $entry->[1];
+        my @args = ( $pkg, $version || 'undef', $entry->[1] );
+
+        # %g will warn on 'undef' as a string
+        push @buf, sprintf $version ? '%-22s %-22g %s' : '%-22s %-22s %s',
+            @args;
     }
     return join( "\n", @buf ) . "\n";
 }

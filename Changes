@@ -2,6 +2,9 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    - Write MetaCPAN's numified versions in fixed decimal notation (where
+      possible) when writing index to string (oalders)
+
 0.34 2014-12-01T14:21:15Z
 
     - If two packages have the same version, the one which is last in will be preferred (oalders)
