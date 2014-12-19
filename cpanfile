@@ -1,4 +1,5 @@
 requires 'perl', '5.008001';
+requires 'autodie';
 
 requires 'Archive::Extract', 0.72;
 requires 'Archive::Tar';
