@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.1.1, CPAN::Meta::Converter version 2.142060",
+   "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.143240",
    "license" : [
       "perl_5"
    ],
@@ -53,16 +53,22 @@
             "IO::Uncompress::Gunzip" : "0",
             "IO::Zlib" : "0",
             "JSON::PP" : "0",
+            "List::Compare" : "0",
             "MetaCPAN::Client" : "1.006",
+            "MooX::Options" : "0",
             "Parse::CPAN::Meta" : "1.4414",
+            "Parse::CPAN::Packages" : "2.39",
             "Parse::LocalDistribution" : "0.14",
             "Parse::PMFile" : "0.29",
             "Path::Tiny" : "0",
             "Pod::Usage" : "0",
             "Try::Tiny" : "0",
+            "Type::Params" : "0",
+            "Types::URI" : "0",
+            "autodie" : "0",
             "parent" : "0",
             "perl" : "5.008005",
-            "version" : "0.9909"
+            "version" : "0.9912"
          }
       },
       "test" : {

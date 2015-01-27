@@ -22,9 +22,14 @@ requires 'Digest::MD5';
 requires 'File::Path';
 requires 'IO::File::AtomicChange';
 requires 'JSON::PP';
+requires 'List::Compare';
+requires 'MooX::Options';
+requires 'Parse::CPAN::Packages', '2.39';
 requires 'Path::Tiny';
 requires 'Try::Tiny';
-requires 'version', '0.9909';
+requires 'Type::Params';
+requires 'Types::URI';
+requires 'version', '0.9912';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';

@@ -3,8 +3,9 @@
 /Build
 /blib
 
-/carton.lock
 /.carton/
+/carton.lock
+/cpanfile.snapshot
 /local/
 
 nytprof.out
