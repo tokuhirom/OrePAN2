@@ -1,0 +1,12 @@
+File:         02packages.details.txt
+URL:          http://www.perl.com/CPAN/modules/02packages.details.txt
+Description:  Package names found in directory $CPAN/authors/id/
+Columns:      package name, version, path
+Intended-For: Automated fetch routines, namespace documentation.
+Written-By:   PAUSE version 1.005
+Line-Count:   139666
+Last-Updated: Wed, 26 Feb 2014 01:06:11 GMT
+
+AAA::Demo                         undef  J/JW/JWACH/AAA-1.1.tar.gz
+AAA::eBay                         undef  J/JW/JWACH/AAA-1.1.tar.gz
+AAAA::Crypt::DH                    0.04  B/BI/BINGOS/AAAA-Crypt-DH-0.04.tar.gz
