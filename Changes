@@ -2,6 +2,9 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.36 2015-02-09T21:06:09Z
+    - Add OrePAN2::Auditor (oalders)
+
 0.35 2014-12-01T20:26:54Z
 
     - Revert back to MetaCPAN version (from version_numified) (oalders)
