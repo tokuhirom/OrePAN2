@@ -16,7 +16,7 @@ orepan2-audit - 02packages auditor
 
 =head1 SYNOPSIS
 
-    % orepan2-audit --darkpan path/to/darkpan/02packages --cpan http://cpan.metacpan.org/modules/02packages.details.txt --show oudated-modules --verbose
+    % orepan2-audit --darkpan path/to/darkpan/02packages --cpan http://cpan.metacpan.org/modules/02packages.details.txt --show outdated-modules --verbose
 
 =head1 DESCRIPTION
 
