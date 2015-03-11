@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use utf8;
 
+use Archive::Extract;
 use Archive::Tar;
 use CPAN::Meta;
 use File::Basename qw(dirname basename);
@@ -33,7 +34,7 @@ sub directory { shift->{directory} }
 sub inject {
     my ( $self, $source, $opts ) = @_;
     local $self->{author}
-        = uc( $opts->{author} || $self->{author} || 'DUMMY' );
+        = $opts->{author} || $self->{author} || 'DUMMY';
 
     my $tarpath;
     if ( $source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/ )
@@ -93,9 +94,20 @@ sub tarpath {
     return $tarpath;
 }
 
+sub _detect_author {
+    my ( $self, $source, $archive ) = @_;
+    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $ae = Archive::Extract->new( archive => $archive );
+    $ae->extract( to => $tmpdir );
+    my $guard = pushd( glob("$tmpdir/*") );
+    $self->{author}->($source);
+}
+
 sub inject_from_file {
     my ( $self, $file ) = @_;
 
+    local $self->{author} = $self->_detect_author( $file, $file )
+        if ref $self->{author} eq "CODE";
     my $basename = basename($file);
     my $tarpath  = $self->tarpath($basename);
 
@@ -108,14 +120,35 @@ sub inject_from_file {
 sub inject_from_http {
     my ( $self, $url ) = @_;
 
-    my $basename = basename($url);
+    # If $self->{author} is not a code reference,
+    # then $tarpath is fixed before http request
+    # and HTTP::Tiny->mirror works correctly.
+    # So we treat that case first.
+    if ( ref $self->{author} ne "CODE" ) {
+        my $basename = basename($url);
+        my $tarpath  = $self->tarpath($basename);
+        my $response = HTTP::Tiny->new->mirror( $url, $tarpath );
+        unless ( $response->{success} ) {
+            die "Cannot fetch $url($response->{status} $response->{reason})\n";
+        }
+        return $tarpath;
+    }
 
-    my $tarpath = $self->tarpath($basename);
-
-    my $response = HTTP::Tiny->new->mirror( $url, $tarpath );
+    my $tmpdir   = tempdir( CLEANUP => 1 );
+    my $tmpfile  = "$tmpdir/tmp.tar.gz";
+    my $response = HTTP::Tiny->new->mirror( $url, $tmpfile );
     unless ( $response->{success} ) {
         die "Cannot fetch $url($response->{status} $response->{reason})\n";
     }
+
+    my $basename = basename($url);
+    local $self->{author} = $self->_detect_author( $url, $tmpfile );
+    my $tarpath = $self->tarpath($basename);
+    copy( $tmpfile, $tarpath )
+        or die "Copy failed $tmpfile $tarpath: $!\n";
+
+    my $mtime = ( stat $tmpfile )[9];
+    utime $mtime, $mtime, $tarpath;
 
     return $tarpath;
 }
@@ -125,7 +158,7 @@ sub inject_from_git {
 
     my $tmpdir = tempdir( CLEANUP => 1 );
 
-    my ( $basename, $tar ) = do {
+    my ( $basename, $tar, $author ) = do {
         my $guard = pushd($tmpdir);
 
         _run("git clone $repository");
@@ -133,6 +166,12 @@ sub inject_from_git {
         if ($branch) {
             my $guard2 = pushd( [<*>]->[0] );
             _run("git checkout $branch");
+        }
+
+        my $author;
+        if ( ref $self->{author} eq "CODE" ) {
+            my $guard2 = pushd( [<*>]->[0] );
+            $author = $self->{author}->($repository);
         }
 
         # The repository needs to contains META.json in repository.
@@ -157,9 +196,10 @@ sub inject_from_git {
         my @files = $self->list_files($tmpdir);
         $tar->add_files(@files);
 
-        ( "$name-$version.tar.gz", $tar );
+        ( "$name-$version.tar.gz", $tar, $author );
     };
 
+    local $self->{author} = $author if $author;
     my $tarpath = $self->tarpath($basename);
 
     # Must be same partition.
