@@ -44,4 +44,22 @@ subtest 'check that $self->{author} is used' => sub {
     ok -f "$tmpdir/authors/id/M/MI/MIYAGAWA/Acme-Foo-0.01.tar.gz";
 };
 
+subtest 'check that code reference $self->{author} works' => sub {
+    my $tmpdir = tempdir( CLEANUP => 1 );
+
+    my $injector = OrePAN2::Injector->new(
+        directory => $tmpdir,
+        author    => sub {
+            my $file = shift;
+            require CPAN::Meta;
+            my $meta = CPAN::Meta->load_file("META.json");
+            my $author = $meta->{author}[0]; # tokuhirom <tokuhirom@gmail.com>
+            $author =~ s/\s.*//;
+            uc $author;
+        },
+    );
+    $injector->inject('t/dat/Acme-Foo-0.01.tar.gz');
+    ok -f "$tmpdir/authors/id/T/TO/TOKUHIROM/Acme-Foo-0.01.tar.gz";
+};
+
 done_testing;
