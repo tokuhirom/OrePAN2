@@ -240,3 +240,136 @@ sub _run {
 
 1;
 
+__END__
+
+=encoding utf-8
+
+=for stopwords DarkPAN orepan2-inject orepan2-indexer darkpan OrePAN1 OrePAN
+
+=head1 NAME
+
+OrePAN2::Injector - Inject a distribution to your darkpan
+
+=head1 SYNOPSIS
+
+    use OrePAN2::Injector;
+
+    my $injector = OrePAN2::Injector->new(directory => '/path/to/darkpan')
+
+    $injector->inject(
+        'http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz',
+        { author => 'MAHITO' },
+    );
+
+=head1 DESCRIPTION
+
+OrePAN2::Injector allows you to inject a distribution to your darkpan.
+
+=head1 METHODS
+
+=head3 C<< my $injector = OrePAN2::Injector->new(%attr) >>
+
+Constructor. Here C<%attr> might be:
+
+=over 4
+
+=item * directory
+
+Your darkpan directory path. This is required.
+
+=item * author
+
+Default author of distributions.
+If you omit this, then C<DUMMY> will be used.
+
+B<BETA>: As of OrePAN2 0.37,
+the author attribute accepts a code reference, so that
+you can calculate author whenever injecting distributions:
+
+    my $author_cb = sub {
+        my $source = shift;
+        $source =~ m{authors/id/./../([^/]+)} ? $1 : "DUMMY";
+    };
+
+    my $injector = OrePAN2::Injector->new(
+        directory => '/path/to/darkpan',
+        author => $author_cb,
+    );
+
+    $injector->inject(
+        'http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz'
+    );
+    #=> Acme-Hoge-0.03 will be indexed with author MAHITO
+
+Note that the code reference C<$author_cb> will be executed
+under the following circumstances:
+
+    * the first aurgumet of it is the $source argument of inject method
+    * the working directory of it is the top of the distribution in the question
+
+=back
+
+=head3 C<< $injector->inject($source, \%option) >>
+
+Inject C<$source> to your darkpan. Here C<$source> is one of the following:
+
+=over 4
+
+=item * local archive file
+
+eg: /path/to/Text-TestBase-0.10.tar.gz
+
+=item * http url
+
+eg: http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz
+
+=item * git repository
+
+eg: git://github.com/tokuhirom/Text-TestBase.git@master
+
+Note that you need to set up git repository as a installable git repo,
+that is, you need to put a META.json in your repository.
+
+If you are using L<Minilla> or L<Milla>, your repository is already ready to install.
+
+Supports the following URL types:
+
+    git+file://path/to/repo.git
+    git://github.com/plack/Plack.git@1.0000        # tag
+    git://github.com/plack/Plack.git@devel         # branch
+
+They are compatible with L<cpanm>.
+
+=item * module name
+
+eg: Data::Dumper
+
+=back
+
+C<\%option> might be:
+
+=over 4
+
+=item * author
+
+Author of distribution. This overwrites C<new>'s author attribute.
+
+=back
+
+=head1 SEE ALSO
+
+L<orepan2-inject>
+
+=head1 LICENSE
+
+Copyright (C) tokuhirom.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+tokuhirom E<lt>tokuhirom@gmail.comE<gt>
+
+=cut
+
