@@ -129,7 +129,8 @@ sub inject_from_http {
         my $tarpath  = $self->tarpath($basename);
         my $response = HTTP::Tiny->new->mirror( $url, $tarpath );
         unless ( $response->{success} ) {
-            die "Cannot fetch $url($response->{status} $response->{reason})\n";
+            die
+                "Cannot fetch $url($response->{status} $response->{reason})\n";
         }
         return $tarpath;
     }
