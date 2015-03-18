@@ -41,4 +41,17 @@ subtest 'inject-git' => sub {
     ok -f 'authors/id/D/DU/DUMMY/Acme-YakiniQ-0.01.tar.gz', "inject from git";
 };
 
+subtest 'inject-git with code reference author' => sub {
+    my $tmpdir = pushd( tempdir CLEANUP => 1 );
+    my $injector = OrePAN2::Injector->new(
+        directory => '.',
+    );
+    $injector->inject("git+file://$gitrepo", {
+        author => sub { "MIYAGAWA" },
+    });
+
+    ok -f 'authors/id/M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz',
+        "code reference author";
+};
+
 done_testing;

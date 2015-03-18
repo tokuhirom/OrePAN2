@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use utf8;
 
+use Archive::Extract;
 use Archive::Tar;
 use CPAN::Meta;
 use File::Basename qw(dirname basename);
@@ -33,7 +34,7 @@ sub directory { shift->{directory} }
 sub inject {
     my ( $self, $source, $opts ) = @_;
     local $self->{author}
-        = uc( $opts->{author} || $self->{author} || 'DUMMY' );
+        = $opts->{author} || $self->{author} || 'DUMMY';
 
     my $tarpath;
     if ( $source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/ )
@@ -93,9 +94,20 @@ sub tarpath {
     return $tarpath;
 }
 
+sub _detect_author {
+    my ( $self, $source, $archive ) = @_;
+    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $ae = Archive::Extract->new( archive => $archive );
+    $ae->extract( to => $tmpdir );
+    my $guard = pushd( glob("$tmpdir/*") );
+    $self->{author}->($source);
+}
+
 sub inject_from_file {
     my ( $self, $file ) = @_;
 
+    local $self->{author} = $self->_detect_author( $file, $file )
+        if ref $self->{author} eq "CODE";
     my $basename = basename($file);
     my $tarpath  = $self->tarpath($basename);
 
@@ -108,14 +120,35 @@ sub inject_from_file {
 sub inject_from_http {
     my ( $self, $url ) = @_;
 
-    my $basename = basename($url);
+    # If $self->{author} is not a code reference,
+    # then $tarpath is fixed before http request
+    # and HTTP::Tiny->mirror works correctly.
+    # So we treat that case first.
+    if ( ref $self->{author} ne "CODE" ) {
+        my $basename = basename($url);
+        my $tarpath  = $self->tarpath($basename);
+        my $response = HTTP::Tiny->new->mirror( $url, $tarpath );
+        unless ( $response->{success} ) {
+            die "Cannot fetch $url($response->{status} $response->{reason})\n";
+        }
+        return $tarpath;
+    }
 
-    my $tarpath = $self->tarpath($basename);
-
-    my $response = HTTP::Tiny->new->mirror( $url, $tarpath );
+    my $tmpdir   = tempdir( CLEANUP => 1 );
+    my $tmpfile  = "$tmpdir/tmp.tar.gz";
+    my $response = HTTP::Tiny->new->mirror( $url, $tmpfile );
     unless ( $response->{success} ) {
         die "Cannot fetch $url($response->{status} $response->{reason})\n";
     }
+
+    my $basename = basename($url);
+    local $self->{author} = $self->_detect_author( $url, $tmpfile );
+    my $tarpath = $self->tarpath($basename);
+    copy( $tmpfile, $tarpath )
+        or die "Copy failed $tmpfile $tarpath: $!\n";
+
+    my $mtime = ( stat $tmpfile )[9];
+    utime $mtime, $mtime, $tarpath;
 
     return $tarpath;
 }
@@ -125,7 +158,7 @@ sub inject_from_git {
 
     my $tmpdir = tempdir( CLEANUP => 1 );
 
-    my ( $basename, $tar ) = do {
+    my ( $basename, $tar, $author ) = do {
         my $guard = pushd($tmpdir);
 
         _run("git clone $repository");
@@ -133,6 +166,12 @@ sub inject_from_git {
         if ($branch) {
             my $guard2 = pushd( [<*>]->[0] );
             _run("git checkout $branch");
+        }
+
+        my $author;
+        if ( ref $self->{author} eq "CODE" ) {
+            my $guard2 = pushd( [<*>]->[0] );
+            $author = $self->{author}->($repository);
         }
 
         # The repository needs to contains META.json in repository.
@@ -157,9 +196,10 @@ sub inject_from_git {
         my @files = $self->list_files($tmpdir);
         $tar->add_files(@files);
 
-        ( "$name-$version.tar.gz", $tar );
+        ( "$name-$version.tar.gz", $tar, $author );
     };
 
+    local $self->{author} = $author if $author;
     my $tarpath = $self->tarpath($basename);
 
     # Must be same partition.
@@ -199,4 +239,137 @@ sub _run {
 }
 
 1;
+
+__END__
+
+=encoding utf-8
+
+=for stopwords DarkPAN orepan2-inject orepan2-indexer darkpan OrePAN1 OrePAN
+
+=head1 NAME
+
+OrePAN2::Injector - Inject a distribution to your darkpan
+
+=head1 SYNOPSIS
+
+    use OrePAN2::Injector;
+
+    my $injector = OrePAN2::Injector->new(directory => '/path/to/darkpan')
+
+    $injector->inject(
+        'http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz',
+        { author => 'MAHITO' },
+    );
+
+=head1 DESCRIPTION
+
+OrePAN2::Injector allows you to inject a distribution to your darkpan.
+
+=head1 METHODS
+
+=head3 C<< my $injector = OrePAN2::Injector->new(%attr) >>
+
+Constructor. Here C<%attr> might be:
+
+=over 4
+
+=item * directory
+
+Your darkpan directory path. This is required.
+
+=item * author
+
+Default author of distributions.
+If you omit this, then C<DUMMY> will be used.
+
+B<BETA>: As of OrePAN2 0.37,
+the author attribute accepts a code reference, so that
+you can calculate author whenever injecting distributions:
+
+    my $author_cb = sub {
+        my $source = shift;
+        $source =~ m{authors/id/./../([^/]+)} ? $1 : "DUMMY";
+    };
+
+    my $injector = OrePAN2::Injector->new(
+        directory => '/path/to/darkpan',
+        author => $author_cb,
+    );
+
+    $injector->inject(
+        'http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz'
+    );
+    #=> Acme-Hoge-0.03 will be indexed with author MAHITO
+
+Note that the code reference C<$author_cb> will be executed
+under the following circumstances:
+
+    * the first aurgumet of it is the $source argument of inject method
+    * the working directory of it is the top of the distribution in the question
+
+=back
+
+=head3 C<< $injector->inject($source, \%option) >>
+
+Inject C<$source> to your darkpan. Here C<$source> is one of the following:
+
+=over 4
+
+=item * local archive file
+
+eg: /path/to/Text-TestBase-0.10.tar.gz
+
+=item * http url
+
+eg: http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz
+
+=item * git repository
+
+eg: git://github.com/tokuhirom/Text-TestBase.git@master
+
+Note that you need to set up git repository as a installable git repo,
+that is, you need to put a META.json in your repository.
+
+If you are using L<Minilla> or L<Milla>, your repository is already ready to install.
+
+Supports the following URL types:
+
+    git+file://path/to/repo.git
+    git://github.com/plack/Plack.git@1.0000        # tag
+    git://github.com/plack/Plack.git@devel         # branch
+
+They are compatible with L<cpanm>.
+
+=item * module name
+
+eg: Data::Dumper
+
+=back
+
+C<\%option> might be:
+
+=over 4
+
+=item * author
+
+Author of distribution. This overwrites C<new>'s author attribute.
+
+=back
+
+=head1 SEE ALSO
+
+L<orepan2-inject>
+
+=head1 LICENSE
+
+Copyright (C) tokuhirom.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+tokuhirom E<lt>tokuhirom@gmail.comE<gt>
+
+=cut
 

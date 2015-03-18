@@ -74,6 +74,25 @@ subtest 'Upgrade undef versions' => sub {
     }
 };
 
+subtest 'code reference author with inject from http works' => sub {
+    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $author = sub {
+        my $source = shift;
+        if ( $source =~ m{authors/id/./../([^/]+)} ) {
+            return $1;
+        } else {
+            die "unexpected";
+        }
+    };
+    my $injector = OrePAN2::Injector->new( directory => $tmpdir );
+    $injector->inject(
+        'https://cpan.metacpan.org/authors/id/O/OA/OALDERS/OrePAN2-0.32.tar.gz',
+        { author => $author },
+    );
+    ok -f "$tmpdir/authors/id/O/OA/OALDERS/OrePAN2-0.32.tar.gz",
+        "detect author by url";
+};
+
 sub inject_and_index {
     my $dir     = shift;
     my $archive = shift;

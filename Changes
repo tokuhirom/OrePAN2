@@ -2,6 +2,9 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    - [BETA] author attribute accepts a code reference,
+      so that you can calculate author whenever injecting distributions (skaji)
+
 0.36 2015-02-09T21:06:09Z
     - Add OrePAN2::Auditor (oalders)
 
