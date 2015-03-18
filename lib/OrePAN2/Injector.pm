@@ -249,7 +249,7 @@ __END__
 
 =head1 NAME
 
-OrePAN2::Injector - Inject a distribution to your darkpan
+OrePAN2::Injector - Inject a distribution to your DarkPAN
 
 =head1 SYNOPSIS
 
@@ -264,7 +264,7 @@ OrePAN2::Injector - Inject a distribution to your darkpan
 
 =head1 DESCRIPTION
 
-OrePAN2::Injector allows you to inject a distribution to your darkpan.
+OrePAN2::Injector allows you to inject a distribution into your DarkPAN.
 
 =head1 METHODS
 
@@ -276,7 +276,7 @@ Constructor. Here C<%attr> might be:
 
 =item * directory
 
-Your darkpan directory path. This is required.
+Your DarkPAN directory path. This is required.
 
 =item * author
 
@@ -305,14 +305,14 @@ you can calculate author whenever injecting distributions:
 Note that the code reference C<$author_cb> will be executed
 under the following circumstances:
 
-    * the first aurgumet of it is the $source argument of inject method
-    * the working directory of it is the top of the distribution in the question
+    * the first argument is the $source argument to the inject method
+    * the working directory of it is the top level of the distribution in question
 
 =back
 
 =head3 C<< $injector->inject($source, \%option) >>
 
-Inject C<$source> to your darkpan. Here C<$source> is one of the following:
+Inject C<$source> to your DarkPAN. Here C<$source> is one of the following:
 
 =over 4
 
@@ -320,7 +320,7 @@ Inject C<$source> to your darkpan. Here C<$source> is one of the following:
 
 eg: /path/to/Text-TestBase-0.10.tar.gz
 
-=item * http url
+=item * HTTP url
 
 eg: http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz
 
@@ -353,7 +353,7 @@ C<\%option> might be:
 
 =item * author
 
-Author of distribution. This overwrites C<new>'s author attribute.
+Author of the distribution. This overrides C<new>'s author attribute.
 
 =back
 
