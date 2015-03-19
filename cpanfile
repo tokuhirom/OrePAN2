@@ -23,6 +23,7 @@ requires 'File::Path';
 requires 'IO::File::AtomicChange';
 requires 'JSON::PP';
 requires 'List::Compare';
+requires 'Moo', '1.007000';
 requires 'MooX::Options';
 requires 'Parse::CPAN::Packages', '2.39';
 requires 'Path::Tiny';

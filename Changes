@@ -2,6 +2,9 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.38 2015-03-19T03:24:55Z
+    - Bump minimum version of Moo to avoid tester failures (oalders)
+
 0.37 2015-03-18T02:51:18Z
 
     - [BETA] author attribute accepts a code reference,

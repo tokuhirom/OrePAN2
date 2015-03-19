@@ -55,6 +55,7 @@
             "JSON::PP" : "0",
             "List::Compare" : "0",
             "MetaCPAN::Client" : "1.006",
+            "Moo" : "1.007000",
             "MooX::Options" : "0",
             "Parse::CPAN::Meta" : "1.4414",
             "Parse::CPAN::Packages" : "2.39",
@@ -91,7 +92,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.37",
+   "version" : "0.38",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
