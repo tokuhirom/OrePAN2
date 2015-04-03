@@ -47,6 +47,7 @@ sub indexer {
     $self->{indexer} ||= OrePAN2::Indexer->new(
         directory => $self->directory,
         simple    => $self->{simple},
+        allow_dev => $self->allow_dev,
     );
 }
 
@@ -59,7 +60,6 @@ sub make_index {
     my $self = shift;
     $self->indexer->make_index(
         no_compress => !$self->compress_index,
-        allow_dev   => $self->allow_dev,
     );
 }
 
