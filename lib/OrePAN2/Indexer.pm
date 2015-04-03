@@ -191,7 +191,8 @@ sub do_metacpan_lookup {
 sub _scan_provides {
     my ( $self, $dir, $meta ) = @_;
 
-    my $provides = Parse::LocalDistribution->new->parse($dir);
+    my $provides = Parse::LocalDistribution->new( { ALLOW_DEV_VERSION => 1 } )
+        ->parse($dir);
     return $provides;
 }
 
