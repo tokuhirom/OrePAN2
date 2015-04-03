@@ -61,7 +61,7 @@ sub add_index {
     return if $self->_maybe_index_from_metacpan( $index, $archive_file );
 
     my $archive = Archive::Extract->new( archive => $archive_file );
-    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $tmpdir = tempdir( 'orepan2.XXXXXX', TMPDIR => 1, CLEANUP => 1 );
     $archive->extract( to => $tmpdir );
 
     my $provides = $self->scan_provides( $tmpdir, $archive_file );
