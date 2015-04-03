@@ -23,6 +23,7 @@ requires 'File::Path';
 requires 'IO::File::AtomicChange';
 requires 'JSON::PP';
 requires 'List::Compare';
+requires 'LWP::UserAgent';
 requires 'Moo', '1.007000';
 requires 'MooX::Options';
 requires 'Parse::CPAN::Packages', '2.39';
@@ -33,7 +34,6 @@ requires 'Types::URI';
 requires 'version', '0.9912';
 
 on 'test' => sub {
-    requires 'LWP::UserAgent';
     requires 'PAUSE::Packages';
     requires 'Test::More', '0.98';
     requires 'Test::RequiresInternet', '0.02';
