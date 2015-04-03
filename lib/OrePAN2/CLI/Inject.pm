@@ -25,6 +25,7 @@ sub run {
     my $simple;
     my $text;
     my $enable_cache = 0;
+    my $allow_dev    = 0;
     my $p            = Getopt::Long::Parser->new(
         config => [qw(posix_default no_ignore_case auto_help)] );
     $p->getoptions(
@@ -34,6 +35,7 @@ sub run {
         'simple!'         => \$simple,
         'text!'           => \$text,
         'cache!'          => \$enable_cache,
+        'allow-dev!'      => \$allow_dev,
     );
 
     if ($version) {
@@ -47,6 +49,7 @@ sub run {
         directory      => $directory,
         compress_index => !$text,
         simple         => $simple,
+        allow_dev      => $allow_dev,
     );
     if (@ARGV) {
         for (@ARGV) {

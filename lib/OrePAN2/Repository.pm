@@ -7,7 +7,7 @@ use 5.008_001;
 
 use Carp;
 use Class::Accessor::Lite 0.05 (
-    rw => [qw(directory cache compress_index)],
+    rw => [qw(directory cache compress_index allow_dev)],
 );
 use File::Find;
 use File::Spec;
@@ -57,7 +57,10 @@ sub has_cache {
 
 sub make_index {
     my $self = shift;
-    $self->indexer->make_index( no_compress => !$self->compress_index );
+    $self->indexer->make_index(
+        no_compress => !$self->compress_index,
+        allow_dev   => $self->allow_dev,
+    );
 }
 
 sub inject {

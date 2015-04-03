@@ -31,6 +31,7 @@ sub new {
 }
 
 sub directory { shift->{directory} }
+sub allow_dev { shift->{allow_dev} }
 
 sub make_index {
     my ( $self, %args ) = @_;
@@ -190,7 +191,10 @@ sub do_metacpan_lookup {
 sub _scan_provides {
     my ( $self, $dir, $meta ) = @_;
 
-    my $provides = Parse::LocalDistribution->new->parse($dir);
+    my $provides = Parse::LocalDistribution
+        ->new({ ALLOW_DEV_VERSION => $self->allow_dev })
+        ->parse($dir)
+        ;
     return $provides;
 }
 
