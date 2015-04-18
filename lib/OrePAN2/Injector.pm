@@ -255,7 +255,7 @@ OrePAN2::Injector - Inject a distribution to your DarkPAN
 
     use OrePAN2::Injector;
 
-    my $injector = OrePAN2::Injector->new(directory => '/path/to/darkpan')
+    my $injector = OrePAN2::Injector->new(directory => '/path/to/darkpan');
 
     $injector->inject(
         'http://cpan.metacpan.org/authors/id/M/MA/MAHITO/Acme-Hoge-0.03.tar.gz',
