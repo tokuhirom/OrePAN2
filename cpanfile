@@ -33,6 +33,8 @@ requires 'Types::URI';
 requires 'version', '0.9912';
 
 on 'test' => sub {
+    requires 'LWP::UserAgent';
+    requires 'PAUSE::Packages';
     requires 'Test::More', '0.98';
     requires 'Test::RequiresInternet', '0.02';
     requires 'File::Which';
