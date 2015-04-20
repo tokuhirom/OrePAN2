@@ -103,7 +103,8 @@ sub scan_provides {
         }
     }
 
-    print STDERR "[INFO] Could not find useful meta from '$archive_file'\n";
+    print STDERR
+        "[INFO] Found META file in '$archive_file' but it does not contain 'provides'\n";
     print STDERR "[INFO] Scanning for provided modules...\n";
 
     my $provides = eval { $self->_scan_provides('.') };
