@@ -31,6 +31,7 @@ sub new {
 }
 
 sub directory { shift->{directory} }
+sub allow_dev { shift->{allow_dev} }
 
 sub make_index {
     my ( $self, %args ) = @_;
@@ -61,7 +62,7 @@ sub add_index {
     return if $self->_maybe_index_from_metacpan( $index, $archive_file );
 
     my $archive = Archive::Extract->new( archive => $archive_file );
-    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $tmpdir = tempdir('orepan2.XXXXXX', TMPDIR => 1, CLEANUP => 1 );
     $archive->extract( to => $tmpdir );
 
     my $provides = $self->scan_provides( $tmpdir, $archive_file );
@@ -191,7 +192,10 @@ sub do_metacpan_lookup {
 sub _scan_provides {
     my ( $self, $dir, $meta ) = @_;
 
-    my $provides = Parse::LocalDistribution->new->parse($dir);
+    my $provides = Parse::LocalDistribution
+        ->new({ ALLOW_DEV_VERSION => $self->allow_dev })
+        ->parse($dir)
+        ;
     return $provides;
 }
 
