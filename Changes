@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.39 2015-07-03T21:23:23Z
     - Globally enable dev versions (Chris Weyl).  See discussion at
       https://github.com/tokuhirom/OrePAN2/pull/36
     - Use a template for tempdir, for easier identification (Chris Weyl)

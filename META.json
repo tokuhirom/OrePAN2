@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.143240",
+   "generated_by" : "Minilla/v2.3.0, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "perl_5"
    ],
@@ -53,6 +53,7 @@
             "IO::Uncompress::Gunzip" : "0",
             "IO::Zlib" : "0",
             "JSON::PP" : "0",
+            "LWP::UserAgent" : "0",
             "List::Compare" : "0",
             "MetaCPAN::Client" : "1.006",
             "Moo" : "1.007000",
@@ -75,6 +76,7 @@
       "test" : {
          "requires" : {
             "File::Which" : "0",
+            "PAUSE::Packages" : "0",
             "Test::More" : "0.98",
             "Test::RequiresInternet" : "0.02"
          }
@@ -92,7 +94,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.38",
+   "version" : "0.39",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
@@ -104,6 +106,8 @@
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "Ivan Bessarabov <ivan@bessarabov.ru>",
       "Shoichi Kaji <skaji@cpan.org>",
-      "Olaf Alders <olaf@wundersolutions.com>"
-   ]
+      "Olaf Alders <olaf@wundersolutions.com>",
+      "Chris Weyl <cweyl@alumni.drew.edu>"
+   ],
+   "x_serialization_backend" : "JSON::PP version 2.27300"
 }
