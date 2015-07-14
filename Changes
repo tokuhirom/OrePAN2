@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+    - Add previously documented but apparently never implemented "simple" flag
+      to orepan2-indexer script (oalders)
 
 0.39 2015-07-03T21:23:23Z
     - Globally enable dev versions (Chris Weyl).  See discussion at

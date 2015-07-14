@@ -31,6 +31,15 @@ subtest 'txt index' => sub {
     like $txt, qr/Description:\s+DarkPAN/;
 };
 
+subtest 'simple txt index' => sub {
+    my $tmp = pushd( tempdir() );
+    OrePAN2::CLI::Indexer->new()->run( '--text', '--simple', $tmp );
+    ok -f 'modules/02packages.details.txt';
+    my $txt = slurp 'modules/02packages.details.txt';
+    note $txt;
+    unlike $txt, qr/Last-Updated/;
+};
+
 done_testing;
 
 __END__
