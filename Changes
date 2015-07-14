@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.40 2015-07-14T21:34:16Z
     - Add previously documented but apparently never implemented "simple" flag
       to orepan2-indexer script (oalders)
 

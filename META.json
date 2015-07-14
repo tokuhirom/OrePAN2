@@ -94,7 +94,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.39",
+   "version" : "0.40",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
@@ -106,8 +106,8 @@
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "Ivan Bessarabov <ivan@bessarabov.ru>",
       "Shoichi Kaji <skaji@cpan.org>",
-      "Olaf Alders <olaf@wundersolutions.com>",
-      "Chris Weyl <cweyl@alumni.drew.edu>"
+      "Chris Weyl <cweyl@alumni.drew.edu>",
+      "Olaf Alders <olaf@wundersolutions.com>"
    ],
    "x_serialization_backend" : "JSON::PP version 2.27300"
 }
