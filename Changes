@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.41 2016-06-24T18:50:00Z
     - Make 02packages sort order case insensitive (just like PAUSE). Reported
       by Tatsuhiko Miyagawa. https://github.com/tokuhirom/OrePAN2/issues/38
 
