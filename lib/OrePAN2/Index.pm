@@ -55,7 +55,7 @@ sub lookup {
 
 sub packages {
     my ($self) = @_;
-    sort { $a cmp $b } keys %{ $self->{index} };
+    sort { lc $a cmp lc $b } keys %{ $self->{index} };
 }
 
 sub delete_index {

@@ -9,20 +9,40 @@ use MetaCPAN::Client;
 
 use OrePAN2::Indexer;
 use OrePAN2::Injector;
+use t::Util qw( slurp );
 
-subtest 'use MetaCPAN' => sub {
-    my $tmpdir = tempdir( CLEANUP => 1 );
-
+sub inject_module {
+    my $name   = shift;
+    my $tmpdir = shift;
     my $mcpan  = MetaCPAN::Client->new;
-    my $module = $mcpan->module('OrePAN2');
+    my $module = $mcpan->module($name);
 
-    my $release = $mcpan->release( $module->distribution );
-
+    my $release  = $mcpan->release( $module->distribution );
     my $injector = OrePAN2::Injector->new(
         directory => $tmpdir,
         author    => $release->author,
     );
-    $injector->inject('OrePAN2');
+    $injector->inject($name);
+    return $release;
+}
+
+subtest 'case insensitive sorting' => sub {
+    my $tmpdir = tempdir( CLEANUP => 1 );
+    inject_module( $_, $tmpdir ) for ( 'autodie', 'fatfinger' );
+
+    my $orepan = OrePAN2::Indexer->new( directory => $tmpdir, metacpan => 1 );
+    $orepan->make_index( no_compress => 1 );
+
+    my $details = slurp "$tmpdir/modules/02packages.details.txt";
+    my @rows = split "\n", $details;
+    ok( $rows[-1] =~ m{\Afatfinger}, 'fatfinger is last' );
+    ok( $rows[-2] =~ m{\AFatal},     'Fatal precedes fatfinger' );
+};
+
+subtest 'use MetaCPAN' => sub {
+    my $tmpdir = tempdir( CLEANUP => 1 );
+
+    my $release = inject_module( 'OrePAN2', $tmpdir );
 
     my $path = $release->download_url;
     $path =~ s{\A.*/authors/}{};
@@ -80,7 +100,8 @@ subtest 'code reference author with inject from http works' => sub {
         my $source = shift;
         if ( $source =~ m{authors/id/./../([^/]+)} ) {
             return $1;
-        } else {
+        }
+        else {
             die "unexpected";
         }
     };
