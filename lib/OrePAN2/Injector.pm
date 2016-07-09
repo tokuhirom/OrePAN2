@@ -81,12 +81,14 @@ sub inject {
 sub tarpath {
     my ( $self, $basename ) = @_;
 
-    my $author  = uc( $self->{author} );
+    my( $author, @extra ) = split /\//, $self->{author};
+    $author = uc( $author );
     my $tarpath = File::Spec->catfile(
         $self->directory, 'authors', 'id',
         substr( $author, 0, 1 ),
         substr( $author, 0, 2 ),
         $author,
+        @extra,
         $basename
     );
     mkpath( dirname($tarpath) );
