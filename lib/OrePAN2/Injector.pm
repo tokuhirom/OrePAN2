@@ -35,6 +35,7 @@ sub inject {
     my ( $self, $source, $opts ) = @_;
     local $self->{author}
         = $opts->{author} || $self->{author} || 'DUMMY';
+    local $self->{extra_path} = $opts->{extra_path} || '';
 
     my $tarpath;
     if ( $source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/ )
@@ -87,6 +88,7 @@ sub tarpath {
         substr( $author, 0, 1 ),
         substr( $author, 0, 2 ),
         $author,
+        $self->{extra_path},
         $basename
     );
     mkpath( dirname($tarpath) );
