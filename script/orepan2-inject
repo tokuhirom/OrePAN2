@@ -34,6 +34,12 @@ Specify the cpan author directory name.
 
 OrePAN2 uses 'DUMMY' as a default author name.
 
+=item C< --author_subdir=ExtraStuff >
+
+Create directory elements following the author directory name. 
+
+By default OrePAN2 does not create directory elements beyond the author.
+
 =item C< --simple >
 
 Use a simple format for 02packages metadata.  This helps avoid merge conflicts.

@@ -35,7 +35,7 @@ sub inject {
     my ( $self, $source, $opts ) = @_;
     local $self->{author}
         = $opts->{author} || $self->{author} || 'DUMMY';
-    local $self->{extra_path} = $opts->{extra_path} || '';
+    local $self->{author_subdir} = $opts->{author_subdir} || '';
 
     my $tarpath;
     if ( $source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/ )
@@ -88,7 +88,7 @@ sub tarpath {
         substr( $author, 0, 1 ),
         substr( $author, 0, 2 ),
         $author,
-        $self->{extra_path},
+        $self->{author_subdir},
         $basename
     );
     mkpath( dirname($tarpath) );
@@ -309,6 +309,18 @@ under the following circumstances:
 
     * the first argument is the $source argument to the inject method
     * the working directory of it is the top level of the distribution in question
+
+=item * author_subdir
+
+This is an optional attribute.  If present it means that directory elements 
+will be created following the author.  This can be useful, for instance,
+if you want to make your DarkPAN have paths that exactly match the paths
+in CPAN.  Sometimes CPAN paths look something like the following:
+
+    authors/id/<author>/modules/...
+
+In the above case you can pass 'modules' as the value for author_subdir so
+that the path OrePAN2 creates looks like the above path.
 
 =back
 
