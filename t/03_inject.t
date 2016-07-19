@@ -39,7 +39,7 @@ subtest 'extra path after author name' => sub {
     my $injector = OrePAN2::Injector->new(
         directory => $tmpdir,
     );
-    $injector->inject( 't/dat/Acme-Foo-0.01.tar.gz', { author => 'upper', extra_path => 'abcd' } );
+    $injector->inject( 't/dat/Acme-Foo-0.01.tar.gz', { author => 'upper', author_subdir => 'abcd' } );
     ok -f "$tmpdir/authors/id/U/UP/UPPER/abcd/Acme-Foo-0.01.tar.gz";
 };
 
