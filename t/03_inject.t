@@ -33,6 +33,16 @@ subtest 'author name must be upper case' => sub {
     ok -f "$tmpdir/authors/id/U/UP/UPPER/Acme-Foo-0.01.tar.gz";
 };
 
+subtest 'extra path after author name' => sub {
+    my $tmpdir = tempdir( CLEANUP => 1 );
+
+    my $injector = OrePAN2::Injector->new(
+        directory => $tmpdir,
+    );
+    $injector->inject( 't/dat/Acme-Foo-0.01.tar.gz', { author => 'upper', extra_path => 'abcd' } );
+    ok -f "$tmpdir/authors/id/U/UP/UPPER/abcd/Acme-Foo-0.01.tar.gz";
+};
+
 subtest 'check that $self->{author} is used' => sub {
     my $tmpdir = tempdir( CLEANUP => 1 );
 
