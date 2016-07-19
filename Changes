@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    - The cli injector now accepts an "author_subdir" option, which allows you
+      to save a tarball to a subdirectory of an authors home directory (Seth
+      Daniel).  https://github.com/tokuhirom/OrePAN2/pull/40 and
+      https://github.com/tokuhirom/OrePAN2/pull/40
+
 0.41 2016-06-24T18:50:00Z
     - Make 02packages sort order case insensitive (just like PAUSE). Reported
       by Tatsuhiko Miyagawa. https://github.com/tokuhirom/OrePAN2/issues/38
