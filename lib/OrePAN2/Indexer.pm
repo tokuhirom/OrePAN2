@@ -18,6 +18,7 @@ use OrePAN2::Index;
 use Parse::LocalDistribution;
 use Path::Tiny;
 use Try::Tiny;
+use Ref::Util qw(is_arrayref);
 
 sub new {
     my $class = shift;
@@ -176,8 +177,8 @@ sub do_metacpan_lookup {
     my $modules = $mc->module( { either => \@file_search } );
 
     while ( my $file = $modules->next ) {
-        next unless $file->module;
-        foreach my $inner ( @{ $file->module } ) {
+        my $module = $file->module or next;
+        foreach my $inner ( is_arrayref $module ? @{ $module } : $module ) {
             next unless $inner->{indexed};
 
             $provides->{release}->{ $file->release }->{ $inner->{name} } //=
