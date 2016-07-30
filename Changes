@@ -1,9 +1,10 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+    - Bump MetaCPAN::Client version to 1.021000 (Mickey Nasriachi)
+    - Fix bug in arrayref handling of MetaCPAN results (Mickey Nasriachi)
 
 0.42 2016-07-19T19:48:29Z
-
     - The cli injector now accepts an "author_subdir" option, which allows you
       to save a tarball to a subdirectory of an authors home directory (Seth
       Daniel).  https://github.com/tokuhirom/OrePAN2/pull/40 and
