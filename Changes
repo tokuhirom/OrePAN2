@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.43 2016-07-30T15:41:31Z
     - Bump MetaCPAN::Client version to 1.021000 (Mickey Nasriachi)
     - Fix bug in arrayref handling of MetaCPAN results (Mickey Nasriachi)
 

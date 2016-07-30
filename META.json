@@ -55,7 +55,7 @@
             "JSON::PP" : "0",
             "LWP::UserAgent" : "0",
             "List::Compare" : "0",
-            "MetaCPAN::Client" : "1.006",
+            "MetaCPAN::Client" : "1.021000",
             "Moo" : "1.007000",
             "MooX::Options" : "0",
             "Parse::CPAN::Meta" : "1.4414",
@@ -64,6 +64,7 @@
             "Parse::PMFile" : "0.29",
             "Path::Tiny" : "0",
             "Pod::Usage" : "0",
+            "Ref::Util" : "0",
             "Try::Tiny" : "0",
             "Type::Params" : "0",
             "Types::URI" : "0",
@@ -94,7 +95,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.42",
+   "version" : "0.43",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
@@ -108,6 +109,7 @@
       "Shoichi Kaji <skaji@cpan.org>",
       "Chris Weyl <cweyl@alumni.drew.edu>",
       "Seth Daniel <seth.daniel@openx.com>",
+      "Mickey Nasriachi <mickey@cpan.org>",
       "Olaf Alders <olaf@wundersolutions.com>"
    ],
    "x_serialization_backend" : "JSON::PP version 2.27300"
