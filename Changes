@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.44 2016-08-22T22:50:26Z
     - OrePAN2::Repository::gc() now optionally accepts an anonymous sub (Olaf Alders).
 
 0.43 2016-07-30T15:41:31Z
