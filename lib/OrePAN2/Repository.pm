@@ -90,7 +90,7 @@ sub load_index {
 
 # Remove files that are not referenced by the index file.
 sub gc {
-    my ($self) = @_;
+    my ( $self, $callback ) = @_;
 
     return unless -f $self->index_file;
 
@@ -110,7 +110,7 @@ sub gc {
                 return unless -f $_;
                 $_ = File::Spec->canonpath($_);
                 unless ( $registered{$_} ) {
-                    unlink $_;
+                    $callback ? $callback->($_) : unlink $_;
                 }
                 1;
             },

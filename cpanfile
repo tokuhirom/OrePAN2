@@ -35,6 +35,7 @@ requires 'parent';
 requires 'version', '0.9912';
 
 on 'test' => sub {
+    requires 'File::Touch';
     requires 'File::Which';
     requires 'PAUSE::Packages';
     requires 'Test::More', '0.98';

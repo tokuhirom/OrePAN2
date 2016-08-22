@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.0.1, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Minilla/v3.0.4, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -76,6 +76,7 @@
       },
       "test" : {
          "requires" : {
+            "File::Touch" : "0",
             "File::Which" : "0",
             "PAUSE::Packages" : "0",
             "Test::More" : "0.98",
