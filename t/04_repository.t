@@ -21,8 +21,8 @@ use OrePAN2::Repository;
 {
     my ( $repo, $tmpdir ) = make_repo();
 
-    $repo->gc(
-        sub { my $file = shift; unlink $file; print "# unlinked $file"; } );
+    $repo->gc( sub { my $file = shift; unlink $file; diag "unlinked $file"; }
+    );
     test_repo($tmpdir);
 }
 
