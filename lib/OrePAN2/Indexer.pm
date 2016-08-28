@@ -91,16 +91,18 @@ sub _orepan_archive_path {
 sub scan_provides {
     my ( $self, $dir, $archive_file ) = @_;
 
-    my $guard = pushd( glob("$dir/*") );
-    for my $mfile ( 'META.json', 'META.yml', 'META.yaml' ) {
-        next unless -f $mfile;
-        my $meta = eval { CPAN::Meta->load_file($mfile) };
-        return $meta->{provides} if $meta && $meta->{provides};
+    foreach my $subdir (glob("$dir/*")) {
+        my $guard = pushd( $subdir );
+        for my $mfile ( 'META.json', 'META.yml', 'META.yaml' ) {
+            next unless -f $mfile;
+            my $meta = eval { CPAN::Meta->load_file($mfile) };
+            return $meta->{provides} if $meta && $meta->{provides};
 
-        if ($@) {
-            print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
-            print STDERR "[WARN] $@\n";
-            print STDERR "[WARN] Attempting to continue...\n";
+            if ($@) {
+                print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
+                print STDERR "[WARN] $@\n";
+                print STDERR "[WARN] Attempting to continue...\n";
+            }
         }
     }
 
