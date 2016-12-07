@@ -55,7 +55,7 @@ sub inject {
     }
     elsif ( $source =~ m/^[\w_][\w0-9:_]+$/ ) {
 
-        my $c = MetaCPAN::Client->new
+        my $c = MetaCPAN::Client->new( version => 'v1' )
             || die "Could not get MetaCPAN::Client";
 
         my $mod = $c->module($source)
@@ -312,7 +312,7 @@ under the following circumstances:
 
 =item * author_subdir
 
-This is an optional attribute.  If present it means that directory elements 
+This is an optional attribute.  If present it means that directory elements
 will be created following the author.  This can be useful, for instance,
 if you want to make your DarkPAN have paths that exactly match the paths
 in CPAN.  Sometimes CPAN paths look something like the following:
@@ -387,4 +387,3 @@ it under the same terms as Perl itself.
 tokuhirom E<lt>tokuhirom@gmail.comE<gt>
 
 =cut
-

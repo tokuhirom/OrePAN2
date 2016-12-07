@@ -152,8 +152,8 @@ sub do_metacpan_lookup {
 
     my $provides = $self->_metacpan_lookup;
 
-    my $mc                 = MetaCPAN::Client->new;
-    my @archives           = map { Path::Tiny->new($_)->basename } @{$files};
+    my $mc = MetaCPAN::Client->new( version => 'v1' );
+    my @archives = map { Path::Tiny->new($_)->basename } @{$files};
     my @search_by_archives = map { +{ archive => $_ } } @archives;
     my $releases = $mc->release( { either => \@search_by_archives } );
 
@@ -166,10 +166,10 @@ sub do_metacpan_lookup {
         push @file_search,
             {
             all => [
-                { release               => $release->name },
-                { indexed               => 'true' },
-                { authorized            => 'true' },
-                { 'file.module.indexed' => 'true' },
+                { release          => $release->name },
+                { indexed          => 'true' },
+                { authorized       => 'true' },
+                { 'module.indexed' => 'true' },
             ]
             };
     }
