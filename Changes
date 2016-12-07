@@ -2,6 +2,8 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.45 2016-12-07T17:54:13Z
+
     - Update OrePAN2::Indexer::do_metacpan_lookup() to not do a search for
       modules if no releases are found. A recent MetaCPAN::Client change
       caused this search to return all modules if an empty arrayref was
