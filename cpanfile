@@ -18,7 +18,7 @@ requires 'IO::Zlib';
 requires 'JSON::PP';
 requires 'LWP::UserAgent';
 requires 'List::Compare';
-requires 'MetaCPAN::Client', '1.021000';
+requires 'MetaCPAN::Client', '2.000000';
 requires 'Moo', '1.007000';
 requires 'MooX::Options';
 requires 'Parse::CPAN::Meta', '1.4414';
