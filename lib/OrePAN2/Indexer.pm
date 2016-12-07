@@ -174,11 +174,13 @@ sub do_metacpan_lookup {
             };
     }
 
+    return unless @file_search;
+
     my $modules = $mc->module( { either => \@file_search } );
 
     while ( my $file = $modules->next ) {
         my $module = $file->module or next;
-        foreach my $inner ( is_arrayref $module ? @{ $module } : $module ) {
+        foreach my $inner ( is_arrayref $module ? @{$module} : $module ) {
             next unless $inner->{indexed};
 
             $provides->{release}->{ $file->release }->{ $inner->{name} } //=
@@ -251,4 +253,3 @@ sub list_archive_files {
 }
 
 1;
-

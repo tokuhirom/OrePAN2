@@ -2,6 +2,11 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+    - Update OrePAN2::Indexer::do_metacpan_lookup() to not do a search for
+      modules if no releases are found. A recent MetaCPAN::Client change
+      caused this search to return all modules if an empty arrayref was
+      passed to it.
+
 0.44 2016-08-22T22:50:26Z
     - OrePAN2::Repository::gc() now optionally accepts an anonymous sub (Olaf Alders).
 
@@ -222,4 +227,3 @@ Revision history for Perl extension OrePAN2
 0.01 2013-05-10T01:48:01Z
 
     - original version
-
