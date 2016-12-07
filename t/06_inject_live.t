@@ -14,7 +14,7 @@ use t::Util qw( slurp );
 sub inject_module {
     my $name   = shift;
     my $tmpdir = shift;
-    my $mcpan  = MetaCPAN::Client->new;
+    my $mcpan  = MetaCPAN::Client->new( version => 'v1' );
     my $module = $mcpan->module($name);
 
     my $release  = $mcpan->release( $module->distribution );
