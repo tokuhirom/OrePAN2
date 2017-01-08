@@ -33,6 +33,8 @@ sub new {
 
 sub directory { shift->{directory} }
 
+sub metacpan_lookup_size { shift->{metacpan_lookup_size} || 200 }
+
 sub make_index {
     my ( $self, %args ) = @_;
 
@@ -155,36 +157,40 @@ sub do_metacpan_lookup {
     my $mc = MetaCPAN::Client->new( version => 'v1' );
     my @archives = map { Path::Tiny->new($_)->basename } @{$files};
     my @search_by_archives = map { +{ archive => $_ } } @archives;
-    my $releases = $mc->release( { either => \@search_by_archives } );
 
-    my @file_search;
+    while (@search_by_archives) {
+        my @search_by_archives_chunk
+            = splice @search_by_archives, 0, $self->metacpan_lookup_size;
 
-    while ( my $release = $releases->next ) {
+        my $releases = $mc->release( { either => \@search_by_archives_chunk } );
 
-        $provides->{archive}->{ $release->archive } = $release->name;
+        my @file_search;
 
-        push @file_search,
-            {
-            all => [
-                { release          => $release->name },
-                { indexed          => 'true' },
-                { authorized       => 'true' },
-                { 'module.indexed' => 'true' },
-            ]
-            };
-    }
+        while ( my $release = $releases->next ) {
+            $provides->{archive}->{ $release->archive } = $release->name;
 
-    return unless @file_search;
+            push @file_search,
+                {
+                    all => [
+                        { release          => $release->name },
+                        { indexed          => 'true' },
+                        { authorized       => 'true' },
+                        { 'module.indexed' => 'true' },
+                    ]
+                };
+        }
 
-    my $modules = $mc->module( { either => \@file_search } );
+        next unless @file_search;
 
-    while ( my $file = $modules->next ) {
-        my $module = $file->module or next;
-        foreach my $inner ( is_arrayref $module ? @{$module} : $module ) {
-            next unless $inner->{indexed};
+        my $modules = $mc->module( { either => \@file_search } );
 
-            $provides->{release}->{ $file->release }->{ $inner->{name} } //=
-                $inner->{version};
+        while ( my $file = $modules->next ) {
+            my $module = $file->module or next;
+            for my $inner ( is_arrayref $module ? @{$module} : $module ) {
+                next unless $inner->{indexed};
+                $provides->{release}->{ $file->release }->{ $inner->{name} } //=
+                    $inner->{version};
+            }
         }
     }
 
