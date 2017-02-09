@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.0.4, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Minilla/v3.0.9, CPAN::Meta::Converter version 2.150005",
    "license" : [
       "perl_5"
    ],
@@ -96,7 +96,7 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.45",
+   "version" : "0.46",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Shoichi Kaji <skaji@outlook.com>",
@@ -112,6 +112,7 @@
       "Seth Daniel <seth.daniel@openx.com>",
       "Mickey Nasriachi <mickey@cpan.org>",
       "Gregory Oschwald <goschwald@maxmind.com>",
+      "E. Choroba <choroba@matfyz.cz>",
       "Olaf Alders <olaf@wundersolutions.com>"
    ],
    "x_serialization_backend" : "JSON::PP version 2.27300"

@@ -2,6 +2,9 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.46 2017-02-09T04:35:09Z
+    - Process MetaCPAN lookup in chunks (E. Choroba).
+
 0.45 2016-12-07T17:54:13Z
 
     - Update OrePAN2::Indexer::do_metacpan_lookup() to not do a search for
