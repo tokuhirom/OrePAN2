@@ -109,7 +109,7 @@ sub as_string {
         '',
         );
 
-    for my $pkg ( $self->packages ) {
+    for my $pkg (@{ $self->packages }) {
         my $entry = $self->{index}{$pkg};
 
         # package name, version, path
