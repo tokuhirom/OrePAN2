@@ -1,9 +1,9 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More;
-use t::Util;
+
 use File::Temp;
+use Test::More;
 
 my $dir = File::Temp::tempdir( CLEANUP => 1 );
 is system( $^X, '-Ilib', 'script/orepan2-inject', '--text',

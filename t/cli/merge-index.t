@@ -1,9 +1,9 @@
 use strict;
 use warnings;
 use utf8;
-use Test::More;
-use t::Util;
+
 use File::Temp;
+use Test::More;
 
 my $f1 = File::Temp->new();
 print {$f1} <<'...';

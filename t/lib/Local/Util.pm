@@ -1,4 +1,4 @@
-package t::Util;
+package Local::Util;
 use strict;
 use warnings;
 use utf8;

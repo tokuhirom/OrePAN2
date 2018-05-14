@@ -2,14 +2,15 @@ use strict;
 use warnings;
 use utf8;
 
+use lib 't/lib';
+
 use Test::More;
 use Test::RequiresInternet( 'api.metacpan.org' => 80 );
 use File::Temp qw(tempdir);
 use MetaCPAN::Client;
-
 use OrePAN2::Indexer;
 use OrePAN2::Injector;
-use t::Util qw( slurp );
+use Local::Util qw( slurp );
 
 sub inject_module {
     my $name   = shift;
@@ -33,7 +34,7 @@ subtest 'case insensitive sorting' => sub {
     my $orepan = OrePAN2::Indexer->new( directory => $tmpdir, metacpan => 1 );
     $orepan->make_index( no_compress => 1 );
 
-    my $details = slurp "$tmpdir/modules/02packages.details.txt";
+    my $details = slurp( "$tmpdir/modules/02packages.details.txt" );
     my @rows = split "\n", $details;
     ok( $rows[-1] =~ m{\Afatfinger}, 'fatfinger is last' );
     ok( $rows[-2] =~ m{\AFatal},     'Fatal precedes fatfinger' );

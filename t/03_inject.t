@@ -1,9 +1,12 @@
 use strict;
 use warnings;
 use utf8;
+
+use lib 't/lib';
+
 use Test::More;
 use Test::More;
-use t::Util;
+use Local::Util;
 use File::Temp qw(tempdir);
 use File::Path qw(mkpath);
 use File::Copy qw(copy);
