@@ -96,7 +96,7 @@ sub gc {
 
     my $index = $self->load_index;
     my %registered;
-    for my $package (@{ $index->packages }) {
+    for my $package (@{ $index->packages ||[]}) {
         my ( $version, $path ) = $index->lookup($package);
         $registered{$path}++;
     }
