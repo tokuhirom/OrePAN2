@@ -1,8 +1,11 @@
 use strict;
 use warnings;
 use utf8;
+
+use lib 't/lib';
+
 use Test::More;
-use t::Util;
+use Local::Util;
 use File::Temp qw(tempdir);
 use File::Path qw(mkpath);
 use File::Copy qw(copy);
@@ -22,7 +25,7 @@ subtest 'gz' => sub {
     );
     $orepan->make_index();
 
-    my $content = slurp_gz "$tmpdir/modules/02packages.details.txt.gz";
+    my $content = slurp_gz( "$tmpdir/modules/02packages.details.txt.gz" );
     note $content;
     like $content,
         qr{Acme::YakiniQ\s+0.01\s+M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz};
@@ -41,7 +44,7 @@ subtest 'txt' => sub {
     );
     $orepan->make_index( no_compress => 1 );
 
-    my $content = slurp "$tmpdir/modules/02packages.details.txt";
+    my $content = slurp( "$tmpdir/modules/02packages.details.txt" );
     note $content;
     like $content,
         qr{Acme::YakiniQ\s+0.01\s+M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz};
