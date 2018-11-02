@@ -2,6 +2,10 @@ Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
 
+0.47 2018-11-02T20:09:44Z
+    - Move t/Util.pm and modernize Travis config (GH#50) (Olaf Alders)
+    - rewrite 2 cases of autoderef. (GH#49) (Kang-min Liu)
+
 0.46 2017-02-09T04:35:09Z
     - Process MetaCPAN lookup in chunks (E. Choroba).
 

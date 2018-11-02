@@ -4,13 +4,13 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.0.9, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Minilla/v3.1.3, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
    "meta-spec" : {
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : "2"
+      "version" : 2
    },
    "name" : "OrePAN2",
    "no_index" : {
@@ -96,24 +96,25 @@
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.46",
+   "version" : "0.47",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
-      "Shoichi Kaji <skaji@outlook.com>",
-      "Masahiro Honma <hiratara@cpan.org>",
       "Chad Granum <exodist7@gmail.com>",
-      "Songmu <y.songmu@gmail.com>",
-      "moznion <moznion@gmail.com>",
-      "Ichito Nagata <i.nagata110@gmail.com>",
-      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
-      "Ivan Bessarabov <ivan@bessarabov.ru>",
-      "Shoichi Kaji <skaji@cpan.org>",
       "Chris Weyl <cweyl@alumni.drew.edu>",
-      "Seth Daniel <seth.daniel@openx.com>",
-      "Mickey Nasriachi <mickey@cpan.org>",
-      "Gregory Oschwald <goschwald@maxmind.com>",
       "E. Choroba <choroba@matfyz.cz>",
-      "Olaf Alders <olaf@wundersolutions.com>"
+      "Gregory Oschwald <goschwald@maxmind.com>",
+      "Ichito Nagata <i.nagata110@gmail.com>",
+      "Ivan Bessarabov <ivan@bessarabov.ru>",
+      "Masahiro Honma <hiratara@cpan.org>",
+      "Mickey Nasriachi <mickey@cpan.org>",
+      "Olaf Alders <olaf@wundersolutions.com>",
+      "Seth Daniel <seth.daniel@openx.com>",
+      "Shoichi Kaji <skaji@cpan.org>",
+      "Shoichi Kaji <skaji@outlook.com>",
+      "Songmu <y.songmu@gmail.com>",
+      "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
+      "moznion <moznion@gmail.com>"
    ],
-   "x_serialization_backend" : "JSON::PP version 2.27300"
+   "x_serialization_backend" : "JSON::PP version 2.97001",
+   "x_static_install" : 1
 }
