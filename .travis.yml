@@ -1,10 +1,29 @@
 ---
+addons:
+  apt:
+    packages:
+      - aspell
+      - aspell-en
 before_install:
+  - 'cpanm --notest App::cpm'
   - 'eval $(curl https://travis-perl.github.io/init) --auto'
+  - 'AUTHOR_TESTING=0 cpm install --workers $(test-jobs) --global Code::TidyAll::Plugin::SortLines::Naturally Code::TidyAll::Plugin::UniqueLines Perl::Tidy'
 cache:
   directories:
     - '~/perl5'
+install:
+  - 'cpan-install --coverage   # installs coverage prereqs, if enabled'
+  - 'AUTHOR_TESTING=0 cpm install --cpanfile cpanfile --workers $(test-jobs) --global --with-recommends --with-suggests --with-configure --with-develop'
 language: perl
+matrix:
+  allow_failures:
+    -
+      env: COVERAGE=1
+  fast_finish: 'true'
+  include:
+    -
+      env: COVERAGE=1
+      perl: '5.28'
 notifications:
   email:
     on_failure: always
@@ -21,6 +40,7 @@ perl:
   - '5.22'
   - '5.24'
   - '5.26'
+  - '5.28'
 script:
-  - 'prove -lvr t'
+  - 'prove -lr -j$(test-jobs) t'
 sudo: 'false'
