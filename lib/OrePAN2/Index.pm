@@ -7,6 +7,7 @@ use utf8;
 
 use IO::Uncompress::Gunzip ('$GunzipError');
 use OrePAN2;
+use version 0.9912;
 
 sub new {
     my $class = shift;
