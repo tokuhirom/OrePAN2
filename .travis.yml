@@ -5,15 +5,7 @@ addons:
       - aspell
       - aspell-en
 before_install:
-  - 'cpanm --notest App::cpm'
   - 'eval $(curl https://travis-perl.github.io/init) --auto'
-  - 'AUTHOR_TESTING=0 cpm install --workers $(test-jobs) --global Code::TidyAll::Plugin::SortLines::Naturally Code::TidyAll::Plugin::UniqueLines Perl::Tidy'
-cache:
-  directories:
-    - '~/perl5'
-install:
-  - 'cpan-install --coverage   # installs coverage prereqs, if enabled'
-  - 'AUTHOR_TESTING=0 cpm install --cpanfile cpanfile --workers $(test-jobs) --global --with-recommends --with-suggests --with-configure --with-develop'
 language: perl
 matrix:
   allow_failures:
@@ -26,11 +18,13 @@ matrix:
       perl: '5.28'
 notifications:
   email:
+    if: repo = "tokuhirom/OrePAN2"
     on_failure: always
     on_success: always
     recipients:
       - olaf@wundersolutions.com
 perl:
+  - '5.10.0'
   - '5.10'
   - '5.12'
   - '5.14'
@@ -41,6 +35,3 @@ perl:
   - '5.24'
   - '5.26'
   - '5.28'
-script:
-  - 'prove -lr -j$(test-jobs) t'
-sudo: 'false'
