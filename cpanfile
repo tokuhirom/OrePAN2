@@ -31,6 +31,7 @@ requires 'Ref::Util';
 requires 'Try::Tiny';
 requires 'Type::Params';
 requires 'Types::URI';
+requires 'feature';
 requires 'parent';
 requires 'version', '0.9912';
 
@@ -38,6 +39,7 @@ on 'test' => sub {
     requires 'File::Touch';
     requires 'File::Which';
     requires 'PAUSE::Packages';
+    requires 'Path::Class';
     requires 'Test::More', '0.98';
     requires 'Test::RequiresInternet', '0.02';
 };
