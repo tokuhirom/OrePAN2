@@ -2,7 +2,7 @@ requires 'perl', '5.008001';
 requires 'autodie';
 
 requires 'Archive::Extract', 0.72;
-requires 'Archive::Tar';
+requires 'Archive::Tar', 1.46;
 requires 'CPAN::Meta', 2.131560;
 requires 'Class::Accessor::Lite', '0.05';
 requires 'Digest::MD5';
@@ -31,6 +31,7 @@ requires 'Ref::Util';
 requires 'Try::Tiny';
 requires 'Type::Params';
 requires 'Types::URI';
+requires 'feature';
 requires 'parent';
 requires 'version', '0.9912';
 
@@ -38,6 +39,7 @@ on 'test' => sub {
     requires 'File::Touch';
     requires 'File::Which';
     requires 'PAUSE::Packages';
+    requires 'Path::Class';
     requires 'Test::More', '0.98';
     requires 'Test::RequiresInternet', '0.02';
 };
