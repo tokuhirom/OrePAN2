@@ -1,3 +1,6 @@
+use strict;
+use warnings;
+
 requires 'perl', '5.008001';
 requires 'autodie';
 
@@ -6,6 +9,7 @@ requires 'Archive::Tar', 1.46;
 requires 'CPAN::Meta', 2.131560;
 requires 'Class::Accessor::Lite', '0.05';
 requires 'Digest::MD5';
+requires 'ExtUtils::MakeMaker', '7.06';
 requires 'File::Path';
 requires 'File::Temp';
 requires 'File::pushd';
