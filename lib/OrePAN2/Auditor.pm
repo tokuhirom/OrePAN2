@@ -248,17 +248,12 @@ __END__
 
 =head1 DESCRIPTION
 
-BETA BETA BETA
-
-L<OrePAN2> is a well established set of code, but this is a very recent
-edition.  Please don't rely on the API remaining stable a this point.
-
 If you have a local DarkPAN or MiniCPAN or something which has its own
-02packages.txt file, it can be helpful to know which files are outdated or
+C<02packages.txt> file, it can be helpful to know which files are outdated or
 which files exist in your DarkPAN, but not on CPAN (or vice versa).  This
 module makes this easy for you.
 
-Think of it as a way of diffing 02packages files.
+Think of it as a way of diffing C<02packages> files.
 
 =head2 new
 
@@ -296,20 +291,12 @@ on CPAN and for which the module in your DarkPAN has a lower version number.
 
     my $module = $auditor->cpan_module( 'HTML::Restrict' );
 
-Currently returns a L<Parse::CPAN::Packages::Fast::Package> object, but this could change.
+Returns a L<Parse::CPAN::Packages::Fast::Package> object.
 
 =head2 darkpan_module( $module_name )
 
     my $module = $auditor->cpan_module( 'HTML::Restrict' );
 
-Currently returns a L<Parse::CPAN::Packages::Fast::Package> object, but this could change.
-
-=head1 CAVEATS
-
-I've tried, for the most part, not to expose the underlying parsers in the API
-of this module.  C<cpan_module> and C<darkpan_module> are currently the
-exception.  I may at some point replace them with OrePAN2 objects which do
-something similar but with different APIs.  I'm exposing them now in order to
-make this object a little easier to work with and to get some feedback.
+Returns a L<Parse::CPAN::Packages::Fast::Package> object.
 
 =cut
