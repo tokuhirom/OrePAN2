@@ -8,7 +8,7 @@ use version 0.9912;
 use Carp qw( croak );
 use List::Compare ();
 use MooX::Options;
-use Parse::CPAN::Packages 2.39;
+use Parse::CPAN::Packages::Fast 0.09;
 use Path::Tiny ();
 use Type::Params qw( compile );
 use Type::Tiny::Enum;
@@ -108,7 +108,7 @@ has ua => (
 
 has _cpan_parser => (
     is      => 'ro',
-    isa     => InstanceOf ['Parse::CPAN::Packages'],
+    isa     => InstanceOf ['Parse::CPAN::Packages::Fast'],
     lazy    => 1,
     default => sub {
         my $self = shift;
@@ -118,7 +118,7 @@ has _cpan_parser => (
 
 has _darkpan_parser => (
     is      => 'ro',
-    isa     => InstanceOf ['Parse::CPAN::Packages'],
+    isa     => InstanceOf ['Parse::CPAN::Packages::Fast'],
     lazy    => 1,
     default => sub {
         my $self = shift;
@@ -203,10 +203,7 @@ sub _modules_from_parser {
     my $self   = shift;
     my $parser = shift;
 
-    return [
-        map  { $_->package }
-        sort { $a->package cmp $b->package } $parser->packages
-    ];
+    return [ sort { $a cmp $b } $parser->packages ];
 }
 
 sub _parser_for_url {
@@ -217,10 +214,6 @@ sub _parser_for_url {
 
     my $res = $self->ua->get($url);
     croak "could not fetch $url" if !$res->is_success;
-
-    if ( substr( $url, -3, 3 ) eq 'txt' ) {
-        return Parse::CPAN::Packages->new( $res->content );
-    }
 
     # dumb hack to avoid having to uncompress this ourselves
     my @path_segments = $url->path_segments;
@@ -234,7 +227,7 @@ EOF
     my $child   = $tempdir->child( pop @path_segments );
     $child->spew_raw( $res->content );
 
-    return Parse::CPAN::Packages->new( $child->stringify );
+    return Parse::CPAN::Packages::Fast->new( $child->stringify );
 }
 
 1;
@@ -303,13 +296,13 @@ on CPAN and for which the module in your DarkPAN has a lower version number.
 
     my $module = $auditor->cpan_module( 'HTML::Restrict' );
 
-Currently returns a L<Parse::CPAN::Packages::Package> object, but this could change.
+Currently returns a L<Parse::CPAN::Packages::Fast::Package> object, but this could change.
 
 =head2 darkpan_module( $module_name )
 
     my $module = $auditor->cpan_module( 'HTML::Restrict' );
 
-Currently returns a L<Parse::CPAN::Packages::Package> object, but this could change.
+Currently returns a L<Parse::CPAN::Packages::Fast::Package> object, but this could change.
 
 =head1 CAVEATS
 

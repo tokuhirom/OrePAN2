@@ -26,7 +26,7 @@ requires 'MetaCPAN::Client', '2.000000';
 requires 'Moo', '1.007000';
 requires 'MooX::Options';
 requires 'Parse::CPAN::Meta', '1.4414';
-requires 'Parse::CPAN::Packages', '2.39';
+requires 'Parse::CPAN::Packages::Fast', '0.09';
 requires 'Parse::LocalDistribution', '0.14';
 requires 'Parse::PMFile', '0.29';
 requires 'Path::Tiny';
