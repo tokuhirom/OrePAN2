@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use feature qw( say );
 
 use OrePAN2::Auditor;
 my $outdated = OrePAN2::Auditor->new_with_options;
