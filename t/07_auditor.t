@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Capture::Tiny qw( capture_stdout );
 use FindBin          ();
 use OrePAN2::Auditor ();
 use Test::More;
@@ -57,5 +58,23 @@ is_deeply(
     is( $module->package, 'Foo::Bar', 'Foo::Bar package' );
     is( $module->version, '1.0', 'Foo::Bar version' );
 }
+
+my $outdated_releases = capture_stdout( sub { $auditor->_outdated_releases } );
+my $expected = <<'EOF';
+AAAA-Crypt-DH-0.02 => AAAA-Crypt-DH-0.04
+https://metacpan.org/changes/distribution/AAAA-Crypt-DH
+
+EOF
+
+is( $outdated_releases, $expected, 'outdated_releases' );
+
+my $runner = OrePAN2::Auditor->new(
+    cpan    => "file://$FindBin::Bin/dat/auditor/cpan/02packages.details.txt",
+    darkpan => 't/dat/auditor/darkpan/02packages.details.txt',
+    show => 'outdated-releases',
+);
+
+my $outdated_via_run = capture_stdout( sub { $runner->run } );
+is( $outdated_via_run, $expected, 'outdated_releases via run()' );
 
 done_testing;
