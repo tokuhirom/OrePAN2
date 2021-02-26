@@ -15,7 +15,7 @@ orepan2-audit - 02packages auditor
 
 =head1 SYNOPSIS
 
-    % orepan2-audit --show outdated-modules --verbose --darkpan path/to/darkpan/02packages --cpan http://cpan.metacpan.org/modules/02packages.details.txt
+    % orepan2-audit --show outdated-releases --verbose --darkpan path/to/darkpan/02packages --cpan http://cpan.metacpan.org/modules/02packages.details.txt
 
 =head1 DESCRIPTION
 
@@ -24,6 +24,10 @@ OrePAN2 auditor.  This script finds differences between your DarkPAN and a CPAN 
 =head1 OPTIONS
 
 =over 4
+
+=item C< --show >
+
+Possible values are C<outdated-releases>, C<outdated-modules>, C<cpan-only-modules> and C<darkpan-only-modules>.
 
 =item C< --darkpan >
 
@@ -36,9 +40,5 @@ The full path or URL to a CPAN 02packages file in .txt or .txt.gz format.
 =item C< --verbose >
 
 Print out some version information.  Currenly only applies to outdated modules
-
-=item C< --show >
-
-Possible values are C<outdated-modules>, C<cpan-only-modules> and C<darkpan-only-modules>.
 
 =back

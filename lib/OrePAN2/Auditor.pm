@@ -10,6 +10,7 @@ use List::Compare ();
 use MooX::Options;
 use Parse::CPAN::Packages::Fast 0.09;
 use Path::Tiny ();
+use Text::SimpleTable::AutoWidth ();
 use Type::Params qw( compile );
 use Type::Tiny::Enum;
 use Type::Utils qw( class_type );
@@ -20,7 +21,7 @@ use LWP::UserAgent ();
 my $SHOW = Type::Tiny::Enum->new(
     name => 'Show',
     values =>
-        [ 'cpan-only-modules', 'darkpan-only-modules', 'outdated-modules' ],
+        [ 'cpan-only-modules', 'darkpan-only-modules', 'outdated-modules', 'outdated-releases' ],
 );
 
 option cpan => (
@@ -145,6 +146,11 @@ sub run {
     my $method = $self->show;
     $method =~ s{-}{_}g;
 
+    if ( $method eq 'outdated_releases' ) {
+        $self->_outdated_releases;
+        return;
+    }
+
     my $modules = $self->$method;
 
     if ( $method eq 'outdated_modules' && $self->verbose ) {
@@ -165,6 +171,45 @@ sub run {
     }
 
     say $_ for @{$modules};
+}
+
+sub _outdated_releases {
+    my $self     = shift;
+    my $outdated = $self->outdated_modules;
+
+    my %dist;
+    foreach my $module (@$outdated) {
+        my $darkpan = $self->darkpan_module($module)->distribution;
+        my $cpan    = $self->cpan_module($module)->distribution;
+
+        next if $darkpan->distvname eq $cpan->distvname;
+
+        $dist{ $darkpan->dist }->{ $darkpan->distvname }->{version}
+            ->{ $cpan->distvname } = 1;
+        push @{ $dist{ $darkpan->dist }->{ $darkpan->distvname }->{modules} },
+            [ $module, $cpan->distvname ];
+    }
+
+    foreach my $dist_name ( sort keys %dist ) {
+        foreach my $release ( keys %{ $dist{$dist_name} } ) {
+            my $this_release = $dist{$dist_name}->{$release};
+            my @versions     = sort keys %{ $this_release->{version} };
+
+            say sprintf '%s => %s', $release, join '/', @versions;
+            say "https://metacpan.org/changes/distribution/$dist_name";
+
+            say q{} and next if scalar @versions == 1;
+
+            my @modules
+                = sort { $a->[1] cmp $b->[1] || $a->[0] cmp $b->[0] }
+                @{ $this_release->{modules} };
+            my $table = Text::SimpleTable::AutoWidth->new;
+            foreach my $module (@modules) {
+                $table->row( $module->[0], $module->[1] );
+            }
+            say $table->draw;
+        }
+    }
 }
 
 sub cpan_module {
