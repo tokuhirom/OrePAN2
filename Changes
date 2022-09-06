@@ -1,6 +1,10 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+    - Remove copy/pasted docs from orepan2-audit script. Minimum Perl has also
+      been bumped from 5.008001 to 5.012000 because of a dependency on
+      Getopt::Long::Descriptive. (GH#59) (Olaf Alders)
+    - Apply perltidy, perlnitpick & perlimports (GH#60) (Olaf Alders)
 
 0.48 2021-02-25T15:15:27Z
     - Switch from Parse::CPAN::Packages to Parse::CPAN::Packages::Fast (GH#57)
