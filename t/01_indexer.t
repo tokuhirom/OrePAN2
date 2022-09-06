@@ -5,12 +5,12 @@ use utf8;
 use lib 't/lib';
 
 use Test::More;
-use Local::Util;
-use File::Temp qw(tempdir);
-use File::Path qw(mkpath);
-use File::Copy qw(copy);
+use Local::Util qw( slurp slurp_gz );
+use File::Temp  qw( tempdir );
+use File::Path  qw( mkpath );
+use File::Copy  qw( copy );
 
-use OrePAN2::Indexer;
+use OrePAN2::Indexer ();
 
 subtest 'gz' => sub {
     my $tmpdir = tempdir( CLEANUP => 1 );
@@ -25,7 +25,7 @@ subtest 'gz' => sub {
     );
     $orepan->make_index();
 
-    my $content = slurp_gz( "$tmpdir/modules/02packages.details.txt.gz" );
+    my $content = slurp_gz("$tmpdir/modules/02packages.details.txt.gz");
     note $content;
     like $content,
         qr{Acme::YakiniQ\s+0.01\s+M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz};
@@ -44,7 +44,7 @@ subtest 'txt' => sub {
     );
     $orepan->make_index( no_compress => 1 );
 
-    my $content = slurp( "$tmpdir/modules/02packages.details.txt" );
+    my $content = slurp("$tmpdir/modules/02packages.details.txt");
     note $content;
     like $content,
         qr{Acme::YakiniQ\s+0.01\s+M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz};

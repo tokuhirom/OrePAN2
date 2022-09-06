@@ -5,13 +5,13 @@ use warnings;
 use autodie;
 use utf8;
 
-use IO::Uncompress::Gunzip ('$GunzipError');
-use OrePAN2;
+use IO::Uncompress::Gunzip qw( $GunzipError );
+use OrePAN2                ();
 use version 0.9912;
 
 sub new {
     my $class = shift;
-    my %args = @_ == 1 ? %{ $_[0] } : @_;
+    my %args  = @_ == 1 ? %{ $_[0] } : @_;
     bless {
         index => {},
         %args,
@@ -107,7 +107,7 @@ sub as_string {
             "Line-Count:   @{[ scalar(keys %{$self->{index}}) ]}",
             "Last-Updated: @{[ scalar localtime ]}",
         ),
-        '',
+        q{},
         );
 
     for my $pkg ( $self->packages ) {

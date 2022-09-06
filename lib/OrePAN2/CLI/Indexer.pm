@@ -4,10 +4,10 @@ use strict;
 use warnings;
 use utf8;
 
-use Getopt::Long ();
-use OrePAN2;
-use OrePAN2::Indexer;
-use Pod::Usage;
+use Getopt::Long     ();
+use OrePAN2          ();
+use OrePAN2::Indexer ();
+use Pod::Usage       qw( pod2usage );
 
 sub new {
     my $class = shift;

@@ -4,12 +4,10 @@ use strict;
 use warnings;
 use utf8;
 
-use Getopt::Long ();
-use OrePAN2;
-use OrePAN2::Indexer;
-use OrePAN2::Injector;
-use OrePAN2::Repository;
-use Pod::Usage;
+use Getopt::Long        ();
+use OrePAN2             ();
+use OrePAN2::Repository ();
+use Pod::Usage          qw( pod2usage );
 
 sub new {
     my $class = shift;
@@ -22,7 +20,7 @@ sub run {
     my $version;
     my $generate_index = 1;
     my $author         = 'DUMMY';
-    my $author_subdir     = '';
+    my $author_subdir  = q{};
     my $simple;
     my $text;
     my $enable_cache = 0;
@@ -55,7 +53,10 @@ sub run {
             next unless /\S/;
             next if $enable_cache && $repository->has_cache($_);
 
-            my $tarpath = $repository->inject( $_, { author => $author, author_subdir => $author_subdir } );
+            my $tarpath = $repository->inject(
+                $_,
+                { author => $author, author_subdir => $author_subdir }
+            );
             print "Wrote $tarpath from $_\n";
         }
     }
@@ -65,7 +66,10 @@ sub run {
             next unless /\S/;
             next if $enable_cache && $repository->has_cache($_);
 
-            my $tarpath = $repository->inject( $_, { author => $author, author_subdir => $author_subdir } );
+            my $tarpath = $repository->inject(
+                $_,
+                { author => $author, author_subdir => $author_subdir }
+            );
             print "Wrote $tarpath from $_\n";
         }
     }

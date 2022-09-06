@@ -5,20 +5,19 @@ use Moo 1.007000;
 use feature qw( say state );
 use version 0.9912;
 
-use Carp qw( croak );
+use Carp          qw( croak );
 use List::Compare ();
 use MooX::Options;
-use Parse::CPAN::Packages::Fast 0.09;
-use Path::Tiny ();
-use Type::Params qw( compile );
-use Type::Tiny::Enum;
-use Type::Utils qw( class_type );
-use Types::Standard qw( ArrayRef Bool InstanceOf Str );
-use Types::URI -all;
-use LWP::UserAgent ();
+use Parse::CPAN::Packages::Fast 0.09 ();
+use Path::Tiny                       ();
+use Type::Params                     qw( compile );
+use Type::Tiny::Enum                 ();
+use Types::Standard                  qw( ArrayRef Bool InstanceOf Str );
+use Types::URI                       qw( Uri );
+use LWP::UserAgent                   ();
 
 my $SHOW = Type::Tiny::Enum->new(
-    name => 'Show',
+    name   => 'Show',
     values =>
         [ 'cpan-only-modules', 'darkpan-only-modules', 'outdated-modules' ],
 );

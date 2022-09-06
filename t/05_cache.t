@@ -2,8 +2,8 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
-use File::Temp;
-use File::stat;
+use File::Temp ();
+use File::stat qw( stat );
 
 my $dir = File::Temp::tempdir( CLEANUP => 1 );
 

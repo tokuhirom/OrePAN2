@@ -5,20 +5,20 @@ use warnings;
 use utf8;
 use 5.008_001;
 
-use Carp;
+use Carp ();
 use Class::Accessor::Lite 0.05 (
     rw => [qw(directory cache compress_index)],
 );
-use File::Find;
-use File::Spec;
-use File::pushd;
-use OrePAN2::Indexer;
-use OrePAN2::Injector;
-use OrePAN2::Repository::Cache;
+use File::Find                 ();
+use File::Spec                 ();
+use File::pushd                ();
+use OrePAN2::Indexer           ();
+use OrePAN2::Injector          ();
+use OrePAN2::Repository::Cache ();
 
 sub new {
     my $class = shift;
-    my %args = @_ == 1 ? %{ $_[0] } : @_;
+    my %args  = @_ == 1 ? %{ $_[0] } : @_;
 
     for my $key (qw(directory)) {
         unless ( exists $args{$key} ) {
@@ -71,7 +71,7 @@ sub index_file {
     my $self = shift;
     return File::Spec->catfile(
         $self->directory, 'modules',
-        '02packages.details.txt' . ( $self->compress_index ? '.gz' : '' )
+        '02packages.details.txt' . ( $self->compress_index ? '.gz' : q{} )
     );
 }
 

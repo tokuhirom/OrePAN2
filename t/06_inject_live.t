@@ -6,11 +6,11 @@ use lib 't/lib';
 
 use Test::More;
 use Test::RequiresInternet( 'api.metacpan.org' => 80 );
-use File::Temp qw(tempdir);
-use MetaCPAN::Client;
-use OrePAN2::Indexer;
-use OrePAN2::Injector;
-use Local::Util qw( slurp );
+use File::Temp        qw( tempdir );
+use MetaCPAN::Client  ();
+use OrePAN2::Indexer  ();
+use OrePAN2::Injector ();
+use Local::Util       qw( slurp );
 
 sub inject_module {
     my $name   = shift;
@@ -34,8 +34,8 @@ subtest 'case insensitive sorting' => sub {
     my $orepan = OrePAN2::Indexer->new( directory => $tmpdir, metacpan => 1 );
     $orepan->make_index( no_compress => 1 );
 
-    my $details = slurp( "$tmpdir/modules/02packages.details.txt" );
-    my @rows = split "\n", $details;
+    my $details = slurp("$tmpdir/modules/02packages.details.txt");
+    my @rows    = split "\n", $details;
     ok( $rows[-1] =~ m{\Afatfinger}, 'fatfinger is last' );
     ok( $rows[-2] =~ m{\AFatal},     'Fatal precedes fatfinger' );
 };
@@ -67,30 +67,29 @@ subtest 'use MetaCPAN' => sub {
 };
 
 subtest 'MetaCPAN lookup works in chunks' => sub {
-    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $tmpdir  = tempdir( CLEANUP => 1 );
     my @modules = qw( OrePAN2 autodie );
     my %release;
 
-    for my $module ( @modules ) {
+    for my $module (@modules) {
         my $release = inject_module( $module, $tmpdir );
         $release{$module}{$_} = $release->$_
             for qw( download_url archive name );
     }
 
     my $orepan = OrePAN2::Indexer->new(
-        directory => $tmpdir,
-        metacpan => 1,
+        directory            => $tmpdir,
+        metacpan             => 1,
         metacpan_lookup_size => 1,
     );
 
-    $orepan->do_metacpan_lookup( [
-        map url2path( $release{$_}{download_url} ), @modules
-    ] );
+    $orepan->do_metacpan_lookup(
+        [ map url2path( $release{$_}{download_url} ), @modules ] );
 
-    for my $module ( @modules ) {
+    for my $module (@modules) {
         ok(
-            exists $orepan->_metacpan_lookup
-                ->{archive}{ $release{$module}{archive} },
+            exists $orepan->_metacpan_lookup->{archive}
+                { $release{$module}{archive} },
             "%module archive found by MetaCPAN"
         );
         ok(
@@ -159,9 +158,9 @@ sub inject_and_index {
 }
 
 sub url2path {
-    my ( $url ) = @_;
+    my ($url) = @_;
     ( my $path = $url ) =~ s{\A.*/authors/}{};
-    return $path
+    return $path;
 }
 
 done_testing;

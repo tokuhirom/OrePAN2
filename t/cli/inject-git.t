@@ -1,10 +1,10 @@
 use strict;
 use warnings;
-use File::Spec;
-use File::pushd qw(pushd);
-use File::Temp qw(tempdir);
-use File::Which ();
-use OrePAN2::Injector;
+use File::Spec        ();
+use File::pushd       qw( pushd );
+use File::Temp        qw( tempdir );
+use File::Which       ();
+use OrePAN2::Injector ();
 use Test::More;
 
 my $git = File::Which::which('git');
@@ -24,15 +24,15 @@ my $gitrepo = tempdir CLEANUP => 1;
         my $guard2 = pushd $gitrepo;
         system( $git, 'init' );
         system( $git, 'config', 'user.email', 'hiratara@cpan.org' );
-        system( $git, 'config', 'user.name', 'Masahiro Homma' );
-        system( $git, 'add', '.' );
+        system( $git, 'config', 'user.name',  'Masahiro Homma' );
+        system( $git, 'add',    '.' );
         system( $git, 'commit', '-am', "it's a test" );
     }
 }
 
 # Start testing
 subtest 'inject-git' => sub {
-    my $tmpdir = pushd( tempdir CLEANUP => 1 );
+    my $tmpdir   = pushd( tempdir CLEANUP => 1 );
     my $injector = OrePAN2::Injector->new(
         directory => '.',
     );
@@ -42,13 +42,16 @@ subtest 'inject-git' => sub {
 };
 
 subtest 'inject-git with code reference author' => sub {
-    my $tmpdir = pushd( tempdir CLEANUP => 1 );
+    my $tmpdir   = pushd( tempdir CLEANUP => 1 );
     my $injector = OrePAN2::Injector->new(
         directory => '.',
     );
-    $injector->inject("git+file://$gitrepo", {
-        author => sub { "MIYAGAWA" },
-    });
+    $injector->inject(
+        "git+file://$gitrepo",
+        {
+            author => sub { "MIYAGAWA" },
+        }
+    );
 
     ok -f 'authors/id/M/MI/MIYAGAWA/Acme-YakiniQ-0.01.tar.gz',
         "code reference author";
