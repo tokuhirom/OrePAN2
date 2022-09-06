@@ -48,3 +48,8 @@ on 'test' => sub {
     requires 'Test::RequiresInternet', '0.02';
 };
 
+on 'develop' => sub {
+    requires 'Test::MinimumVersion::Fast';
+    requires 'Test::PAUSE::Permissions';
+    requires 'Test::Spellunker';
+};
