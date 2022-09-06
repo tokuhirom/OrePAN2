@@ -16,19 +16,17 @@ jobs:
     strategy:
       max-parallel: 1
     container:
-      image: perldocker/perl-tester:5.30
+      image: perldocker/perl-tester:5.36
     steps:
-      - uses: actions/checkout@v2
-      - name: Upgrade helpers
-        run: curl https://raw.githubusercontent.com/oalders/ci-perl-helpers/master/bin/upgrade-perl-helpers | bash
+      - uses: actions/checkout@v3
       - name: Run Tests with coverage
         env:
           AUTHOR_TESTING: 1
           AUTOMATED_TESTING: 1
           EXTENDED_TESTING: 1
           RELEASE_TESTING: 1
-        run: upgrade-perl-helpers && auto-build-and-test-dist
-      - uses: actions/upload-artifact@master
+        run: auto-build-and-test-dist
+      - uses: actions/upload-artifact@v3
         with:
           name: build_dir
           path: build_dir
@@ -39,7 +37,6 @@ jobs:
     strategy:
       matrix:
         perl-version:
-          - "5.10"
           - "5.12"
           - "5.14"
           - "5.16"
@@ -51,10 +48,12 @@ jobs:
           - "5.28"
           - "5.30"
           - "5.32"
+          - "5.34"
+          - "5.36"
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
     steps:
-      - uses: actions/download-artifact@master
+      - uses: actions/download-artifact@v3
         with:
           name: build_dir
           path: .
@@ -70,7 +69,6 @@ jobs:
       fail-fast: false
       matrix:
         perl-version:
-          - "5.10"
           - "5.12"
           - "5.14"
           - "5.16"
@@ -82,6 +80,8 @@ jobs:
           - "5.28"
           - "5.30"
           - "5.32"
+          - "5.34"
+          - "5.36"
     name: Perl ${{ matrix.perl-version }} on macos-latest
     needs: build
     steps:
@@ -99,7 +99,7 @@ jobs:
         with:
           cpanfile: "cpanfile"
           args: "--with-suggests --with-recommends --with-test"
-      - run: prove -l t xt
+      - run: prove -l t
         if: success()
         env:
           AUTHOR_TESTING: 1

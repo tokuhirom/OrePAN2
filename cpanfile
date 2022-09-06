@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-requires 'perl', '5.008001';
+requires 'perl', '5.012000';
 requires 'autodie';
 
 requires 'Archive::Extract', 0.72;
