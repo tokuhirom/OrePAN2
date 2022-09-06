@@ -35,7 +35,7 @@ sub inject {
     my ( $self, $source, $opts ) = @_;
     local $self->{author}
         = $opts->{author} || $self->{author} || 'DUMMY';
-    local $self->{author_subdir} = $opts->{author_subdir} || '';
+    local $self->{author_subdir} = $opts->{author_subdir} || q{};
 
     my $tarpath;
     if ( $source =~ /(?:^git(?:\+\w+)?:|\.git(?:@.+)?$)/ )

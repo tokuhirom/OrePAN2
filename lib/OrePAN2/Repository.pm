@@ -71,7 +71,7 @@ sub index_file {
     my $self = shift;
     return File::Spec->catfile(
         $self->directory, 'modules',
-        '02packages.details.txt' . ( $self->compress_index ? '.gz' : '' )
+        '02packages.details.txt' . ( $self->compress_index ? '.gz' : q{} )
     );
 }
 

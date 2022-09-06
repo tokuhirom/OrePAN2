@@ -107,7 +107,7 @@ sub as_string {
             "Line-Count:   @{[ scalar(keys %{$self->{index}}) ]}",
             "Last-Updated: @{[ scalar localtime ]}",
         ),
-        '',
+        q{},
         );
 
     for my $pkg ( $self->packages ) {

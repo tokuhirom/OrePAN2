@@ -20,7 +20,7 @@ sub slurp_gz {
     require IO::Zlib;
     my $fh = IO::Zlib->new( $name, 'rb' )
         or Carp::croak "Cannot open '$name' for reading: $!";
-    my $content = join( '', <$fh> );
+    my $content = join( q{}, <$fh> );
     return $content;
 }
 

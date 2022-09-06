@@ -22,7 +22,7 @@ sub run {
     my $version;
     my $generate_index = 1;
     my $author         = 'DUMMY';
-    my $author_subdir  = '';
+    my $author_subdir  = q{};
     my $simple;
     my $text;
     my $enable_cache = 0;
