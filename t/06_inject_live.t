@@ -6,11 +6,11 @@ use lib 't/lib';
 
 use Test::More;
 use Test::RequiresInternet( 'api.metacpan.org' => 80 );
-use File::Temp qw(tempdir);
-use MetaCPAN::Client;
-use OrePAN2::Indexer;
-use OrePAN2::Injector;
-use Local::Util qw( slurp );
+use File::Temp        qw( tempdir );
+use MetaCPAN::Client  ();
+use OrePAN2::Indexer  ();
+use OrePAN2::Injector ();
+use Local::Util       qw( slurp );
 
 sub inject_module {
     my $name   = shift;

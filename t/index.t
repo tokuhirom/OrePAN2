@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
-use OrePAN2::Index;
+use OrePAN2::Index ();
 
 subtest 'load, lookup' => sub {
     for my $file (

@@ -5,13 +5,12 @@ use utf8;
 use lib 't/lib';
 
 use Test::More;
-use Local::Util;
-use File::Temp qw(tempdir);
-use File::Path qw(mkpath);
-use File::Copy qw(copy);
+use Local::Util qw( slurp_gz );
+use File::Temp  qw( tempdir );
+use File::Path  qw( mkpath );
 
-use OrePAN2::Indexer;
-use OrePAN2::Injector;
+use OrePAN2::Indexer  ();
+use OrePAN2::Injector ();
 
 my $tmpdir = tempdir( CLEANUP => 1 );
 

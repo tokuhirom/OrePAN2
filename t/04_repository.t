@@ -4,10 +4,10 @@ use utf8;
 
 use lib 't/lib';
 
-use File::Temp;
-use File::Touch qw( touch );
-use Local::Util;
-use OrePAN2::Repository;
+use File::Temp          ();
+use File::Touch         qw( touch );
+use Local::Util         qw( slurp_gz );
+use OrePAN2::Repository ();
 use Test::More;
 
 {

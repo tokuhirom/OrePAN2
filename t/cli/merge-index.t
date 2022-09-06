@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use File::Temp;
+use File::Temp qw( SEEK_SET );
 use Test::More;
 
 my $f1 = File::Temp->new();

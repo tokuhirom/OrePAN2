@@ -5,16 +5,16 @@ use warnings;
 use utf8;
 use 5.008_001;
 
-use Carp;
+use Carp ();
 use Class::Accessor::Lite 0.05 (
     rw => [qw(is_dirty directory)],
 );
-use Digest::MD5;
-use File::Path;
-use File::Spec;
-use File::stat;
-use IO::File::AtomicChange;
-use JSON::PP;
+use Digest::MD5            ();
+use File::Path             ();
+use File::Spec             ();
+use File::stat             qw( stat );
+use IO::File::AtomicChange ();
+use JSON::PP               ();
 
 sub new {
     my $class = shift;

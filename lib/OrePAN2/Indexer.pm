@@ -5,20 +5,20 @@ use warnings;
 use utf8;
 
 use Archive::Extract ();
-use CPAN::Meta 2.131560;
+use CPAN::Meta 2.131560 ();
 use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
-use File::Basename ();
-use File::Find     qw(find);
-use File::Spec     ();
-use File::Temp     qw(tempdir);
-use File::pushd;
-use IO::Zlib;
-use MetaCPAN::Client;
-use OrePAN2::Index;
-use Parse::LocalDistribution;
-use Path::Tiny;
-use Try::Tiny;
-use Ref::Util qw(is_arrayref);
+use File::Basename           ();
+use File::Find               qw( find );
+use File::Spec               ();
+use File::Temp               qw( tempdir );
+use File::pushd              qw( pushd );
+use IO::Zlib                 ();
+use MetaCPAN::Client         ();
+use OrePAN2::Index           ();
+use Parse::LocalDistribution ();
+use Path::Tiny               ();
+use Try::Tiny                qw( catch try );
+use Ref::Util                qw( is_arrayref );
 
 sub new {
     my $class = shift;

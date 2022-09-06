@@ -1,10 +1,10 @@
 use strict;
 use warnings;
-use File::Spec;
-use File::pushd qw(pushd);
-use File::Temp  qw(tempdir);
-use File::Which ();
-use OrePAN2::Injector;
+use File::Spec        ();
+use File::pushd       qw( pushd );
+use File::Temp        qw( tempdir );
+use File::Which       ();
+use OrePAN2::Injector ();
 use Test::More;
 
 my $git = File::Which::which('git');

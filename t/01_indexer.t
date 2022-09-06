@@ -5,12 +5,12 @@ use utf8;
 use lib 't/lib';
 
 use Test::More;
-use Local::Util;
-use File::Temp qw(tempdir);
-use File::Path qw(mkpath);
-use File::Copy qw(copy);
+use Local::Util qw( slurp slurp_gz );
+use File::Temp  qw( tempdir );
+use File::Path  qw( mkpath );
+use File::Copy  qw( copy );
 
-use OrePAN2::Indexer;
+use OrePAN2::Indexer ();
 
 subtest 'gz' => sub {
     my $tmpdir = tempdir( CLEANUP => 1 );

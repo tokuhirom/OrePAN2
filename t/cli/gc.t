@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
-use File::Temp;
+use File::Temp ();
 use Test::More;
 
 my $dir = File::Temp::tempdir( CLEANUP => 1 );

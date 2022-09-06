@@ -4,11 +4,10 @@ use utf8;
 
 use lib 't/lib';
 
-use File::pushd;
-use File::Temp qw(tempdir);
-use Local::Util;
-use OrePAN2::CLI::Indexer;
-use Pod::Usage;
+use File::pushd           qw( pushd );
+use File::Temp            qw( tempdir );
+use Local::Util           qw( slurp );
+use OrePAN2::CLI::Indexer ();
 use Test::More;
 
 {

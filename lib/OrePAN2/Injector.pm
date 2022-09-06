@@ -4,18 +4,18 @@ use strict;
 use warnings;
 use utf8;
 
-use Archive::Extract;
-use Archive::Tar;
-use CPAN::Meta;
-use File::Basename qw(dirname basename);
-use File::Copy     qw(copy);
-use File::Find     qw(find);
-use File::Path     qw(mkpath);
-use File::Spec;
-use File::Temp qw(tempdir);
-use File::pushd;
-use HTTP::Tiny;
-use MetaCPAN::Client;
+use Archive::Extract ();
+use Archive::Tar     qw( COMPRESS_GZIP );
+use CPAN::Meta       ();
+use File::Basename   qw( basename dirname );
+use File::Copy       qw( copy );
+use File::Find       qw( find );
+use File::Path       qw( mkpath );
+use File::Spec       ();
+use File::Temp       qw( tempdir );
+use File::pushd      qw( pushd );
+use HTTP::Tiny       ();
+use MetaCPAN::Client ();
 
 sub new {
     my $class = shift;
