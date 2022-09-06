@@ -25,7 +25,7 @@ my $indexer = OrePAN2::Indexer->new(
 );
 $indexer->make_index();
 
-my $content = slurp_gz( "$tmpdir/modules/02packages.details.txt.gz" );
+my $content = slurp_gz("$tmpdir/modules/02packages.details.txt.gz");
 note $content;
 like $content,   qr{Acme::Foo\s+0.01\s+D/DU/DUMMY/Acme-Foo-0.01.tar.gz};
 unlike $content, qr{gaaa::foo};

@@ -18,7 +18,7 @@ use JSON::PP;
 
 sub new {
     my $class = shift;
-    my %args = @_ == 1 ? %{ $_[0] } : @_;
+    my %args  = @_ == 1 ? %{ $_[0] } : @_;
 
     for my $key (qw(directory)) {
         unless ( exists $args{$key} ) {

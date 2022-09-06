@@ -12,7 +12,7 @@ use Test::More;
 
 {
     my ( $repo, $tmpdir ) = make_repo();
-    my $content = slurp_gz( "$tmpdir/modules/02packages.details.txt.gz" );
+    my $content = slurp_gz("$tmpdir/modules/02packages.details.txt.gz");
     unlike( $content, qr{Last\-Updated}, 'simple format' );
 
     $repo->gc();

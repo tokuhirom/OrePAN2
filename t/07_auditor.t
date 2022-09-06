@@ -55,7 +55,7 @@ is_deeply(
         'Parse::CPAN::Packages::Fast::Package'
     );
     is( $module->package, 'Foo::Bar', 'Foo::Bar package' );
-    is( $module->version, '1.0', 'Foo::Bar version' );
+    is( $module->version, '1.0',      'Foo::Bar version' );
 }
 
 done_testing;

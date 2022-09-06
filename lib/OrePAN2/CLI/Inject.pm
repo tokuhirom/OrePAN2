@@ -22,7 +22,7 @@ sub run {
     my $version;
     my $generate_index = 1;
     my $author         = 'DUMMY';
-    my $author_subdir     = '';
+    my $author_subdir  = '';
     my $simple;
     my $text;
     my $enable_cache = 0;
@@ -55,7 +55,10 @@ sub run {
             next unless /\S/;
             next if $enable_cache && $repository->has_cache($_);
 
-            my $tarpath = $repository->inject( $_, { author => $author, author_subdir => $author_subdir } );
+            my $tarpath = $repository->inject(
+                $_,
+                { author => $author, author_subdir => $author_subdir }
+            );
             print "Wrote $tarpath from $_\n";
         }
     }
@@ -65,7 +68,10 @@ sub run {
             next unless /\S/;
             next if $enable_cache && $repository->has_cache($_);
 
-            my $tarpath = $repository->inject( $_, { author => $author, author_subdir => $author_subdir } );
+            my $tarpath = $repository->inject(
+                $_,
+                { author => $author, author_subdir => $author_subdir }
+            );
             print "Wrote $tarpath from $_\n";
         }
     }

@@ -8,9 +8,9 @@ use Archive::Extract ();
 use CPAN::Meta 2.131560;
 use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
 use File::Basename ();
-use File::Find qw(find);
-use File::Spec ();
-use File::Temp qw(tempdir);
+use File::Find     qw(find);
+use File::Spec     ();
+use File::Temp     qw(tempdir);
 use File::pushd;
 use IO::Zlib;
 use MetaCPAN::Client;
@@ -22,7 +22,7 @@ use Ref::Util qw(is_arrayref);
 
 sub new {
     my $class = shift;
-    my %args = @_ == 1 ? %{ $_[0] } : @_;
+    my %args  = @_ == 1 ? %{ $_[0] } : @_;
     unless ( defined $args{directory} ) {
         Carp::croak('Missing mandatory parameter: directory');
     }
@@ -64,11 +64,11 @@ sub add_index {
     return if $self->_maybe_index_from_metacpan( $index, $archive_file );
 
     my $archive = Archive::Extract->new( archive => $archive_file );
-    my $tmpdir = tempdir( 'orepan2.XXXXXX', TMPDIR => 1, CLEANUP => 1 );
+    my $tmpdir  = tempdir( 'orepan2.XXXXXX', TMPDIR => 1, CLEANUP => 1 );
     $archive->extract( to => $tmpdir );
 
     my $provides = $self->scan_provides( $tmpdir, $archive_file );
-    my $path = $self->_orepan_archive_path($archive_file);
+    my $path     = $self->_orepan_archive_path($archive_file);
 
     foreach my $package ( sort keys %{$provides} ) {
         $index->add_index(
@@ -154,15 +154,16 @@ sub do_metacpan_lookup {
 
     my $provides = $self->_metacpan_lookup;
 
-    my $mc = MetaCPAN::Client->new( version => 'v1' );
-    my @archives = map { Path::Tiny->new($_)->basename } @{$files};
+    my $mc                 = MetaCPAN::Client->new( version => 'v1' );
+    my @archives           = map { Path::Tiny->new($_)->basename } @{$files};
     my @search_by_archives = map { +{ archive => $_ } } @archives;
 
     while (@search_by_archives) {
-        my @search_by_archives_chunk
-            = splice @search_by_archives, 0, $self->metacpan_lookup_size;
+        my @search_by_archives_chunk = splice @search_by_archives, 0,
+            $self->metacpan_lookup_size;
 
-        my $releases = $mc->release( { either => \@search_by_archives_chunk } );
+        my $releases
+            = $mc->release( { either => \@search_by_archives_chunk } );
 
         my @file_search;
 
@@ -171,12 +172,12 @@ sub do_metacpan_lookup {
 
             push @file_search,
                 {
-                    all => [
-                        { release          => $release->name },
-                        { indexed          => 'true' },
-                        { authorized       => 'true' },
-                        { 'module.indexed' => 'true' },
-                    ]
+                all => [
+                    { release          => $release->name },
+                    { indexed          => 'true' },
+                    { authorized       => 'true' },
+                    { 'module.indexed' => 'true' },
+                ]
                 };
         }
 
@@ -188,8 +189,8 @@ sub do_metacpan_lookup {
             my $module = $file->module or next;
             for my $inner ( is_arrayref $module ? @{$module} : $module ) {
                 next unless $inner->{indexed};
-                $provides->{release}->{ $file->release }->{ $inner->{name} } //=
-                    $inner->{version};
+                $provides->{release}->{ $file->release }->{ $inner->{name} }
+                    //= $inner->{version};
             }
         }
     }
