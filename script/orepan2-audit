@@ -43,19 +43,3 @@ Print out some version information.  Currenly only applies to outdated modules
 Possible values are C<outdated-modules>, C<cpan-only-modules> and C<darkpan-only-modules>.
 
 =back
-
-=head1 SOURCES
-
-orepan2-inject script supports following source types.
-
-=head2 ARCHIVE FILE
-
-    orepan2-inject Text-TestBase-0.10.tar.gz /path/to/darkpan/
-
-You can inject into DarkPAN from a file.
-
-=head2 HTTP URL
-
-    orepan2-inject http://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Text-TestBase-0.10.tar.gz /path/to/darkpan/
-
-You can inject into DarkPAN from an archive URL.

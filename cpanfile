@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-requires 'perl', '5.008001';
+requires 'perl', '5.012000';
 requires 'autodie';
 
 requires 'Archive::Extract', 0.72;
@@ -48,3 +48,8 @@ on 'test' => sub {
     requires 'Test::RequiresInternet', '0.02';
 };
 
+on 'develop' => sub {
+    requires 'Test::MinimumVersion::Fast';
+    requires 'Test::PAUSE::Permissions';
+    requires 'Test::Spellunker';
+};
