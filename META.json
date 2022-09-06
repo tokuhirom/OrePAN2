@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v3.1.10, CPAN::Meta::Converter version 2.150010",
+   "generated_by" : "Minilla/v3.1.19, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -72,7 +72,7 @@
             "autodie" : "0",
             "feature" : "0",
             "parent" : "0",
-            "perl" : "5.008005",
+            "perl" : "5.012000",
             "version" : "0.9912"
          }
       },
@@ -95,11 +95,11 @@
       "homepage" : "https://github.com/tokuhirom/OrePAN2",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/tokuhirom/OrePAN2.git",
+         "url" : "https://github.com/tokuhirom/OrePAN2.git",
          "web" : "https://github.com/tokuhirom/OrePAN2"
       }
    },
-   "version" : "0.48",
+   "version" : "0.49",
    "x_authority" : "cpan:TOKUHIROM",
    "x_contributors" : [
       "Chad Granum <exodist7@gmail.com>",
@@ -119,6 +119,6 @@
       "Tatsuhiko Miyagawa <miyagawa@bulknews.net>",
       "moznion <moznion@gmail.com>"
    ],
-   "x_serialization_backend" : "JSON::PP version 4.06",
+   "x_serialization_backend" : "JSON::PP version 4.09",
    "x_static_install" : 1
 }
