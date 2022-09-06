@@ -99,8 +99,5 @@ jobs:
         with:
           cpanfile: "cpanfile"
           args: "--with-suggests --with-recommends --with-test"
-      - run: prove -l t
+      - run: prove -lr t
         if: success()
-        env:
-          AUTHOR_TESTING: 1
-          RELEASE_TESTING: 1
