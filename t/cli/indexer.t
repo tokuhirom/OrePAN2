@@ -19,13 +19,13 @@ use Test::More;
 
 subtest 'gz index' => sub {
     my $tmp = pushd( tempdir() );
-    OrePAN2::CLI::Indexer->new()->run($tmp);
+    OrePAN2::CLI::Indexer->new()->run("$tmp");
     ok -f 'modules/02packages.details.txt.gz';
 };
 
 subtest 'txt index' => sub {
     my $tmp = pushd( tempdir() );
-    OrePAN2::CLI::Indexer->new()->run( '--text', $tmp );
+    OrePAN2::CLI::Indexer->new()->run( '--text', "$tmp" );
     ok -f 'modules/02packages.details.txt';
     my $txt = slurp('modules/02packages.details.txt');
     note $txt;
@@ -34,7 +34,7 @@ subtest 'txt index' => sub {
 
 subtest 'simple txt index' => sub {
     my $tmp = pushd( tempdir() );
-    OrePAN2::CLI::Indexer->new()->run( '--text', '--simple', $tmp );
+    OrePAN2::CLI::Indexer->new()->run( '--text', '--simple', "$tmp" );
     ok -f 'modules/02packages.details.txt';
     my $txt = slurp('modules/02packages.details.txt');
     note $txt;
