@@ -1,12 +1,9 @@
 package OrePAN2::Indexer;
 
-use strict;
-use warnings;
 use utf8;
 
-use Archive::Extract ();
-use CPAN::Meta 2.131560 ();
-use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
+use Archive::Extract         ();
+use CPAN::Meta 2.131560      ();
 use File::Basename           ();
 use File::Find               qw( find );
 use File::Spec               ();
@@ -18,22 +15,19 @@ use OrePAN2::Index           ();
 use Parse::LocalDistribution ();
 use Path::Tiny               ();
 use Try::Tiny                qw( catch try );
-use Ref::Util                qw( is_arrayref );
 
-sub new {
-    my $class = shift;
-    my %args  = @_ == 1 ? %{ $_[0] } : @_;
-    unless ( defined $args{directory} ) {
-        Carp::croak('Missing mandatory parameter: directory');
-    }
-    bless {
-        %args,
-    }, $class;
-}
+use Moo;
+use Types::Standard        qw( Bool HashRef Str is_ArrayRef );
+use Types::Common::Numeric qw( PositiveInt );
+use namespace::clean;
 
-sub directory { shift->{directory} }
-
-sub metacpan_lookup_size { shift->{metacpan_lookup_size} || 200 }
+#<<<
+has 'directory'            => ( is => 'ro', isa => Str,         required => 1 );
+has 'simple'               => ( is => 'ro', isa => Bool,        default  => !!0 );
+has 'metacpan'             => ( is => 'ro', isa => Bool,        default  => !!0 );
+has 'metacpan_lookup_size' => ( is => 'ro', isa => PositiveInt, default => 200 );
+has '_metacpan_lookup'     => ( is => 'rw', isa => HashRef,     init_arg => undef );
+#>>>
 
 sub make_index {
     my ( $self, %args ) = @_;
@@ -187,7 +181,7 @@ sub do_metacpan_lookup {
 
         while ( my $file = $modules->next ) {
             my $module = $file->module or next;
-            for my $inner ( is_arrayref $module ? @{$module} : $module ) {
+            for my $inner ( is_ArrayRef $module ? @{$module} : $module ) {
                 next unless $inner->{indexed};
                 $provides->{release}->{ $file->release }->{ $inner->{name} }
                     //= $inner->{version};
@@ -232,7 +226,7 @@ sub write_index {
 sub list_archive_files {
     my $self = shift;
 
-    my $authors_dir = File::Spec->catfile( $self->{directory}, 'authors' );
+    my $authors_dir = File::Spec->catfile( $self->directory, 'authors' );
     return () unless -d $authors_dir;
 
     my @files;
