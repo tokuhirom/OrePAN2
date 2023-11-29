@@ -33,9 +33,10 @@ requires 'Path::Tiny';
 requires 'Pod::Usage';
 requires 'Ref::Util';
 requires 'Try::Tiny';
-requires 'Type::Params';
+requires 'Type::Tiny';
 requires 'Types::URI';
 requires 'feature';
+requires 'namespace::clean';
 requires 'parent';
 requires 'version', '0.9912';
 
