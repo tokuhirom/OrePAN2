@@ -1,6 +1,9 @@
 package OrePAN2::Indexer;
 
+use feature qw( state );
 use utf8;
+
+use Moo;
 
 use Archive::Extract         ();
 use CPAN::Meta 2.131560      ();
@@ -15,10 +18,11 @@ use OrePAN2::Index           ();
 use Parse::LocalDistribution ();
 use Path::Tiny               ();
 use Try::Tiny                qw( catch try );
+use Type::Params             qw( signature );
+use Types::Standard          qw( Bool HashRef Str is_ArrayRef );
+use Types::Common::Numeric   qw( PositiveInt );
+use Types::Self              qw( Self );
 
-use Moo;
-use Types::Standard        qw( Bool HashRef Str is_ArrayRef );
-use Types::Common::Numeric qw( PositiveInt );
 use namespace::clean;
 
 #<<<
@@ -30,7 +34,12 @@ has '_metacpan_lookup'     => ( is => 'rw', isa => HashRef,     init_arg => unde
 #>>>
 
 sub make_index {
-    my ( $self, %args ) = @_;
+    state $signature = signature(
+        named_to_list => !!1,
+        method        => Self,
+        named         => [ no_compress => Bool, { default => !!0 } ]
+    );
+    my ( $self, $no_compress ) = $signature->(@_);
 
     my @files = $self->list_archive_files();
 
@@ -48,7 +57,7 @@ sub make_index {
     for my $archive_file (@files) {
         $self->add_index( $index, $archive_file );
     }
-    $self->write_index( $index, $args{no_compress} );
+    $self->write_index( $index, $no_compress );
     return $index;
 }
 
