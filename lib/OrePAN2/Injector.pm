@@ -1,8 +1,8 @@
 package OrePAN2::Injector;
 
-use strict;
-use warnings;
 use utf8;
+
+use Moo;
 
 use Archive::Extract ();
 use Archive::Tar     qw( COMPRESS_GZIP );
@@ -16,20 +16,12 @@ use File::Temp       qw( tempdir );
 use File::pushd      qw( pushd );
 use HTTP::Tiny       ();
 use MetaCPAN::Client ();
+use Types::Standard  qw( CodeRef Str );
 
-sub new {
-    my $class = shift;
-    my %args  = @_ == 1 ? %{ $_[0] } : @_;
-    unless ( exists $args{directory} ) {
-        Carp::croak("Missing directory");
-    }
-    bless {
-        author => 'DUMMY',
-        %args
-    }, $class;
-}
+use namespace::clean;
 
-sub directory { shift->{directory} }
+has 'author' => ( is => 'ro', isa => CodeRef | Str, default => 'DUMMY' );
+has 'directory' => ( is => 'ro', isa => Str, required => 1 );
 
 sub inject {
     my ( $self, $source, $opts ) = @_;

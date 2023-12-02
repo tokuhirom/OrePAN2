@@ -14,8 +14,6 @@ use Types::Standard            qw( Bool InstanceOf Str );
 
 use namespace::clean;
 
-use MooX::StrictConstructor;
-
 #<<<
 has 'compress_index' => ( is => 'ro',   isa => Bool, default => !!1 );
 has 'cache'          => ( is => 'lazy', isa => InstanceOf ['OrePAN2::Repository::Cache'], builder => 1, handles => { has_cache => 'is_hit', save_cache => 'save' } );
