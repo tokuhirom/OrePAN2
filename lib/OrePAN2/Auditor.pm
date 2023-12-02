@@ -10,17 +10,13 @@ use List::Compare ();
 use MooX::Options;
 use Parse::CPAN::Packages::Fast 0.09 ();
 use Path::Tiny                       ();
-use Type::Params                     qw( compile );
-use Type::Tiny::Enum                 ();
-use Types::Standard                  qw( ArrayRef Bool InstanceOf Str );
+use Type::Params                     qw( signature );
+use Types::Self                      qw( Self );
+use Types::Standard                  qw( ArrayRef Bool Enum InstanceOf Str );
 use Types::URI                       qw( Uri );
 use LWP::UserAgent                   ();
 
-my $SHOW = Type::Tiny::Enum->new(
-    name   => 'Show',
-    values =>
-        [ 'cpan-only-modules', 'darkpan-only-modules', 'outdated-modules' ],
-);
+use namespace::clean -except => [qw( _options_data _options_config )];
 
 option cpan => (
     is       => 'ro',
@@ -41,8 +37,9 @@ option darkpan => (
 );
 
 option show => (
-    is     => 'ro',
-    isa    => $SHOW,
+    is  => 'ro',
+    isa =>
+        Enum [qw( cpan-only-modules darkpan-only-modules outdated-modules )],
     format => 's',
 );
 
@@ -167,17 +164,15 @@ sub run {
 }
 
 sub cpan_module {
-    my $self = shift;
-    state $check = compile(Str);
-    my ($module) = $check->(@_);
+    state $signature = signature( method => Self, positional => [Str] );
+    my ( $self, $module ) = $signature->(@_);
 
     return $self->_cpan_parser->package($module);
 }
 
 sub darkpan_module {
-    my $self = shift;
-    state $check = compile(Str);
-    my ($module) = $check->(@_);
+    state $signature = signature( method => Self, positional => [Str] );
+    my ( $self, $module ) = $signature->(@_);
 
     return $self->_darkpan_parser->package($module);
 }
