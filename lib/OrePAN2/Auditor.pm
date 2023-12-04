@@ -3,7 +3,7 @@ package OrePAN2::Auditor;
 use Moo 1.007000;
 
 use feature qw( say state );
-use version 0.9912;
+use version;
 
 use Carp          qw( croak );
 use List::Compare ();

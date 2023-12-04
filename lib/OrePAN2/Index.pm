@@ -5,7 +5,7 @@ use utf8;
 
 use IO::Uncompress::Gunzip qw( $GunzipError );
 use OrePAN2                ();
-use version 0.9912;
+use version;
 
 use Moo;
 use Types::Standard qw( HashRef );
