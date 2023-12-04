@@ -3,7 +3,6 @@ package OrePAN2::Repository::Cache;
 use strict;
 use warnings;
 use utf8;
-use 5.008_001;
 
 use Carp ();
 use Class::Accessor::Lite 0.05 (
