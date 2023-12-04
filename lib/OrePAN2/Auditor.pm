@@ -1,6 +1,6 @@
 package OrePAN2::Auditor;
 
-use Moo 1.007000;
+use Moo;
 
 use feature qw( say state );
 use version;
