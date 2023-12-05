@@ -31,7 +31,6 @@ on 'runtime' => sub {
     requires 'Parse::CPAN::Meta'           => '1.4414';
     requires 'Parse::CPAN::Packages::Fast' => '0.09';
     requires 'Parse::LocalDistribution'    => '0.14';
-    requires 'Parse::PMFile'               => '0.29';
     requires 'Path::Tiny'                  => '0';
     requires 'Pod::Usage'                  => '0';
     requires 'Try::Tiny'                   => '0';
