@@ -31,4 +31,4 @@ MYMETA.*
 /.build
 /_build_params
 !Build/
-!META.json
+META.json
