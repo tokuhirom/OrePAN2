@@ -1,42 +1,30 @@
 package OrePAN2::Repository::Cache;
 
-use strict;
-use warnings;
 use utf8;
 
-use Carp ();
-use Class::Accessor::Lite 0.05 (
-    rw => [qw(is_dirty directory)],
-);
+use Moo;
+
+use Carp                   ();
 use Digest::MD5            ();
 use File::Path             ();
 use File::Spec             ();
 use File::stat             qw( stat );
 use IO::File::AtomicChange ();
 use JSON::PP               ();
+use Types::Standard        qw( Bool HashRef Str );
 
-sub new {
-    my $class = shift;
-    my %args  = @_ == 1 ? %{ $_[0] } : @_;
+use namespace::clean;
 
-    for my $key (qw(directory)) {
-        unless ( exists $args{$key} ) {
-            Carp::croak("Missing mandatory parameter: $key");
-        }
-    }
-    my $self = bless {
-        %args,
-    }, $class;
-    $self->{filename}
-        = File::Spec->catfile( $self->{directory}, 'orepan2-cache.json' );
-    return $self;
-}
+has 'directory' => ( is => 'ro',   isa => Str,     required => 1 );
+has 'data'      => ( is => 'lazy', isa => HashRef, builder  => 1 );
+has 'filename'  => ( is => 'lazy', isa => Str,     builder  => 1 );
+has 'is_dirty'  => ( is => 'rw',   isa => Bool,    default  => !!0 );
 
-sub data {
+sub _build_data {
     my $self = shift;
-    $self->{data} ||= do {
-        if ( open my $fh, '<', $self->{filename} ) {
-            JSON::PP::decode_json(
+    return do {
+        if ( open my $fh, '<', $self->filename ) {
+            JSON::PP->new->utf8->decode(
                 do { local $/; <$fh> }
             );
         }
@@ -44,6 +32,11 @@ sub data {
             +{};
         }
     };
+}
+
+sub _build_filename {
+    my $self = shift;
+    return File::Spec->catfile( $self->directory, 'orepan2-cache.json' );
 }
 
 sub is_hit {
@@ -87,7 +80,7 @@ sub set {
         = $self->calc_md5(
         File::Spec->catfile( $self->directory, $filename ) )
         or Carp::croak("Cannot calcurate MD5 for '$filename'");
-    $self->{data}->{$stuff} = +{
+    $self->data->{$stuff} = +{
         filename => $filename,
         md5      => $md5,
         ( -f $filename ? ( mtime => stat($filename)->mtime ) : () ),
@@ -98,9 +91,9 @@ sub set {
 sub save {
     my ($self) = @_;
 
-    my $filename = $self->{filename};
+    my $filename = $self->filename;
     my $json
-        = JSON::PP->new->pretty(1)->canonical(1)->encode( $self->{data} );
+        = JSON::PP->new->pretty(1)->canonical(1)->encode( $self->data );
 
     File::Path::mkpath( File::Basename::dirname($filename) );
 
