@@ -133,7 +133,7 @@ Revision history for Perl extension OrePAN2
 
 0.21 2014-02-26T09:47:32Z
 
-    - OrePAN2::Indexer: Make temporary file in the same parition.
+    - OrePAN2::Indexer: Make temporary file in the same partition.
         It's required by atomic operation.
         (tokuhirom)
 
@@ -221,7 +221,7 @@ Revision history for Perl extension OrePAN2
 
     - Switch to Module::Metadata instead of Parse::PMFile.
       (tokuhirom)
-    - set prefix => '' to Module::Metadata->provides(); otherwise defalut 'lib' prefix will be used.
+    - set prefix => '' to Module::Metadata->provides(); otherwise default 'lib' prefix will be used.
       (Shoichi Kaji)
 
 0.05 2013-05-25T00:03:26Z

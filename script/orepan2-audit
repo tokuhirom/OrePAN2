@@ -36,7 +36,7 @@ The full path or URL to a CPAN 02packages file in .txt or .txt.gz format.
 
 =item C< --verbose >
 
-Print out some version information.  Currenly only applies to outdated modules
+Print out some version information.  Currently only applies to outdated modules
 
 =item C< --show >
 
