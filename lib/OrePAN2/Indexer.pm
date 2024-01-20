@@ -1,9 +1,9 @@
 package OrePAN2::Indexer;
 
+use Moo;
+
 use feature qw( state );
 use utf8;
-
-use Moo;
 
 use Archive::Extract         ();
 use CPAN::Meta 2.131560      ();
@@ -26,11 +26,11 @@ use Types::Self              qw( Self );
 use namespace::clean;
 
 #<<<
-has 'directory'            => ( is => 'ro', isa => Str,         required => 1 );
-has 'simple'               => ( is => 'ro', isa => Bool,        default  => !!0 );
-has 'metacpan'             => ( is => 'ro', isa => Bool,        default  => !!0 );
-has 'metacpan_lookup_size' => ( is => 'ro', isa => PositiveInt, default => 200 );
-has '_metacpan_lookup'     => ( is => 'rw', isa => HashRef,     init_arg => undef );
+has directory            => ( is => 'ro', isa => Str,         required => 1 );
+has simple               => ( is => 'ro', isa => Bool,        default  => !!0 );
+has metacpan             => ( is => 'ro', isa => Bool,        default  => !!0 );
+has metacpan_lookup_size => ( is => 'ro', isa => PositiveInt, default => 200 );
+has _metacpan_lookup     => ( is => 'rw', isa => HashRef,     init_arg => undef );
 #>>>
 
 sub make_index {

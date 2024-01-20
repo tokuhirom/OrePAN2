@@ -11,7 +11,7 @@ use Moo;
 use Types::Standard qw( HashRef );
 use namespace::clean;
 
-has 'index' => ( is => 'ro', isa => HashRef, default => sub { {} } );
+has index => ( is => 'ro', isa => HashRef, default => sub { +{} } );
 
 sub load {
     my ( $self, $fname ) = @_;

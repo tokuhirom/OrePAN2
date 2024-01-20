@@ -20,8 +20,8 @@ use Types::Standard  qw( CodeRef Str );
 
 use namespace::clean;
 
-has 'author' => ( is => 'ro', isa => CodeRef | Str, default => 'DUMMY' );
-has 'directory' => ( is => 'ro', isa => Str, required => 1 );
+has author => ( is => 'ro', isa => CodeRef | Str, default => 'DUMMY' );
+has directory => ( is => 'ro', isa => Str, required => 1 );
 
 sub inject {
     my ( $self, $source, $opts ) = @_;
