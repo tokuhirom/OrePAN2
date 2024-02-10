@@ -1,6 +1,7 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+    - Refactor internals (GH#61) (XSven)
 
 0.49 2022-09-06T16:30:13Z
     - Remove copy/pasted docs from orepan2-audit script. Minimum Perl has also
