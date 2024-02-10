@@ -79,7 +79,7 @@ sub set {
     my $md5
         = $self->calc_md5(
         File::Spec->catfile( $self->directory, $filename ) )
-        or Carp::croak("Cannot calcurate MD5 for '$filename'");
+        or Carp::croak("Cannot calculate MD5 for '$filename'");
     $self->data->{$stuff} = +{
         filename => $filename,
         md5      => $md5,
