@@ -1,58 +1,44 @@
 package OrePAN2::Repository;
 
-use strict;
-use warnings;
 use utf8;
-use 5.008_001;
 
-use Carp ();
-use Class::Accessor::Lite 0.05 (
-    rw => [qw(directory cache compress_index)],
-);
+use Moo;
+
 use File::Find                 ();
 use File::Spec                 ();
 use File::pushd                ();
 use OrePAN2::Indexer           ();
 use OrePAN2::Injector          ();
 use OrePAN2::Repository::Cache ();
+use Types::Standard            qw( Bool InstanceOf Str );
 
-sub new {
-    my $class = shift;
-    my %args  = @_ == 1 ? %{ $_[0] } : @_;
+use namespace::clean;
 
-    for my $key (qw(directory)) {
-        unless ( exists $args{$key} ) {
-            Carp::croak("Missing mandatory parameter: $key");
-        }
-    }
-    my $self = bless {
-        compress_index => 1,
-        %args,
-    }, $class;
-    $self->{cache}
-        = OrePAN2::Repository::Cache->new( directory => $self->{directory} );
+#<<<
+has compress_index => ( is => 'ro',   isa => Bool, default => !!1 );
+has cache          => ( is => 'lazy', isa => InstanceOf ['OrePAN2::Repository::Cache'], builder => 1, handles => { has_cache => 'is_hit', save_cache => 'save' } );
+has directory      => ( is => 'ro',   isa => Str, required => 1 );
+has indexer        => ( is => 'lazy', isa => InstanceOf ['OrePAN2::Indexer'],           builder => 1 );
+has injector       => ( is => 'lazy', isa => InstanceOf ['OrePAN2::Injector'],          builder => 1 );
+has simple         => ( is => 'ro',   isa => Bool, default => !!0 );
+#>>>
 
-    return $self;
+sub _build_cache {
+    my $self = shift;
+    return OrePAN2::Repository::Cache->new( directory => $self->directory );
 }
 
-sub injector {
+sub _build_indexer {
     my $self = shift;
-    $self->{injector} ||= OrePAN2::Injector->new(
+    return OrePAN2::Indexer->new(
         directory => $self->directory,
+        simple    => $self->simple
     );
 }
 
-sub indexer {
+sub _build_injector {
     my $self = shift;
-    $self->{indexer} ||= OrePAN2::Indexer->new(
-        directory => $self->directory,
-        simple    => $self->{simple},
-    );
-}
-
-sub has_cache {
-    my ( $self, $stuff ) = @_;
-    $self->cache->is_hit($stuff);
+    return OrePAN2::Injector->new( directory => $self->directory );
 }
 
 sub make_index {
@@ -73,11 +59,6 @@ sub index_file {
         $self->directory, 'modules',
         '02packages.details.txt' . ( $self->compress_index ? '.gz' : q{} )
     );
-}
-
-sub save_cache {
-    my $self = shift;
-    $self->cache->save;
 }
 
 sub load_index {

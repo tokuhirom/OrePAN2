@@ -1,12 +1,12 @@
 package OrePAN2::Indexer;
 
-use strict;
-use warnings;
+use Moo;
+
+use feature qw( state );
 use utf8;
 
-use Archive::Extract ();
-use CPAN::Meta 2.131560 ();
-use Class::Accessor::Lite ( rw => ['_metacpan_lookup'] );
+use Archive::Extract         ();
+use CPAN::Meta 2.131560      ();
 use File::Basename           ();
 use File::Find               qw( find );
 use File::Spec               ();
@@ -18,29 +18,32 @@ use OrePAN2::Index           ();
 use Parse::LocalDistribution ();
 use Path::Tiny               ();
 use Try::Tiny                qw( catch try );
-use Ref::Util                qw( is_arrayref );
+use Type::Params             qw( signature );
+use Types::Standard          qw( Bool HashRef Str is_ArrayRef );
+use Types::Common::Numeric   qw( PositiveInt );
+use Types::Self              qw( Self );
 
-sub new {
-    my $class = shift;
-    my %args  = @_ == 1 ? %{ $_[0] } : @_;
-    unless ( defined $args{directory} ) {
-        Carp::croak('Missing mandatory parameter: directory');
-    }
-    bless {
-        %args,
-    }, $class;
-}
+use namespace::clean;
 
-sub directory { shift->{directory} }
-
-sub metacpan_lookup_size { shift->{metacpan_lookup_size} || 200 }
+#<<<
+has directory            => ( is => 'ro', isa => Str,         required => 1 );
+has simple               => ( is => 'ro', isa => Bool,        default  => !!0 );
+has metacpan             => ( is => 'ro', isa => Bool,        default  => !!0 );
+has metacpan_lookup_size => ( is => 'ro', isa => PositiveInt, default => 200 );
+has _metacpan_lookup     => ( is => 'rw', isa => HashRef,     init_arg => undef );
+#>>>
 
 sub make_index {
-    my ( $self, %args ) = @_;
+    state $signature = signature(
+        named_to_list => !!1,
+        method        => Self,
+        named         => [ no_compress => Bool, { default => !!0 } ]
+    );
+    my ( $self, $no_compress ) = $signature->(@_);
 
     my @files = $self->list_archive_files();
 
-    if ( $self->{metacpan} ) {
+    if ( $self->metacpan ) {
         try {
             $self->do_metacpan_lookup( \@files );
         }
@@ -54,7 +57,7 @@ sub make_index {
     for my $archive_file (@files) {
         $self->add_index( $index, $archive_file );
     }
-    $self->write_index( $index, $args{no_compress} );
+    $self->write_index( $index, $no_compress );
     return $index;
 }
 
@@ -122,7 +125,7 @@ sub scan_provides {
 sub _maybe_index_from_metacpan {
     my ( $self, $index, $file ) = @_;
 
-    return unless $self->{metacpan};
+    return unless $self->metacpan;
 
     my $archive = Path::Tiny->new($file)->basename;
     my $lookup  = $self->_metacpan_lookup;
@@ -187,7 +190,7 @@ sub do_metacpan_lookup {
 
         while ( my $file = $modules->next ) {
             my $module = $file->module or next;
-            for my $inner ( is_arrayref $module ? @{$module} : $module ) {
+            for my $inner ( is_ArrayRef $module ? @{$module} : $module ) {
                 next unless $inner->{indexed};
                 $provides->{release}->{ $file->release }->{ $inner->{name} }
                     //= $inner->{version};
@@ -232,7 +235,7 @@ sub write_index {
 sub list_archive_files {
     my $self = shift;
 
-    my $authors_dir = File::Spec->catfile( $self->{directory}, 'authors' );
+    my $authors_dir = File::Spec->catfile( $self->directory, 'authors' );
     return () unless -d $authors_dir;
 
     my @files;

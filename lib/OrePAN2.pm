@@ -1,5 +1,4 @@
 package OrePAN2;
-use 5.008005;
 use strict;
 use warnings;
 

@@ -1,22 +1,17 @@
 package OrePAN2::Index;
 
-use strict;
-use warnings;
 use autodie;
 use utf8;
 
 use IO::Uncompress::Gunzip qw( $GunzipError );
 use OrePAN2                ();
-use version 0.9912;
+use version;
 
-sub new {
-    my $class = shift;
-    my %args  = @_ == 1 ? %{ $_[0] } : @_;
-    bless {
-        index => {},
-        %args,
-    }, $class;
-}
+use Moo;
+use Types::Standard qw( HashRef );
+use namespace::clean;
+
+has index => ( is => 'ro', isa => HashRef, default => sub { +{} } );
 
 sub load {
     my ( $self, $fname ) = @_;
@@ -48,7 +43,7 @@ sub load {
 
 sub lookup {
     my ( $self, $package ) = @_;
-    if ( my $entry = $self->{index}->{$package} ) {
+    if ( my $entry = $self->index->{$package} ) {
         return @$entry;
     }
     return;
@@ -56,12 +51,12 @@ sub lookup {
 
 sub packages {
     my ($self) = @_;
-    sort { lc $a cmp lc $b } keys %{ $self->{index} };
+    sort { lc $a cmp lc $b } keys %{ $self->index };
 }
 
 sub delete_index {
     my ( $self, $package ) = @_;
-    delete $self->{index}->{$package};
+    delete $self->index->{$package};
     return;
 }
 
@@ -72,8 +67,8 @@ sub delete_index {
 sub add_index {
     my ( $self, $package, $version, $archive_file ) = @_;
 
-    if ( $self->{index}{$package} ) {
-        my ($orig_ver) = @{ $self->{index}{$package} };
+    if ( $self->index->{$package} ) {
+        my ($orig_ver) = @{ $self->index->{$package} };
 
         if ( version->parse($orig_ver) > version->parse($version) ) {
             $version //= 'undef';
@@ -83,7 +78,7 @@ sub add_index {
             return;
         }
     }
-    $self->{index}->{$package} = [ $version, $archive_file ];
+    $self->index->{$package} = [ $version, $archive_file ];
 }
 
 sub as_string {
@@ -104,14 +99,14 @@ sub as_string {
         ? ()
         : (
             "Written-By:   OrePAN2 $OrePAN2::VERSION",
-            "Line-Count:   @{[ scalar(keys %{$self->{index}}) ]}",
+            "Line-Count:   @{[ scalar(keys %{$self->index}) ]}",
             "Last-Updated: @{[ scalar localtime ]}",
         ),
         q{},
         );
 
     for my $pkg ( $self->packages ) {
-        my $entry = $self->{index}{$pkg};
+        my $entry = $self->index->{$pkg};
 
         # package name, version, path
         push @buf, sprintf '%-22s %-22s %s', $pkg, $entry->[0] || 'undef',
