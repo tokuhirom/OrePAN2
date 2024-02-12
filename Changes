@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+    - fix is_ArrayRef() precedence change if Type::Tiny::XS is installed
+      (GH#67) (XSven)
 
 0.50 2024-02-10T20:06:37Z
     - Refactor internals (GH#61) (XSven)
