@@ -190,7 +190,7 @@ sub do_metacpan_lookup {
 
         while ( my $file = $modules->next ) {
             my $module = $file->module or next;
-            for my $inner ( is_ArrayRef $module ? @{$module} : $module ) {
+            for my $inner ( is_ArrayRef($module) ? @{$module} : $module ) {
                 next unless $inner->{indexed};
                 $provides->{release}->{ $file->release }->{ $inner->{name} }
                     //= $inner->{version};
