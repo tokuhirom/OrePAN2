@@ -22,11 +22,12 @@ use Type::Params             qw( signature );
 use Types::Standard          qw( Bool HashRef Str is_ArrayRef );
 use Types::Common::Numeric   qw( PositiveInt );
 use Types::Self              qw( Self );
+use Types::Path::Tiny        qw( Path );
 
 use namespace::clean;
 
 #<<<
-has directory            => ( is => 'ro', isa => Str,         required => 1 );
+has directory            => ( is => 'ro', isa => Path,        coerce => 1, required => 1 );
 has simple               => ( is => 'ro', isa => Bool,        default  => !!0 );
 has metacpan             => ( is => 'ro', isa => Bool,        default  => !!0 );
 has metacpan_lookup_size => ( is => 'ro', isa => PositiveInt, default => 200 );

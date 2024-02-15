@@ -12,13 +12,14 @@ use File::stat             qw( stat );
 use IO::File::AtomicChange ();
 use JSON::PP               ();
 use Types::Standard        qw( Bool HashRef Str );
+use Types::Path::Tiny      qw( Path );
 
 use namespace::clean;
 
-has directory => ( is => 'ro',   isa => Str,     required => 1 );
-has data      => ( is => 'lazy', isa => HashRef, builder  => 1 );
-has filename  => ( is => 'lazy', isa => Str,     builder  => 1 );
-has is_dirty  => ( is => 'rw',   isa => Bool,    default  => !!0 );
+has directory => ( is => 'ro',   isa => Path,    coerce => 1, required => 1 );
+has data      => ( is => 'lazy', isa => HashRef, builder => 1 );
+has filename  => ( is => 'lazy', isa => Str,     builder => 1 );
+has is_dirty  => ( is => 'rw',   isa => Bool,    default => !!0 );
 
 sub _build_data {
     my $self = shift;

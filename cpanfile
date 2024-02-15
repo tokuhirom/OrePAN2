@@ -35,6 +35,7 @@ on 'runtime' => sub {
     requires 'Pod::Usage'                  => '0';
     requires 'Try::Tiny'                   => '0';
     requires 'Type::Tiny'                  => '2.000000';
+    requires 'Types::Path::Tiny'           => '0';
     requires 'Types::Self'                 => '0';
     requires 'Types::URI'                  => '0';
     requires 'feature'                     => '0';

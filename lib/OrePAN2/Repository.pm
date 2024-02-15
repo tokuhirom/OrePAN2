@@ -11,13 +11,14 @@ use OrePAN2::Indexer           ();
 use OrePAN2::Injector          ();
 use OrePAN2::Repository::Cache ();
 use Types::Standard            qw( Bool InstanceOf Str );
+use Types::Path::Tiny          qw( Path );
 
 use namespace::clean;
 
 #<<<
 has compress_index => ( is => 'ro',   isa => Bool, default => !!1 );
 has cache          => ( is => 'lazy', isa => InstanceOf ['OrePAN2::Repository::Cache'], builder => 1, handles => { has_cache => 'is_hit', save_cache => 'save' } );
-has directory      => ( is => 'ro',   isa => Str, required => 1 );
+has directory      => ( is => 'ro',   isa => Path, coerce => 1, required => 1 );
 has indexer        => ( is => 'lazy', isa => InstanceOf ['OrePAN2::Indexer'],           builder => 1 );
 has injector       => ( is => 'lazy', isa => InstanceOf ['OrePAN2::Injector'],          builder => 1 );
 has simple         => ( is => 'ro',   isa => Bool, default => !!0 );
