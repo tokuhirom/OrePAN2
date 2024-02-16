@@ -9,11 +9,12 @@ use Local::Util qw( slurp slurp_gz );
 use File::Temp  qw( tempdir );
 use File::Path  qw( mkpath );
 use File::Copy  qw( copy );
+use Path::Tiny  qw();
 
 use OrePAN2::Indexer ();
 
 subtest 'gz' => sub {
-    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
 
     mkpath "$tmpdir/authors/id/M/MI/MIYAGAWA/";
 

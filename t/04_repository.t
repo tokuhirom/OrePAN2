@@ -4,11 +4,12 @@ use utf8;
 
 use lib 't/lib';
 
-use File::Temp          ();
-use File::Touch         qw( touch );
-use Local::Util         qw( slurp_gz );
-use OrePAN2::Repository ();
 use Test::More;
+use File::Touch qw( touch );
+use Local::Util qw( slurp_gz );
+use Path::Tiny  qw();
+
+use OrePAN2::Repository ();
 
 {
     my ( $repo, $tmpdir ) = make_repo();
@@ -28,7 +29,7 @@ use Test::More;
 }
 
 sub make_repo {
-    my $tmpdir = File::Temp::tempdir( CLEANUP => 1 );
+    my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
 
     my $repo = OrePAN2::Repository->new( directory => $tmpdir, simple => 1 );
     $repo->inject('t/dat/Acme-Foo-0.01.tar.gz');
