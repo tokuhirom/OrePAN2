@@ -7,11 +7,12 @@ use lib 't/lib';
 use Test::More;
 use Test::More;
 use File::Temp qw( tempdir );
+use Path::Tiny qw();
 
 use OrePAN2::Injector ();
 
 subtest 'gz' => sub {
-    my $tmpdir = tempdir( CLEANUP => 1 );
+    my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
 
     my $injector = OrePAN2::Injector->new(
         directory => $tmpdir,

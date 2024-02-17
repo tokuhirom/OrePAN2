@@ -35,6 +35,7 @@ on 'runtime' => sub {
     requires 'Pod::Usage'                  => '0';
     requires 'Try::Tiny'                   => '0';
     requires 'Type::Tiny'                  => '2.000000';
+    requires 'Types::Path::Tiny'           => '0';
     requires 'Types::Self'                 => '0';
     requires 'Types::URI'                  => '0';
     requires 'feature'                     => '0';
@@ -46,8 +47,7 @@ on 'runtime' => sub {
 on 'test' => sub {
     requires 'File::Touch'            => '0';
     requires 'File::Which'            => '0';
-    requires 'PAUSE::Packages'        => '0';
-    requires 'Path::Class'            => '0';
+    requires 'Path::Tiny'             => '0.119';
     requires 'Test::More'             => '0.98';
     requires 'Test::RequiresInternet' => '0.02';
 };

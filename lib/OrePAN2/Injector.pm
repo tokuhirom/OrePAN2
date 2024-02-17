@@ -4,24 +4,25 @@ use utf8;
 
 use Moo;
 
-use Archive::Extract ();
-use Archive::Tar     qw( COMPRESS_GZIP );
-use CPAN::Meta       ();
-use File::Basename   qw( basename dirname );
-use File::Copy       qw( copy );
-use File::Find       qw( find );
-use File::Path       qw( mkpath );
-use File::Spec       ();
-use File::Temp       qw( tempdir );
-use File::pushd      qw( pushd );
-use HTTP::Tiny       ();
-use MetaCPAN::Client ();
-use Types::Standard  qw( CodeRef Str );
+use Archive::Extract  ();
+use Archive::Tar      qw( COMPRESS_GZIP );
+use CPAN::Meta        ();
+use File::Basename    qw( basename dirname );
+use File::Copy        qw( copy );
+use File::Find        qw( find );
+use File::Path        qw( mkpath );
+use File::Spec        ();
+use File::Temp        qw( tempdir );
+use File::pushd       qw( pushd );
+use HTTP::Tiny        ();
+use MetaCPAN::Client  ();
+use Types::Standard   qw( CodeRef Str );
+use Types::Path::Tiny qw( Path );
 
 use namespace::clean;
 
 has author => ( is => 'ro', isa => CodeRef | Str, default => 'DUMMY' );
-has directory => ( is => 'ro', isa => Str, required => 1 );
+has directory => ( is => 'ro', isa => Path, coerce => 1, required => 1 );
 
 sub inject {
     my ( $self, $source, $opts ) = @_;
