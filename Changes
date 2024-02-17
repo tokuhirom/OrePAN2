@@ -1,6 +1,7 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+    - weaken type constraint of "directory" attribute (GH#69) (XSven)
 
 0.51 2024-02-12T16:20:34Z
     - fix is_ArrayRef() precedence change if Type::Tiny::XS is installed
