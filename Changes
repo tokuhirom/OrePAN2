@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.52 2024-02-19T22:27:12Z
     - weaken type constraint of "directory" attribute (GH#69) (XSven)
 
 0.51 2024-02-12T16:20:34Z
