@@ -50,6 +50,9 @@ on 'test' => sub {
     requires 'Path::Tiny'             => '0.119';
     requires 'Test::More'             => '0.98';
     requires 'Test::RequiresInternet' => '0.02';
+    suggests 'Capture::Tiny'  => '0';
+    suggests 'Log::Any::Test' => '0';
+    suggests 'Mojo::Log'      => '0';
 };
 
 on 'develop' => sub {
