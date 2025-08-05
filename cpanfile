@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 on 'runtime' => sub {
-    requires 'perl'    => '5.012000';
+    requires 'perl'    => '5.014000';
     requires 'autodie' => '0';
 
     requires 'Archive::Extract'            => '0.72';
@@ -50,9 +50,8 @@ on 'test' => sub {
     requires 'Path::Tiny'             => '0.119';
     requires 'Test::More'             => '0.98';
     requires 'Test::RequiresInternet' => '0.02';
-    suggests 'Capture::Tiny'  => '0';
-    suggests 'Log::Any::Test' => '0';
-    suggests 'Mojo::Log'      => '0';
+    requires 'Capture::Tiny'          => '0';
+    requires 'Log::Any'               => '0';
 };
 
 on 'develop' => sub {

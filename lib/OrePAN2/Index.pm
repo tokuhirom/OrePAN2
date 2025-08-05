@@ -9,6 +9,7 @@ use version;
 use OrePAN2::Logger;
 
 use Moo;
+with 'OrePAN2::Role::HasLogger';
 use Types::Standard qw( HashRef );
 use namespace::clean;
 
@@ -115,13 +116,6 @@ sub as_string {
     }
     return join( "\n", @buf ) . "\n";
 }
-
-#@type OrePAN2::Logger
-has log => (
-    is      => 'ro',
-    lazy    => 1,
-    default => sub { my ($self) = @_; OrePAN2::Logger->new->get_logger() }
-);
 
 1;
 __END__

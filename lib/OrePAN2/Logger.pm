@@ -13,10 +13,18 @@ sub get_logger {
     return ( $self->log );
 }
 
-#sub warn { shift; print STDERR "[WARN] $_[0]\n" }
+# trace
+# debug
+# info (inform)
 sub info { shift; print STDERR "[INFO] $_[0]\n" }
 
-#sub debug { shift; print STDERR "[DEBUG] $_[0]\n" }
-#sub error { shift; print STDERR "[ERROR] $_[0]\n" }
+# notice
+# warning (warn)
+sub warn { shift; print STDERR "[WARN] $_[0]\n" }
+
+# error (err)
+# critical (crit, fatal)
+# alert
+# emergency
 
 1;

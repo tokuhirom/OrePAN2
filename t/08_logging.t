@@ -26,9 +26,9 @@ subtest 'add_index_default_logger', sub {
         $index->add_index( 'X', 0.01, 'X/X/X/X-0.01.tar.gz' );
     };
     like $stderr, qr{\[INFO\] Not adding X in X/X/X/X-0.01.tar.gz},
-        'INFO: Not adding to index (via STDERR)';
+        "got 'Not adding to index' via STDERR";
     like $stderr, qr{\[INFO\] Existing version 0.02 is greater than 0.01},
-        'INFO: Existing version greater than new  (via STDERR)';
+        "got 'Existing version greater than new' via STDERR";
 };
 
 subtest 'add_index_log_any', sub {
@@ -52,11 +52,11 @@ subtest 'add_index_log_any', sub {
     $index->add_index( 'X', 0.01, 'X/X/X/X-0.01.tar.gz' );
     $log->contains_ok(
         qr{Not adding X in X/X/X/X-0.01.tar.gz},
-        "INFO: Not adding to index (via Log::Any)"
+        "got 'Not adding to index' via Log::Any"
     );
     $log->contains_ok(
         qr{Existing version 0.02 is greater than 0.01},
-        "INFO: Existing version greater than new (via Log::Any)"
+        "got 'Existing version greater than new' via Log::Any"
     );
 };
 
@@ -78,10 +78,10 @@ subtest 'add_index_mojo_log', sub {
     $index->add_index( 'X', 0.02, 'X/X/X/X-0.02.tar.gz' );
     $index->add_index( 'X', 0.01, 'X/X/X/X-0.01.tar.gz' );
     like $messages->[-2], qr{\[info\] Not adding X in X/X/X/X-0.01.tar.gz},
-        'INFO: Not adding to index (via Mojo::Log)';
+        "got 'Not adding to index' via Mojo::Log";
     like $messages->[-1],
         qr{\[info\] Existing version 0.02 is greater than 0.01},
-        'INFO: Existing version greater than new  (via Mojo::Log)';
+        "got 'Existing version greater than new' via Mojo::Log";
 };
 
 done_testing;
