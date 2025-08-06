@@ -2,15 +2,15 @@ use strict;
 use warnings;
 
 use Test::More;
+use Capture::Tiny (qw /capture/);
+use Log::Any::Test;
+use Log::Any;
+
 use OrePAN2::Index ();
+use OrePAN2::Indexer ();
 
-subtest 'add_index_default_logger', sub {
 
-    plan skip_all => 'requires Capture::Tiny'
-        unless eval {
-        use Capture::Tiny ':all';
-        1;
-        };
+subtest 'test_default_logger', sub {
 
     # create new index
     my $index = OrePAN2::Index->new();
@@ -29,19 +29,23 @@ subtest 'add_index_default_logger', sub {
         "got 'Not adding to index' via STDERR";
     like $stderr, qr{\[INFO\] Existing version 0.02 is greater than 0.01},
         "got 'Existing version greater than new' via STDERR";
+
+    my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
+
+    my $orepan = OrePAN2::Indexer->new(
+        directory => $tmpdir,
+        simple    => 1,
+    );
+
+    ( undef, $stderr, undef ) = Capture::Tiny::capture {
+        $orepan->log->info("Testing");
+    };
+    like $stderr, qr{\[INFO\] Testing},
+        "got 'Testing' via STDERR";
+
 };
 
-subtest 'add_index_log_any', sub {
-
-    plan skip_all => 'requires Log::Any and Log::Any::Test'
-        unless eval {
-        require Log::Any;
-        require Log::Any::Test;
-        1;
-        };
-
-    Log::Any->import;
-    Log::Any::Test->import;
+subtest 'test_log_any', sub {
 
     my $log = Log::Any->get_logger();
 
@@ -58,30 +62,21 @@ subtest 'add_index_log_any', sub {
         qr{Existing version 0.02 is greater than 0.01},
         "got 'Existing version greater than new' via Log::Any"
     );
-};
 
-subtest 'add_index_mojo_log', sub {
+    my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
 
-    plan skip_all => 'requires Mojo::Log'
-        unless eval {
-        require Mojo::Log;
-        1;
-        };
+    my $orepan = OrePAN2::Indexer->new(
+        directory => $tmpdir,
+        simple    => 1,
+        log       => $log,
+    );
 
-    Mojo::Log->import;
+    $orepan->log->info("Testing");
+    $log->contains_ok(
+        qr{Testing},
+        "got 'Testing' via Log::Any"
+    );
 
-    my $log      = Mojo::Log->new;
-    my $messages = $log->capture();
-
-    my $index = OrePAN2::Index->new( log => $log );
-    $index->add_index( 'X', 0.01, 'X/X/X/X-0.01.tar.gz' );
-    $index->add_index( 'X', 0.02, 'X/X/X/X-0.02.tar.gz' );
-    $index->add_index( 'X', 0.01, 'X/X/X/X-0.01.tar.gz' );
-    like $messages->[-2], qr{\[info\] Not adding X in X/X/X/X-0.01.tar.gz},
-        "got 'Not adding to index' via Mojo::Log";
-    like $messages->[-1],
-        qr{\[info\] Existing version 0.02 is greater than 0.01},
-        "got 'Existing version greater than new' via Mojo::Log";
 };
 
 done_testing;

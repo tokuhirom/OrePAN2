@@ -1,4 +1,5 @@
 package OrePAN2::Role::HasLogger;
+use OrePAN2::Logger;
 
 use Moo::Role;
 
@@ -9,7 +10,6 @@ has log => (
 );
 
 sub _build_log {
-    require OrePAN2::Logger;
     OrePAN2::Logger->new->get_logger;
 }
 
