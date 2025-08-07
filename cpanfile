@@ -45,13 +45,14 @@ on 'runtime' => sub {
 };
 
 on 'test' => sub {
-    requires 'File::Touch'            => '0';
-    requires 'File::Which'            => '0';
-    requires 'Path::Tiny'             => '0.119';
-    requires 'Test::More'             => '0.98';
+    requires 'File::Touch' => '0';
+    requires 'File::Which' => '0';
+    requires 'Path::Tiny'  => '0.119';
+    requires 'Test::More'  => '0.98';
+    requires 'Test::Needs' => '0';
+    suggests 'Test::Output' => '0';
     requires 'Test::RequiresInternet' => '0.02';
-    requires 'Capture::Tiny'          => '0';
-    requires 'Log::Any'               => '0';
+    suggests 'Log::Any' => '0';
 };
 
 on 'develop' => sub {
