@@ -1,6 +1,7 @@
 package OrePAN2::Indexer;
 
 use Moo;
+with 'OrePAN2::Role::HasLogger';
 
 use feature qw( state );
 use utf8;
@@ -49,8 +50,8 @@ sub make_index {
             $self->do_metacpan_lookup( \@files );
         }
         catch {
-            print STDERR "[WARN] Unable to fetch provides via MetaCPAN\n";
-            print STDERR "[WARN] $_\n";
+            $self->log->warn("Unable to fetch provides via MetaCPAN");
+            $self->log->warn("$_")
         };
     }
 
@@ -104,20 +105,21 @@ sub scan_provides {
         return $meta->{provides} if $meta && $meta->{provides};
 
         if ($@) {
-            print STDERR "[WARN] Error using '$mfile' from '$archive_file'\n";
-            print STDERR "[WARN] $@\n";
-            print STDERR "[WARN] Attempting to continue...\n";
+            $self->log->warn("Error using '$mfile' from '$archive_file'");
+            $self->log->warn("$@");
+            $self->log->warn("Attempting to continue...");
         }
     }
 
-    print STDERR
-        "[INFO] Found META file in '$archive_file' but it does not contain 'provides'\n";
-    print STDERR "[INFO] Scanning for provided modules...\n";
+    $self->log->info(
+        "Found META file in '$archive_file' but it does not contain 'provides'"
+    );
+    $self->log->info("Scanning for provided modules...");
 
     my $provides = eval { $self->_scan_provides('.') };
     return $provides if $provides;
 
-    print STDERR "[WARN] Error scanning: $@\n";
+    $self->log->warn("Error scanning: $@");
 
     # Return empty provides.
     return {};
@@ -132,14 +134,14 @@ sub _maybe_index_from_metacpan {
     my $lookup  = $self->_metacpan_lookup;
 
     unless ( exists $lookup->{archive}->{$archive} ) {
-        print STDERR "[INFO] $archive not found on MetaCPAN\n";
+        $self->log->info("$archive not found on MetaCPAN");
         return;
     }
     my $release_name = $lookup->{archive}->{$archive};
 
     my $provides = $lookup->{release}->{$release_name};
     unless ( $provides && keys %{$provides} ) {
-        print STDERR "[INFO] provides for $archive not found on MetaCPAN\n";
+        $self->log->info("provides for $archive not found on MetaCPAN");
         return;
     }
 
