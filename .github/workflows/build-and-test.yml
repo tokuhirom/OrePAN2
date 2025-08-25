@@ -17,7 +17,7 @@ jobs:
     container:
       image: perldocker/perl-tester:5.38
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run Tests with coverage
         env:
           AUTHOR_TESTING: 1
@@ -86,7 +86,7 @@ jobs:
     name: Perl ${{ matrix.perl-version }} on macos-latest
     needs: build
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set Up Perl
         uses: shogo82148/actions-setup-perl@v1
         with:
