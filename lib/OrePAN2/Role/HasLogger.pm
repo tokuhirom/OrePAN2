@@ -1,16 +1,13 @@
 package OrePAN2::Role::HasLogger;
-use OrePAN2::Logger;
 
 use Moo::Role;
+
+use OrePAN2::Logger ();
 
 has log => (
     is      => 'ro',
     lazy    => 1,
-    builder => '_build_log',
+    default => sub { OrePAN2::Logger->new },
 );
-
-sub _build_log {
-    OrePAN2::Logger->new->get_logger;
-}
 
 1;
