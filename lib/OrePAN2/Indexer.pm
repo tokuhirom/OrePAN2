@@ -51,7 +51,7 @@ sub make_index {
         }
         catch {
             $self->log->warn("Unable to fetch provides via MetaCPAN");
-            $self->log->warn("$_")
+            $self->log->warn("$_");
         };
     }
 
