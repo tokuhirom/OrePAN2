@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 on 'runtime' => sub {
-    requires 'perl'    => '5.012000';
+    requires 'perl'    => '5.014000';
     requires 'autodie' => '0';
 
     requires 'Archive::Extract'            => '0.72';
@@ -45,11 +45,14 @@ on 'runtime' => sub {
 };
 
 on 'test' => sub {
-    requires 'File::Touch'            => '0';
-    requires 'File::Which'            => '0';
-    requires 'Path::Tiny'             => '0.119';
-    requires 'Test::More'             => '0.98';
+    requires 'File::Touch' => '0';
+    requires 'File::Which' => '0';
+    requires 'Path::Tiny'  => '0.119';
+    requires 'Test::More'  => '0.98';
+    requires 'Test::Needs' => '0';
+    suggests 'Test::Output' => '0';
     requires 'Test::RequiresInternet' => '0.02';
+    suggests 'Log::Any' => '0';
 };
 
 on 'develop' => sub {

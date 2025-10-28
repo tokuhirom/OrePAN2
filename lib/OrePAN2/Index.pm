@@ -6,8 +6,10 @@ use utf8;
 use IO::Uncompress::Gunzip qw( $GunzipError );
 use OrePAN2                ();
 use version;
+use OrePAN2::Logger;
 
 use Moo;
+with 'OrePAN2::Role::HasLogger';
 use Types::Standard qw( HashRef );
 use namespace::clean;
 
@@ -72,9 +74,9 @@ sub add_index {
 
         if ( version->parse($orig_ver) > version->parse($version) ) {
             $version //= 'undef';
-            print STDERR "[INFO] Not adding $package in $archive_file\n";
-            print STDERR
-                "[INFO] Existing version $orig_ver is greater than $version\n";
+            $self->log->info("Not adding $package in $archive_file");
+            $self->log->info(
+                "Existing version $orig_ver is greater than $version");
             return;
         }
     }
