@@ -1,9 +1,10 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
-    - make logging use a real logger object, (GH#18)
-    - Minimum Perl has been bumped from 5.012000 to 5.014000 because of a dependency on IO::Socket::IP
-    - fix test to use https://github.com/ not git://
+    - introduce logging flexibility to OrePAN2 (GH#73) (paulinsche)
+    - Minimum Perl has been bumped from 5.012000 to 5.014000 because of a
+      dependency on IO::Socket::IP (GH#73) (paulinsche)
+    - fix test to use https://github.com/ not git:// (GH#73) (paulinsche)
 
 0.52 2024-02-19T22:27:12Z
     - weaken type constraint of "directory" attribute (GH#69) (XSven)
