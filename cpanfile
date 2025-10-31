@@ -36,10 +36,11 @@ on 'runtime' => sub {
     requires 'Try::Tiny'                   => '0';
     requires 'Type::Tiny'                  => '2.000000';
     requires 'Types::Path::Tiny'           => '0';
-    requires 'Types::Self'                 => '0';
-    requires 'Types::URI'                  => '0';
+    requires 'Types::Self'                 => '0.002';
+    requires 'Types::URI'                  => '0.007';
+    requires 'URI::FromHash'               => '0';
     requires 'feature'                     => '0';
-    requires 'namespace::clean'            => '0';
+    requires 'namespace::clean'            => '0.27';
     requires 'parent'                      => '0';
     requires 'version'                     => '0.9912';
 };
@@ -56,6 +57,8 @@ on 'test' => sub {
 };
 
 on 'develop' => sub {
+    requires 'CPAN::Uploader'             => '0';
+    requires 'Perl::MinimumVersion::Fast' => '0';
     requires 'Test::MinimumVersion::Fast' => '0';
     requires 'Test::PAUSE::Permissions'   => '0';
     requires 'Test::Spellunker'           => '0';
