@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.53 2025-10-31T16:58:33Z
     - introduce logging flexibility to OrePAN2 (GH#73) (paulinsche)
     - Minimum Perl has been bumped from 5.012000 to 5.014000 because of a
       dependency on IO::Socket::IP (GH#73) (paulinsche)
