@@ -56,5 +56,18 @@ subtest 'as_string' => sub {
     like $index->as_string, qr{A_Third_Package};
 };
 
+subtest 'as_gzip' => sub {
+    my $index = OrePAN2::Index->new;
+    $index->load('t/dat/02.packages.details.txt');
+
+    my $gzip = File::Temp->new(DIR => 't', SUFFIX => '.gz');
+
+    $index->as_gzip("$gzip");
+
+    my $copy = OrePAN2::Index->new;
+    $copy->load("$gzip");
+    is($copy->as_string, $index->as_string, "Got the same contents");
+};
+
 done_testing;
 

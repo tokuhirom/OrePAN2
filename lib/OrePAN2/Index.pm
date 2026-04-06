@@ -12,6 +12,9 @@ use Moo;
 with 'OrePAN2::Role::HasLogger';
 use Types::Standard qw( HashRef );
 use namespace::clean;
+use File::Temp ();
+use File::Copy ();
+use IO::Compress::Gzip;
 
 has index => ( is => 'ro', isa => HashRef, default => sub { +{} } );
 
@@ -117,6 +120,17 @@ sub as_string {
     return join( "\n", @buf ) . "\n";
 }
 
+sub as_gzip {
+    my ($self, $path, $opts) = @_;
+
+    my $str = $self->as_string($opts);
+    my $tmp = File::Temp->new();
+    my $gz = IO::Compress::Gzip->new("$tmp");
+    $gz->print($str);
+    $gz->close;
+    File::Copy::move("$tmp", $path);
+}
+
 1;
 __END__
 
@@ -160,5 +174,10 @@ defaults to 0.
     $index->as_string( simple => 1 );
 
 Make index as string.
+
+=item C<< $index->as_gzip($path, $options) >>
+
+Writes the index to $path, the options are passed through
+C<<$index->as_string>> as is.
 
 =back
