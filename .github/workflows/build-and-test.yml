@@ -56,7 +56,6 @@ jobs:
       - name: Install deps and test
         if: success()
         env:
-          AUTHOR_TESTING: 1
           RELEASE_TESTING: 1
         run: cpan-install-dist-deps && test-dist
   test_macos:

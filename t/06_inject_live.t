@@ -5,6 +5,8 @@ use utf8;
 use lib 't/lib';
 
 use Test::More;
+plan skip_all => 'set AUTHOR_TESTING to run live MetaCPAN tests'
+    unless $ENV{AUTHOR_TESTING};
 use Test::RequiresInternet( 'api.metacpan.org' => 80 );
 use File::Temp        qw( tempdir );
 use MetaCPAN::Client  ();
