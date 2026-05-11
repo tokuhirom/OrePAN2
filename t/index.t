@@ -3,6 +3,7 @@ use warnings;
 use utf8;
 use Test::More;
 use OrePAN2::Index ();
+use Path::Tiny     ();
 
 subtest 'load, lookup' => sub {
     for my $file (
@@ -60,7 +61,7 @@ subtest 'as_gzip' => sub {
     my $index = OrePAN2::Index->new;
     $index->load('t/dat/02.packages.details.txt');
 
-    my $gzip = File::Temp->new(DIR => 't', SUFFIX => '.gz');
+    my $gzip = Path::Tiny->tempfile( DIR => 't', SUFFIX => '.gz' );
 
     $index->as_gzip("$gzip");
 

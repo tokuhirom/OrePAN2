@@ -13,7 +13,6 @@ use File::Find               qw( find );
 use File::Spec               ();
 use File::Temp               qw( tempdir );
 use File::pushd              qw( pushd );
-use IO::Zlib                 ();
 use MetaCPAN::Client         ();
 use OrePAN2::Index           ();
 use Parse::LocalDistribution ();
@@ -221,18 +220,17 @@ sub write_index {
         $no_compress ? '02packages.details.txt' : '02packages.details.txt.gz'
     );
     mkdir( File::Basename::dirname($pkgfname) );
-    my $fh = do {
-        if ($no_compress) {
-            open my $fh, '>:raw', $pkgfname;
-            $fh;
-        }
-        else {
-            IO::Zlib->new( $pkgfname, 'w' )
-                or die "Cannot open $pkgfname for writing: $!\n";
-        }
-    };
-    print $fh $index->as_string( { simple => $self->{simple} } );
-    close $fh;
+    my $opts = { simple => $self->{simple} };
+
+    if ($no_compress) {
+        open my $fh, '>:raw', $pkgfname
+            or die "Cannot open $pkgfname for writing: $!\n";
+        print {$fh} $index->as_string($opts);
+        close $fh;
+    }
+    else {
+        $index->as_gzip( $pkgfname, $opts );
+    }
 }
 
 sub list_archive_files {

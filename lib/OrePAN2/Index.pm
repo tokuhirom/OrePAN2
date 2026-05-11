@@ -12,9 +12,8 @@ use Moo;
 with 'OrePAN2::Role::HasLogger';
 use Types::Standard qw( HashRef );
 use namespace::clean;
-use File::Temp ();
-use File::Copy ();
-use IO::Compress::Gzip;
+use IO::Compress::Gzip qw( $GzipError );
+use Path::Tiny ();
 
 has index => ( is => 'ro', isa => HashRef, default => sub { +{} } );
 
@@ -121,14 +120,17 @@ sub as_string {
 }
 
 sub as_gzip {
-    my ($self, $path, $opts) = @_;
+    my ( $self, $path, $opts ) = @_;
 
-    my $str = $self->as_string($opts);
-    my $tmp = File::Temp->new();
-    my $gz = IO::Compress::Gzip->new("$tmp");
-    $gz->print($str);
-    $gz->close;
-    File::Copy::move("$tmp", $path);
+    my $gzipped;
+    my $gz = IO::Compress::Gzip->new( \$gzipped )
+        or die "Cannot create gzip stream: $GzipError\n";
+    $gz->print( $self->as_string($opts) )
+        or die "gzip print failed: $GzipError\n";
+    $gz->close
+        or die "gzip close failed: $GzipError\n";
+    Path::Tiny::path($path)->spew_raw($gzipped);
+    return;
 }
 
 1;
@@ -175,9 +177,15 @@ defaults to 0.
 
 Make index as string.
 
-=item C<< $index->as_gzip($path, $options) >>
+=item C<< $index->as_gzip( $path, \%options ) >>
 
-Writes the index to $path, the options are passed through
-C<<$index->as_string>> as is.
+Writes the index, gzip-compressed, to the file at C<$path>, overwriting
+any existing file at that location. The write is atomic: concurrent
+readers see either the previous contents or the complete new contents,
+never a partially-written file. C<%options> is forwarded verbatim to
+L</as_string>; see there for accepted keys.
+
+    $index->as_gzip( '/srv/darkpan/modules/02packages.details.txt.gz' );
+    $index->as_gzip( $path, { simple => 1 } );
 
 =back
