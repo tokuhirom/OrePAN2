@@ -119,7 +119,7 @@ sub as_string {
     return join( "\n", @buf ) . "\n";
 }
 
-sub as_gzip {
+sub write_gzip {
     my ( $self, $path, $opts ) = @_;
 
     my $gzipped;
@@ -177,15 +177,13 @@ defaults to 0.
 
 Make index as string.
 
-=item C<< $index->as_gzip( $path, \%options ) >>
+=item C<< $index->write_gzip( $path, \%options ) >>
 
-Writes the index, gzip-compressed, to the file at C<$path>, overwriting
-any existing file at that location. The write is atomic: concurrent
-readers see either the previous contents or the complete new contents,
-never a partially-written file. C<%options> is forwarded verbatim to
-L</as_string>; see there for accepted keys.
+Writes the index, gzip-compressed, to the file at C<$path>, replacing any
+existing file there. The write is atomic: concurrent readers see either the
+old file or the complete new one, never a partial write. C<%options> is
+forwarded verbatim to L</as_string>.
 
-    $index->as_gzip( '/srv/darkpan/modules/02packages.details.txt.gz' );
-    $index->as_gzip( $path, { simple => 1 } );
+    $index->write_gzip( $path, { simple => 1 } );
 
 =back

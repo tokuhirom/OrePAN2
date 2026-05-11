@@ -229,7 +229,7 @@ sub write_index {
         close $fh;
     }
     else {
-        $index->as_gzip( $pkgfname, $opts );
+        $index->write_gzip( $pkgfname, $opts );
     }
 }
 
