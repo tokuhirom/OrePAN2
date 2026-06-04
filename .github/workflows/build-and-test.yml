@@ -17,7 +17,7 @@ jobs:
     container:
       image: perldocker/perl-tester:5.38
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - name: Run Tests with coverage
         env:
           AUTHOR_TESTING: 1
@@ -77,9 +77,9 @@ jobs:
     name: Perl ${{ matrix.perl-version }} on macos-latest
     needs: build
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.2
       - name: Set Up Perl
-        uses: shogo82148/actions-setup-perl@v1.41.0
+        uses: shogo82148/actions-setup-perl@v1.41.1
         with:
           perl-version: ${{ matrix.perl-version }}
       - uses: actions/download-artifact@master
@@ -87,7 +87,7 @@ jobs:
           name: build_dir
           path: .
       - name: install deps using cpm
-        uses: perl-actions/install-with-cpm@v2.3
+        uses: perl-actions/install-with-cpm@v2.4
         with:
           cpanfile: "cpanfile"
           args: "--with-suggests --with-recommends --with-test"
