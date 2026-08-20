@@ -12,6 +12,8 @@ use Moo;
 with 'OrePAN2::Role::HasLogger';
 use Types::Standard qw( HashRef );
 use namespace::clean;
+use IO::Compress::Gzip qw( $GzipError );
+use Path::Tiny ();
 
 has index => ( is => 'ro', isa => HashRef, default => sub { +{} } );
 
@@ -117,6 +119,20 @@ sub as_string {
     return join( "\n", @buf ) . "\n";
 }
 
+sub write_gzip {
+    my ( $self, $path, $opts ) = @_;
+
+    my $gzipped;
+    my $gz = IO::Compress::Gzip->new( \$gzipped, Time => 0 )
+        or die "Cannot create gzip stream: $GzipError\n";
+    $gz->print( $self->as_string($opts) )
+        or die "gzip print failed: $GzipError\n";
+    $gz->close
+        or die "gzip close failed: $GzipError\n";
+    Path::Tiny::path($path)->spew_raw($gzipped);
+    return;
+}
+
 1;
 __END__
 
@@ -160,5 +176,14 @@ defaults to 0.
     $index->as_string( simple => 1 );
 
 Make index as string.
+
+=item C<< $index->write_gzip( $path, \%options ) >>
+
+Writes the index, gzip-compressed, to the file at C<$path>, replacing any
+existing file there. The write is atomic: concurrent readers see either the
+old file or the complete new one, never a partial write. C<%options> is
+forwarded verbatim to L</as_string>.
+
+    $index->write_gzip( $path, { simple => 1 } );
 
 =back

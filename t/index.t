@@ -2,7 +2,9 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
-use OrePAN2::Index ();
+use IO::Uncompress::Gunzip ();
+use OrePAN2::Index         ();
+use Path::Tiny             ();
 
 subtest 'load, lookup' => sub {
     for my $file (
@@ -54,6 +56,50 @@ subtest 'as_string' => sub {
     my $index = OrePAN2::Index->new;
     $index->load('t/dat/02.packages.details.txt');
     like $index->as_string, qr{A_Third_Package};
+};
+
+subtest 'write_gzip' => sub {
+    my $index = OrePAN2::Index->new;
+    $index->load('t/dat/02.packages.details.txt');
+
+    my $gzip = Path::Tiny->tempfile( SUFFIX => '.gz' );
+
+    $index->write_gzip("$gzip");
+
+    my $copy = OrePAN2::Index->new;
+    $copy->load("$gzip");
+    is(
+        $copy->as_string( { simple => 1 } ),
+        $index->as_string( { simple => 1 } ),
+        'Got the same contents'
+    );
+};
+
+subtest 'write_gzip forwards options to as_string' => sub {
+    my $index = OrePAN2::Index->new;
+    $index->load('t/dat/02.packages.details.txt');
+
+    my $gzip = Path::Tiny->tempfile( SUFFIX => '.gz' );
+    $index->write_gzip( "$gzip", { simple => 1 } );
+
+    my $decompressed;
+    IO::Uncompress::Gunzip::gunzip( "$gzip" => \$decompressed )
+        or die
+        "gunzip failed: $IO::Uncompress::Gunzip::GunzipError";
+    is $decompressed, $index->as_string( { simple => 1 } ),
+        '{ simple => 1 } was forwarded to as_string';
+};
+
+subtest 'write_gzip dies when destination directory is missing' => sub {
+    my $index = OrePAN2::Index->new;
+    $index->load('t/dat/02.packages.details.txt');
+
+    my $tempdir  = Path::Tiny->tempdir;
+    my $bad_path = $tempdir->child( 'does-not-exist', 'foo.gz' );
+    eval { $index->write_gzip("$bad_path") };
+    like $@, qr/does-not-exist/i,
+        'error message references the missing directory';
+    ok !-e "$bad_path", 'no partial file was written';
 };
 
 done_testing;
