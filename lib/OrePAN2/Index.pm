@@ -123,7 +123,7 @@ sub write_gzip {
     my ( $self, $path, $opts ) = @_;
 
     my $gzipped;
-    my $gz = IO::Compress::Gzip->new( \$gzipped )
+    my $gz = IO::Compress::Gzip->new( \$gzipped, Time => 0 )
         or die "Cannot create gzip stream: $GzipError\n";
     $gz->print( $self->as_string($opts) )
         or die "gzip print failed: $GzipError\n";
