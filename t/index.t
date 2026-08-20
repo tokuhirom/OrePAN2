@@ -62,20 +62,24 @@ subtest 'write_gzip' => sub {
     my $index = OrePAN2::Index->new;
     $index->load('t/dat/02.packages.details.txt');
 
-    my $gzip = Path::Tiny->tempfile( DIR => 't', SUFFIX => '.gz' );
+    my $gzip = Path::Tiny->tempfile( SUFFIX => '.gz' );
 
     $index->write_gzip("$gzip");
 
     my $copy = OrePAN2::Index->new;
     $copy->load("$gzip");
-    is($copy->as_string, $index->as_string, "Got the same contents");
+    is(
+        $copy->as_string( { simple => 1 } ),
+        $index->as_string( { simple => 1 } ),
+        'Got the same contents'
+    );
 };
 
 subtest 'write_gzip forwards options to as_string' => sub {
     my $index = OrePAN2::Index->new;
     $index->load('t/dat/02.packages.details.txt');
 
-    my $gzip = Path::Tiny->tempfile( DIR => 't', SUFFIX => '.gz' );
+    my $gzip = Path::Tiny->tempfile( SUFFIX => '.gz' );
     $index->write_gzip( "$gzip", { simple => 1 } );
 
     my $decompressed;
@@ -93,7 +97,9 @@ subtest 'write_gzip dies when destination directory is missing' => sub {
     my $tempdir  = Path::Tiny->tempdir;
     my $bad_path = $tempdir->child( 'does-not-exist', 'foo.gz' );
     eval { $index->write_gzip("$bad_path") };
-    like $@, qr{\S}, 'write_gzip propagates an error from the file write';
+    like $@, qr/does-not-exist/i,
+        'error message references the missing directory';
+    ok !-e "$bad_path", 'no partial file was written';
 };
 
 done_testing;
