@@ -225,8 +225,10 @@ sub write_index {
     if ($no_compress) {
         open my $fh, '>:raw', $pkgfname
             or die "Cannot open $pkgfname for writing: $!\n";
-        print {$fh} $index->as_string($opts);
-        close $fh;
+        print {$fh} $index->as_string($opts)
+            or die "Cannot write to $pkgfname: $!\n";
+        close $fh
+            or die "Cannot close $pkgfname: $!\n";
     }
     else {
         $index->write_gzip( $pkgfname, $opts );
