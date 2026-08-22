@@ -1,6 +1,25 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+    - Add OrePAN2::Index->write_gzip(), which is now the canonical path for
+      writing a gzipped index. Gzip output is deterministic (no embedded
+      timestamp) and the file is written atomically, so concurrent readers
+      never see a partial index (GH#83) (Wesley Schwengle)
+    - IO::Zlib has moved from a runtime prereq to a test-only prereq
+      (GH#83) (Wesley Schwengle)
+    - Writing an uncompressed index now dies on print/close failures instead
+      of silently producing a truncated 02packages.details.txt (GH#83)
+      (Wesley Schwengle)
+    - Add OrePAN2::Index->merge(), which merges another index in place using
+      the usual "higher version wins" rule, with an optional protect_author
+      list of PAUSE ids whose existing entries are always kept (GH#97)
+      (Wesley Schwengle)
+    - orepan2-merge-index: add --orepan, --cpan and (repeatable)
+      --protect-orepan-author, so a darkpan's own releases can outrank a CPAN
+      mirror's higher-versioned copies of the same packages (GH#97)
+      (Wesley Schwengle)
+    - The live MetaCPAN test in t/06_inject_live.t now only runs under
+      AUTHOR_TESTING (Olaf Alders)
 
 0.53 2025-10-31T16:58:33Z
     - introduce logging flexibility to OrePAN2 (GH#73) (paulinsche)
