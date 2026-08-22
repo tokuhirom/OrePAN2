@@ -43,6 +43,62 @@ subtest 'add_index', sub {
     is [ $index->lookup('X') ]->[1], 'X/X/X/X-0.02.tar.gz';
 };
 
+subtest 'merge' => sub {
+    subtest 'higher version wins with no protect_author' => sub {
+        my $index = OrePAN2::Index->new;
+        $index->add_index( 'Foo::Bar', '0.01', 'D/DU/DUMMY/Foo-Bar-0.01.tar.gz' );
+
+        my $other = OrePAN2::Index->new;
+        $other->add_index( 'Foo::Bar', '2.00', 'C/CP/CPANAUTH/Foo-Bar-2.00.tar.gz' );
+
+        $index->merge($other);
+        is [ $index->lookup('Foo::Bar') ]->[1],
+            'C/CP/CPANAUTH/Foo-Bar-2.00.tar.gz';
+    };
+
+    subtest 'protect_author keeps the lower version' => sub {
+        my $index = OrePAN2::Index->new;
+        $index->add_index( 'Foo::Bar', '0.01', 'D/DU/DUMMY/Foo-Bar-0.01.tar.gz' );
+
+        my $other = OrePAN2::Index->new;
+        $other->add_index( 'Foo::Bar', '2.00', 'C/CP/CPANAUTH/Foo-Bar-2.00.tar.gz' );
+
+        $index->merge( $other, protect_author => ['dummy'] );
+        is [ $index->lookup('Foo::Bar') ]->[1],
+            'D/DU/DUMMY/Foo-Bar-0.01.tar.gz',
+            'matches case-insensitively';
+    };
+
+    subtest 'protection is per-package, not per-distribution' => sub {
+        my $index = OrePAN2::Index->new;
+        $index->add_index( 'Foo::Bar', '0.01', 'D/DU/DUMMY/Foo-Bar-0.01.tar.gz' );
+
+        my $other = OrePAN2::Index->new;
+        $other->add_index( 'Foo::Bar', '2.00', 'C/CP/CPANAUTH/Foo-Bar-2.00.tar.gz' );
+        $other->add_index( 'Foo::Baz', '1.00', 'C/CP/CPANAUTH/Foo-Bar-2.00.tar.gz' );
+
+        $index->merge( $other, protect_author => ['DUMMY'] );
+        is [ $index->lookup('Foo::Bar') ]->[1],
+            'D/DU/DUMMY/Foo-Bar-0.01.tar.gz';
+        is [ $index->lookup('Foo::Baz') ]->[1],
+            'C/CP/CPANAUTH/Foo-Bar-2.00.tar.gz';
+    };
+
+    subtest 'unmatched protect_author warns, does not die' => sub {
+        my $index = OrePAN2::Index->new;
+        $index->add_index( 'Foo::Bar', '2.00', 'C/CP/CPANAUTH/Foo-Bar-2.00.tar.gz' );
+
+        my $stderr = do {
+            open my $fh, '>', \my $captured or die $!;
+            local *STDERR = $fh;
+            eval { $index->merge( OrePAN2::Index->new, protect_author => ['NOBODY'] ) };
+            $captured;
+        };
+        is $@, '', 'does not die';
+        like $stderr, qr/NOBODY/, 'warns about the unmatched author';
+    };
+};
+
 subtest 'delete' => sub {
     my $index = OrePAN2::Index->new;
     $index->load('t/dat/02.packages.details.txt');

@@ -4,14 +4,44 @@ use warnings;
 use OrePAN2::Index;
 use Getopt::Long;
 
-my $version;
 my $p = Getopt::Long::Parser->new(
     config => [qw(posix_default no_ignore_case auto_help)]
 );
 $p->getoptions(
-    'o=s' => \my $outfilename,
-    'simple!' => \my $simple,
-);
+    'o=s'                      => \my $outfilename,
+    'simple!'                  => \my $simple,
+    'orepan=s'                 => \my $orepan_file,
+    'cpan=s'                   => \my $cpan_file,
+    'protect-orepan-author=s@' => \my $protected_authors,
+) or die "Usage error\n";
+
+my $merge_mode = defined $orepan_file || defined $cpan_file;
+
+if ($merge_mode) {
+    die "--orepan and --cpan must be given together\n"
+        unless defined $orepan_file && defined $cpan_file;
+    die "stray positional arguments not allowed with --orepan/--cpan: @ARGV\n"
+        if @ARGV;
+}
+elsif ($protected_authors && @$protected_authors) {
+    die "--protect-orepan-author only works with --orepan and --cpan\n";
+}
+
+my $index;
+if ($merge_mode) {
+    $index = OrePAN2::Index->new();
+    $index->load($orepan_file, {replace => 1});
+
+    my $cpan_index = OrePAN2::Index->new();
+    $cpan_index->load($cpan_file, {replace => 1});
+    $index->merge($cpan_index, protect_author => $protected_authors || []);
+}
+else {
+    $index = OrePAN2::Index->new();
+    for my $filename (@ARGV) {
+        $index->load($filename, {replace => 1});
+    }
+}
 
 my $outfh = *STDOUT;
 if (defined $outfilename) {
@@ -19,17 +49,23 @@ if (defined $outfilename) {
         or die "Cannot open $outfilename for writing: $!";
 }
 
-my $index = OrePAN2::Index->new();
-for my $filename (@ARGV) {
-    $index->load($filename, {replace => 1});
-}
-print {$outfh} $index->as_string({simple => $simple});
+my $outname = defined $outfilename ? $outfilename : 'STDOUT';
+print {$outfh} $index->as_string({simple => $simple})
+    or die "Cannot write to $outname: $!\n";
+close $outfh
+    or die "Cannot close $outname: $!\n";
 
 __END__
 
 =head1 SYNOPSIS
 
     % orepan2-merge-index -o merged.txt foo/02packages.details.txt bar/02packages.details.txt.gz
+
+    % orepan2-merge-index -o merged.txt \
+        --orepan orepan/02packages.details.txt.gz \
+        --cpan cpan/02packages.details.txt.gz \
+        --protect-orepan-author DUMMY \
+        --protect-orepan-author WATERKIP
 
 =head1 DESCRIPTION
 
@@ -52,5 +88,36 @@ Name of output file
 Use a simple format for 02packages metadata.  This helps avoid merge conflicts.
 
      > orepan2-merge-index --simple -o merged.txt foo/02packages.details.txt bar/02packages.details.txt.gz
+
+=head2 orepan / cpan
+
+    % orepan2-merge-index -o merged.txt --orepan orepan/02packages.details.txt.gz --cpan cpan/02packages.details.txt.gz
+
+Merge a darkpan's own index (C<--orepan>) with a CPAN mirror's index
+(C<--cpan>). Without C<--protect-orepan-author>, this behaves like the
+positional-file mode: the higher version of each package wins.
+
+Only meaningful together; specifying one without the other is an error, as
+is passing any stray positional arguments alongside them.
+
+=head2 protect-orepan-author
+
+    % orepan2-merge-index -o merged.txt --orepan o.txt --cpan c.txt \
+        --protect-orepan-author DUMMY --protect-orepan-author WATERKIP
+
+Repeatable. Any package whose C<--orepan> index entry's path is authored
+by one of these PAUSE ids (i.e. the path looks like C<X/XX/AUTHORID/...>)
+always keeps its C<--orepan> entry, even if C<--cpan> has a higher
+version for the same package. Matching is case-insensitive.
+
+Only usable together with C<--orepan> and C<--cpan>; it's an error to pass
+it in positional-file mode, since protection isn't implemented there.
+
+Protection is applied per I<package>, not per I<distribution>: if CPAN's
+copy of a protected author's distribution provides a package the
+C<--orepan> copy doesn't, that package is still taken from CPAN.
+
+A path not shaped like C<X/XX/AUTHORID/...> (e.g. a flat filename) has no
+extractable author and so can never match, regardless of this option.
 
 =cut
