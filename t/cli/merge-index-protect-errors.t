@@ -163,9 +163,10 @@ subtest 'write failures on the output file are fatal' => sub {
     my $orepan = write_index(@OREPAN);
     my $cpan   = write_index(@CPAN);
 
-    # open() succeeds; the print fails. Indexer::write_index checks both
-    # print and close (lib/OrePAN2/Indexer.pm); this script checks neither,
-    # and never closes $outfh at all.
+    # open() succeeds and the print fails, so the failure is only visible if
+    # both the print and the close are checked. script/orepan2-merge-index
+    # checks both, as Indexer::write_index does; this test is what keeps them
+    # checked.
     isnt run_merge(
         '-o', '/dev/full',
         '--orepan', $orepan->filename,
