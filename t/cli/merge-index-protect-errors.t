@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use utf8;
 
+use Capture::Tiny qw( capture );
 use File::Temp qw( SEEK_SET );
 use Test::More;
 
@@ -20,9 +21,18 @@ Columns:      package name, version, path
     return $fh;
 }
 
+# Every failure path under test writes a diagnostic to STDERR. That output is
+# the expected behaviour, not test noise, so capture it and hand it to note()
+# instead of letting it interleave with the TAP stream.
 sub run_merge {
     my (@args) = @_;
-    my $status = system $^X, '-Ilib', $SCRIPT, @args;
+
+    my ( $out, $err, $status )
+        = capture { system $^X, '-Ilib', $SCRIPT, @args };
+
+    note "STDOUT: $out" if length $out;
+    note "STDERR: $err" if length $err;
+
     return $status >> 8;
 }
 
