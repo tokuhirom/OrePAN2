@@ -2,7 +2,7 @@ package OrePAN2;
 use strict;
 use warnings;
 
-our $VERSION = "0.53";
+our $VERSION = "0.54";
 
 1;
 __END__

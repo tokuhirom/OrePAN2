@@ -1,6 +1,8 @@
 Revision history for Perl extension OrePAN2
 
 {{$NEXT}}
+
+0.54 2026-08-23T04:24:28Z
     - Add OrePAN2::Index->write_gzip(), which is now the canonical path for
       writing a gzipped index. Gzip output is deterministic (no embedded
       timestamp) and the file is written atomically, so concurrent readers
